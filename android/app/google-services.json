@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381399143885",
+    "project_id": "on-the-bon-1",
+    "storage_bucket": "on-the-bon-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381399143885:android:df8393ff5197f53bdd6084",
+        "android_client_info": {
+          "package_name": "com.example.on_the_bon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381399143885-8jgqcdmuqj1t65de5ribd76v24s6aok3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjwwC-lbBq5BKa-rdrZen0hxPMpEvcMPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381399143885-8jgqcdmuqj1t65de5ribd76v24s6aok3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
