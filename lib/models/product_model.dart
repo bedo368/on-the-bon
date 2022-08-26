@@ -1,4 +1,4 @@
-import 'package:on_the_bon/type/types.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
 
 class Product {
   final String name;
