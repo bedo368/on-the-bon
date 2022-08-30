@@ -28,8 +28,8 @@ class LogInScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                          margin:
-                              EdgeInsets.only(top: mediaQuery.size.height * .15),
+                          margin: EdgeInsets.only(
+                              top: mediaQuery.size.height * .15),
                           child: const SignInLogo(),
                         ),
                         Container(
