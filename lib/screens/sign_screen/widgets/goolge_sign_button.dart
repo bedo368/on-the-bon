@@ -3,7 +3,8 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:on_the_bon/helper/auth.dart';
 
 class GoogleSignButton extends StatelessWidget {
-  const GoogleSignButton({required this.setIsLoading});
+  const GoogleSignButton({Key? key, required this.setIsLoading})
+      : super(key: key);
   final void Function() setIsLoading;
 
   @override

@@ -8,9 +8,7 @@ class Auth {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount? googleSignInAccount =
-
-    
-    await googleSignIn.signIn();
+        await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -52,11 +50,9 @@ class Auth {
       } else if (e.code == "weak-password") {
         throw "weak-password";
       } else {
-        print(e);
         throw "something wroung happend please try again";
       }
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

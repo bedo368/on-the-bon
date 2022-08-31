@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/Product_card/bottom_card.dart';
+import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard(
@@ -15,36 +16,49 @@ class ProductCard extends StatelessWidget {
       child: Stack(
         children: [
           Center(
-            child: Container(
-              margin: const EdgeInsets.only(top: 50),
-              width: MediaQuery.of(context).size.width * .8,
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 140,
-                    child: Card(
-                        margin: const EdgeInsets.only(bottom: 0),
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        )),
-                        color: const Color.fromRGBO(249, 242, 246, 1),
-                        child: Column(
-                          children: [Container()],
-                        )),
-                  ),
-                  BottomCard(haveMultiSize: haveMultiSize),
-                ],
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(ProductScreen.routeName);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 50),
+                width: MediaQuery.of(context).size.width * .8,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 140,
+                      child: Card(
+                          margin: const EdgeInsets.only(bottom: 0),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          )),
+                          color: const Color.fromRGBO(249, 242, 246, 1),
+                          child: Column(
+                            children: [Container()],
+                          )),
+                    ),
+                    BottomCard(haveMultiSize: haveMultiSize),
+                  ],
+                ),
               ),
             ),
           ),
-          Align(
-            alignment: AlignmentDirectional.bottomCenter,
-            child: Image.network(
-              imageUrl,
-              height: 170,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(ProductScreen.routeName);
+            },
+            child: Align(
+              alignment: AlignmentDirectional.bottomCenter,
+              child: Hero(
+                tag: "112",
+                child: Image.network(
+                  imageUrl,
+                  height: 170,
+                ),
+              ),
             ),
           ),
         ],
