@@ -13,7 +13,6 @@ class ProductScreenDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String size = product.sizePrice.keys.first;
 
     return SliverList(
         delegate: SliverChildListDelegate([
@@ -35,7 +34,6 @@ class ProductScreenDetail extends StatelessWidget {
             const CustomDivder(),
             if (product.sizePrice.length > 1)
               ProductSize(
-                size: size,
                 sizePrice: product.sizePrice,
               ),
             if (product.sizePrice.length > 1) const CustomDivder(),

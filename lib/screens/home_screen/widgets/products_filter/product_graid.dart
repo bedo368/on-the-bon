@@ -14,7 +14,10 @@ class ProductGraid extends StatelessWidget {
       shrinkWrap: true,
       primary: false,
       itemBuilder: (context, index) {
-        return ProductCard(productsList[listKeys[index]] as Product);
+        return ProductCard(
+          productsList[listKeys[index]] as Product,
+          key: Key(listKeys[index]),
+        );
         // return Container();
       },
       itemCount: productsList.length,

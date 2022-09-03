@@ -23,6 +23,8 @@ class ProductScreen extends StatelessWidget {
         key: GlobalKey(),
         slivers: [
           ProductAppBar(
+
+            id: product.id,
             imageUrl: product.imageUrl,
             title: product.title,
           ),

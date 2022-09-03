@@ -12,19 +12,15 @@ class Products with ChangeNotifier {
         allProduct[key1] = value1;
       });
     });
-    ChangeNotifier();
     return allProduct;
   }
 
   Product fetchProductByTypeAndId({required String type, required String id}) {
     if (_productList.containsKey(type)) {
       if (_productList[type]!.containsKey(id)) {
-        ChangeNotifier();
-
         return _productList[type]![id] as Product;
       }
     }
-    ChangeNotifier();
 
     return const Product(
         discription: '',
@@ -43,10 +39,10 @@ final tempData = {
         discription: 'قهوه تركي حوار فشخ اوعي تشتريها من عندنا ',
         id: '234fjk3s',
         imageUrl:
-            'https://i.im.ge/2022/09/01/O3rSU1.Lemonade-PNG-Free-File-Download.png',
+            'https://images.deliveryhero.io/image/talabat/Menuitems/indianstyleburger1957599h637816616689807830.jpeg',
         sizePrice: {"وسط": 10, "كبير": 18},
         subType: 'قهوه',
-        title: 'هعصير ليمون',
+        title: 'عصير ليمون',
         type: 'مشروبات ساخنة'),
     "ddfdfsa": const Product(
         discription: 'قهوه تركي حوار فشخ اوعي تشتريها من عندنا ',
@@ -56,46 +52,13 @@ final tempData = {
         subType: 'شاي',
         title: 'شاي فتلة',
         type: 'مشروبات ساخنة'),
-    "109304": const Product(
-        discription: 'عصير ليمون طازج طبيعي 100 % مع استخدام اعلي الخامات',
-        id: '109304',
-        imageUrl: 'https://i.im.ge/2022/09/01/O3rORp.kindpng-2972113.png',
-        sizePrice: {"وسط": 10, "كبير": 18},
-        subType: 'عصائر',
-        title: 'عصير مانجا',
-        type: 'مشروبات باردة'),
-    "165465465646546": const Product(
-        discription: 'عصير ليمون طازج طبيعي 100 % مع استخدام اعلي الخامات',
-        id: '165465465646546',
-        imageUrl:
-            'https://i.im.ge/2022/08/28/ONRxCP.Pngtreea-cup-of-black-coffee-4983144.png',
-        sizePrice: {"وسط": 10},
-        subType: 'شاي',
-        title: 'عصير عنب',
-        type: 'مشروبات باردة'),
-    "sdafsadf": const Product(
-        discription: 'عصير ليمون طازج طبيعي 100 % مع استخدام اعلي الخامات',
-        id: 'sdafsadf',
-        imageUrl: 'https://i.im.ge/2022/09/01/O3rORp.kindpng-2972113.png',
-        sizePrice: {"وسط": 10, "كبير": 18},
-        subType: 'عصائر',
-        title: 'عصير مانجا',
-        type: 'مشروبات باردة'),
-    "dfsafds2": const Product(
-        discription: 'عصير ليمون طازج طبيعي 100 % مع استخدام اعلي الخامات',
-        id: 'dfsafds2',
-        imageUrl:
-            'https://i.im.ge/2022/08/28/ONRxCP.Pngtreea-cup-of-black-coffee-4983144.png',
-        sizePrice: {"وسط": 10},
-        subType: 'شاي',
-        title: 'عصير عنب',
-        type: 'مشروبات باردة'),
   },
   "مشروبات باردة": {
-    "093043": const Product(
+    "dsadsadas": const Product(
         discription: 'عصير ليمون طازج طبيعي 100 % مع استخدام اعلي الخامات',
-        id: '093043',
-        imageUrl: 'https://i.im.ge/2022/09/01/O3rORp.kindpng-2972113.png',
+        id: 'dsadsadas',
+        imageUrl:
+            'https://www.burger21.com/wp-content/uploads/2021/07/Spicy-Thai-Shrimp7.28.21.jpg',
         sizePrice: {"وسط": 10, "كبير": 18},
         subType: 'عصائر',
         title: 'عصير مانجا',

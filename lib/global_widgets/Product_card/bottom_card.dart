@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class BottomCard extends StatelessWidget {
   const BottomCard({
@@ -6,10 +8,14 @@ class BottomCard extends StatelessWidget {
     required this.sizePrice,
     required this.title,
     required this.id,
+    required this.imagUrl,
+    required this.type,
   }) : super(key: key);
   final String title;
   final String id;
+  final String type;
   final Map<String, double> sizePrice;
+  final String imagUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,15 @@ class BottomCard extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(left: 15),
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Provider.of<Cart>(context, listen: false)
+                                .addItemToCartWithQuntity(
+                                    title: title,
+                                    id: id,
+                                    price: price,
+                                    imageUrl: imagUrl,
+                                    type: type);
+                          },
                           icon: const Icon(
                             Icons.add_shopping_cart_rounded,
                             color: Colors.white,

@@ -4,10 +4,8 @@ class ProductSize extends StatelessWidget {
   const ProductSize({
     Key? key,
     required this.sizePrice,
-    required this.size,
   }) : super(key: key);
   final Map<String, double> sizePrice;
-  final String size;
 
   static final ValueNotifier<String> selectedSize =
       ValueNotifier<String>("كبير");
