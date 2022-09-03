@@ -1,33 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/global_widgets/Product_card/product_size.dart';
+import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_size.dart';
+import 'package:on_the_bon/models/product.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_discription.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_price.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_quntity.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_type.dart';
 
 class ProductScreenDetail extends StatelessWidget {
-  const ProductScreenDetail({
-    Key? key,
-  }) : super(key: key);
+  const ProductScreenDetail({Key? key, required this.product})
+      : super(key: key);
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
+    String size = product.sizePrice.keys.first;
+
     return SliverList(
         delegate: SliverChildListDelegate([
       Container(
+        padding: const EdgeInsets.only(bottom: 100),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * .6,
         color: const Color.fromRGBO(44, 7, 7, 1),
         child: Column(
           children: [
-            const ProductType(),
-            const PrdocutDiscription(),
+            ProductType(
+              type: product.type,
+              subType: product.subType,
+            ),
+            PrdocutDiscription(
+              discription: product.discription,
+            ),
             const CustomDivder(),
             const ProductQuntity(),
             const CustomDivder(),
-            const ProductSize(),
-            const CustomDivder(),
-            const ProductPrice(),
+            if (product.sizePrice.length > 1)
+              ProductSize(
+                size: size,
+                sizePrice: product.sizePrice,
+              ),
+            if (product.sizePrice.length > 1) const CustomDivder(),
+            ProductPrice(
+              price: product.sizePrice,
+            ),
             Container(
               margin: const EdgeInsets.only(top: 20),
               width: MediaQuery.of(context).size.width * .8,

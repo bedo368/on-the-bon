@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class PrdocutDiscription extends StatelessWidget {
   const PrdocutDiscription({
     Key? key,
+    required this.discription,
   }) : super(key: key);
+  final String discription;
 
   @override
   Widget build(BuildContext context) {
@@ -12,16 +14,16 @@ class PrdocutDiscription extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: const [
-          Text(
+        children: [
+          const Text(
             ": الوصف",
             style: TextStyle(color: Colors.white, fontSize: 17),
           ),
           Padding(
-            padding: EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: Text(
-              " قهوه تركي حوار فشخ اوعي تشتريها من عندنا  اجود انواع البن",
-              style: TextStyle(color: Colors.white, fontSize: 15),
+              discription,
+              style: const TextStyle(color: Colors.white, fontSize: 15),
               textAlign: TextAlign.end,
             ),
           ),
@@ -30,4 +32,3 @@ class PrdocutDiscription extends StatelessWidget {
     );
   }
 }
-

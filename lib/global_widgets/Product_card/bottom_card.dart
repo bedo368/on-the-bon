@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/global_widgets/Product_card/product_size.dart';
 
 class BottomCard extends StatelessWidget {
   const BottomCard({
     Key? key,
-    required this.haveMultiSize,
+    required this.sizePrice,
+    required this.title,
+    required this.id,
   }) : super(key: key);
-
-  final bool? haveMultiSize;
+  final String title;
+  final String id;
+  final Map<String, double> sizePrice;
 
   @override
   Widget build(BuildContext context) {
+    String size = sizePrice.keys.first;
+    double price = sizePrice[size] as double;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Card(
@@ -22,10 +27,11 @@ class BottomCard extends StatelessWidget {
           )),
           color: Theme.of(context).backgroundColor,
           child: Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: 8, bottom: 10),
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
                       margin: const EdgeInsets.only(left: 15),
@@ -37,32 +43,58 @@ class BottomCard extends StatelessWidget {
                             size: 35,
                           )),
                     ),
-                    Expanded(
-                        child: Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
-                            Text(
-                              "قهوه",
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.white),
-                            ),
-                            Text(
-                              "السعر : 15",
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.white),
-                            ),
-                          ],
-                        ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white),
+                          ),
+                          Text(
+                            "السعر : $price",
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white),
+                          ),
+                        ],
                       ),
-                    ))
+                    ),
                   ],
                 ),
-                if (haveMultiSize == true) const ProductSize()
+                // if (widget.sizePrice.length > 1)
+                //   Container(
+                //     padding: const EdgeInsets.only(bottom: 10),
+                //     width: MediaQuery.of(context).size.width,
+                //     height: 40,
+                //     child: Center(
+                //       child: ListView.builder(
+                //         shrinkWrap: true,
+                //         scrollDirection: Axis.horizontal,
+                //         itemBuilder: (context, index) {
+                //           return Container(
+                //             margin: const EdgeInsets.only(left: 10),
+                //             width: 80,
+                //             height: 28,
+                //             child: ElevatedButton(
+                //                 style: ElevatedButton.styleFrom(
+                //                     primary: size == ""
+                //                         ? Theme.of(context)
+                //                             .colorScheme
+                //                             .secondary
+                //                         : Colors.grey,
+                //                     padding: const EdgeInsets.all(0),
+                //                     textStyle: const TextStyle(fontSize: 10)),
+                //                 onPressed: () {},
+                //                 child: Text(sizesList[index])),
+                //           );
+                //         },
+                //         itemCount: widget.sizePrice.length,
+                //       ),
+                //     ),
+                //   )
               ],
             ),
           )),

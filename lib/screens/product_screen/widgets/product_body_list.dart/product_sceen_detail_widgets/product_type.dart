@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 class ProductType extends StatelessWidget {
   const ProductType({
     Key? key,
+    required this.type,
+    required this.subType,
   }) : super(key: key);
+  final String type;
+  final String subType;
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +18,10 @@ class ProductType extends StatelessWidget {
       decoration: BoxDecoration(
           color: const Color.fromRGBO(249, 242, 246, 1),
           borderRadius: BorderRadius.circular(10)),
-      child: const Text(
-        "النوع : اسبريسو",
+      child: Text(
+        "النوع : $type/ $subType",
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18),
+        style: const TextStyle(fontSize: 18),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 import 'package:on_the_bon/screens/products_type_screen/prodcuts_type_screen.dart';
@@ -53,7 +54,8 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           ProductsTypeScreen.routeName: (context) => const ProductsTypeScreen(),
-          ProductScreen.routeName : (context) => const ProductScreen()
+          ProductScreen.routeName: (context) => const ProductScreen(),
+          CartScreen.routeName: (context) => const CartScreen(),
         },
       ),
     );

@@ -3,53 +3,51 @@ import 'package:flutter/material.dart';
 class ProductSize extends StatelessWidget {
   const ProductSize({
     Key? key,
+    required this.sizePrice,
+    required this.size,
   }) : super(key: key);
+  final Map<String, double> sizePrice;
+  final String size;
 
+  static final ValueNotifier<String> selectedSize =
+      ValueNotifier<String>("كبير");
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * .8,
-      child: Row(
-        textDirection: TextDirection.rtl,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const Text(
-            "الحجم",
-            style: TextStyle(color: Colors.white, fontSize: 22),
-            textAlign: TextAlign.end,
-          ),
-          Container(
-            margin: const EdgeInsets.only(right: 30, left: 15),
-            width: 60,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                  primary: const Color.fromRGBO(249, 242, 246, 1),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 4)),
-              child: const Text(
-                "large",
-                style: TextStyle(fontSize: 14, color: Colors.black),
+
+    final sizesLiest = sizePrice.keys.toList();
+    return Container(
+      padding: const EdgeInsets.only(bottom: 10),
+      width: MediaQuery.of(context).size.width,
+      height: 40,
+      child: Center(
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.only(left: 10),
+              width: 80,
+              height: 28,
+              child: ValueListenableBuilder(
+                valueListenable: ProductSize.selectedSize,
+                builder: (context, v, e) {
+                  return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: v == sizesLiest[index]
+                              ? Theme.of(context).colorScheme.secondary
+                              : Colors.grey,
+                          padding: const EdgeInsets.all(0),
+                          textStyle: const TextStyle(fontSize: 10)),
+                      onPressed: () {
+                        ProductSize.selectedSize.value = sizesLiest[index];
+                      },
+                      child: Text(sizesLiest[index]));
+                },
               ),
-            ),
-          ),
-          SizedBox(
-            width: 60,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).colorScheme.secondary,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0, horizontal: 4)),
-              child: const Text(
-                "meduim",
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
-            ),
-          )
-        ],
+            );
+          },
+          itemCount: sizePrice.length,
+        ),
       ),
     );
   }

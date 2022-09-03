@@ -42,6 +42,7 @@ class ProductQuntity extends StatelessWidget {
             )),
           ),
           IconButton(
+            hoverColor: Colors.amber,
               onPressed: () {},
               icon: const Icon(
                 Icons.add,

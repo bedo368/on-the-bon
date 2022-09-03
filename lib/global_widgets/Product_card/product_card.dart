@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/Product_card/bottom_card.dart';
+import 'package:on_the_bon/models/product.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(
-      {Key? key, required this.imageUrl, this.haveMultiSize = false})
-      : super(key: key);
-  final String imageUrl;
-  final bool? haveMultiSize;
+  const ProductCard(this.currentProduct, {Key? key}) : super(key: key);
+  final Product currentProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +14,20 @@ class ProductCard extends StatelessWidget {
       child: Stack(
         children: [
           Center(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(ProductScreen.routeName);
-              },
-              child: Container(
-                margin: const EdgeInsets.only(top: 50),
-                width: MediaQuery.of(context).size.width * .8,
-                child: Column(
-                  children: [
-                    SizedBox(
+            child: Container(
+              margin: const EdgeInsets.only(top: 50),
+              width: MediaQuery.of(context).size.width * .8,
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(ProductScreen.routeName,
+                          arguments: {
+                            "id": currentProduct.id,
+                            "type": currentProduct.type
+                          });
+                    },
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 140,
                       child: Card(
@@ -40,22 +42,30 @@ class ProductCard extends StatelessWidget {
                             children: [Container()],
                           )),
                     ),
-                    BottomCard(haveMultiSize: haveMultiSize),
-                  ],
-                ),
+                  ),
+                  BottomCard(
+                    id: currentProduct.id,
+                    title: currentProduct.title,
+                    sizePrice: currentProduct.sizePrice,
+                  ),
+                ],
               ),
             ),
           ),
           GestureDetector(
             onTap: () {
-              Navigator.of(context).pushNamed(ProductScreen.routeName);
+              Navigator.of(context).pushNamed(ProductScreen.routeName,
+                  arguments: {
+                    "id": currentProduct.id,
+                    "type": currentProduct.type
+                  });
             },
             child: Align(
               alignment: AlignmentDirectional.bottomCenter,
               child: Hero(
-                tag: "112",
+                tag: currentProduct.id,
                 child: Image.network(
-                  imageUrl,
+                  currentProduct.imageUrl,
                   height: 170,
                 ),
               ),

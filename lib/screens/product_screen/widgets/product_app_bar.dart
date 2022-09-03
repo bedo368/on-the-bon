@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 class ProductAppBar extends StatelessWidget {
   const ProductAppBar({
     Key? key,
+    required this.title,
+    required this.imageUrl,
   }) : super(key: key);
+  final String title;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +40,15 @@ class ProductAppBar extends StatelessWidget {
         title: Container(
           padding: const EdgeInsets.only(right: 10),
           width: MediaQuery.of(context).size.width,
-          child: const Text(
-            "قهوه",
+          child: Text(
+            title,
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
             ),
             textAlign: TextAlign.end,
           ),
         ),
-        background: Image.network(
-            "https://i.im.ge/2022/08/28/ONRxCP.Pngtreea-cup-of-black-coffee-4983144.png"),
+        background: Image.network(imageUrl),
       ),
     );
   }
