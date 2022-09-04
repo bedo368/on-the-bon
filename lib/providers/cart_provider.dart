@@ -2,12 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:on_the_bon/providers/cart_item.dart';
 
 class Cart with ChangeNotifier {
-  double totalPrice = 0;
-
   final Map<String, CartItem> items = {};
   Map<String, CartItem> get cartItems {
     // notifyListeners();
     return {...items};
+  }
+
+  double get totalPrice {
+    double prcie = 0;
+    items.forEach((key, value) {
+      prcie += value.price * value.quantity;
+    });
+    return prcie;
   }
 
   void addItemToCartWithQuntity({
@@ -16,14 +22,29 @@ class Cart with ChangeNotifier {
     required double price,
     required String imageUrl,
     required String type,
+    required String size,
     double quntity = 1,
   }) {
-    if (items.containsKey(id)) {
-      items[id]!.increaseQuntity(quntity);
-    } else if (!items.containsKey(id)) {
-      items[id] = CartItem(
-          id: id, title: title, price: price, imageUrl: imageUrl, type: type);
+    String itemkey = "";
+    items.forEach(
+      (key, value) {
+        if (id == value.id && size == value.size) {
+          value.increaseQuntity(quntity);
+          itemkey = key;
+          return;
+        }
+      },
+    );
+    if (!items.containsKey(itemkey)) {
+      items[DateTime.now().toString()] = CartItem(
+          id: id,
+          title: title,
+          type: type,
+          price: price,
+          imageUrl: imageUrl,
+          size: size);
     }
+
     notifyListeners();
   }
 
@@ -38,9 +59,11 @@ class Cart with ChangeNotifier {
     if (items.containsKey(id)) {
       items[id]!.decreaseQuntity(1);
     }
+
     if (items[id]!.quantity <= 0) {
       items.remove(id);
     }
+
     notifyListeners();
   }
 

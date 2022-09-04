@@ -6,6 +6,7 @@ import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
+import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 import 'package:on_the_bon/screens/products_type_screen/prodcuts_type_screen.dart';
 import 'package:on_the_bon/screens/sign_screen/sign_screen.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
           ProductsTypeScreen.routeName: (context) => const ProductsTypeScreen(),
           ProductScreen.routeName: (context) => const ProductScreen(),
           CartScreen.routeName: (context) => const CartScreen(),
+          OrdersScreen.routeName: (context) => const OrdersScreen(),
         },
       ),
     );

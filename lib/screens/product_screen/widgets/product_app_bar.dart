@@ -51,12 +51,15 @@ class ProductAppBar extends StatelessWidget {
             textAlign: TextAlign.end,
           ),
         ),
-        background: Hero(
-            tag: id,
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-            )),
+        background: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Hero(
+              tag: id,
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+              )),
+        ),
       ),
     );
   }

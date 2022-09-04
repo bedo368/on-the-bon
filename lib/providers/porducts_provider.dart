@@ -40,7 +40,7 @@ final tempData = {
         id: '234fjk3s',
         imageUrl:
             'https://images.deliveryhero.io/image/talabat/Menuitems/indianstyleburger1957599h637816616689807830.jpeg',
-        sizePrice: {"وسط": 10, "كبير": 18},
+        sizePrice: {"وسط": 10, "كبير": 18 , "صغير":6},
         subType: 'قهوه',
         title: 'عصير ليمون',
         type: 'مشروبات ساخنة'),

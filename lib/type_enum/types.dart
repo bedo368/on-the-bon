@@ -7,3 +7,6 @@ typedef ProductList = Map<String, Map<String, Product>>;
 typedef ProductListForAppUse = Map<String, Product>;
 
 typedef CartList = Map<String, dynamic>;
+
+
+

@@ -49,7 +49,8 @@ class BottomCard extends StatelessWidget {
                                     id: id,
                                     price: price,
                                     imageUrl: imagUrl,
-                                    type: type);
+                                    type: type,
+                                    size: size);
                           },
                           icon: const Icon(
                             Icons.add_shopping_cart_rounded,

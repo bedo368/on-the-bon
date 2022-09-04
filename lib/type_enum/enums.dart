@@ -4,3 +4,9 @@ enum ProductType {
   hot,
   cold,
 }
+
+enum OrderType {
+  successfulOrder,
+  orderInProgress,
+  rejectedOrder,
+}

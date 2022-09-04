@@ -4,6 +4,7 @@ class ProductQuntity extends StatelessWidget {
   const ProductQuntity({
     Key? key,
   }) : super(key: key);
+  static final ValueNotifier<double> quetity = ValueNotifier<double>(1);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,11 @@ class ProductQuntity extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (ProductQuntity.quetity.value > 0) {
+                    ProductQuntity.quetity.value -= 1;
+                  }
+                },
                 icon: const Icon(
                   Icons.remove,
                   color: Colors.white,
@@ -35,15 +40,21 @@ class ProductQuntity extends StatelessWidget {
             decoration: BoxDecoration(
                 color: const Color.fromRGBO(249, 242, 246, 1),
                 borderRadius: BorderRadius.circular(3)),
-            child: const Center(
-                child: Text(
-              "34",
-              style: TextStyle(fontSize: 16),
-            )),
+            child: ValueListenableBuilder(
+                valueListenable: ProductQuntity.quetity,
+                builder: (context, v, e) {
+                  return Center(
+                      child: Text(
+                    "${quetity.value}",
+                    style: const TextStyle(fontSize: 16),
+                  ));
+                }),
           ),
           IconButton(
-            hoverColor: Colors.amber,
-              onPressed: () {},
+              hoverColor: Colors.amber,
+              onPressed: () {
+                ProductQuntity.quetity.value += 1;
+              },
               icon: const Icon(
                 Icons.add,
                 color: Colors.white,

@@ -18,13 +18,19 @@ class CartScreen extends StatelessWidget {
               textAlign: TextAlign.end,
             )),
       ),
-      body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [CartGraid(), CartScreenBottom()],
-          ))),
+      body: SingleChildScrollView(
+        child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:  const [
+                
+                CartGraid(),
+                CartScreenBottom(),
+              ],
+            ))),
+      ),
     );
   }
 }

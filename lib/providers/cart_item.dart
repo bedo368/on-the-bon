@@ -7,13 +7,16 @@ class CartItem with ChangeNotifier {
   final double price;
   final String imageUrl;
   final String type;
-  CartItem(
-      {required this.id,
-      required this.title,
-      required this.type,
-      required this.price,
-      required this.imageUrl,
-      this.quantity = 1});
+  String size;
+  CartItem({
+    required this.id,
+    required this.title,
+    required this.type,
+    required this.price,
+    required this.imageUrl,
+    this.quantity = 1,
+    required this.size,
+  });
 
   void increaseQuntity(double q) {
     notifyListeners();

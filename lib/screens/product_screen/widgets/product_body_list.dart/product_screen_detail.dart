@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_size.dart';
 import 'package:on_the_bon/models/product.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_discription.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_price.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_quntity.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_type.dart';
+import 'package:provider/provider.dart';
 
 class ProductScreenDetail extends StatelessWidget {
   const ProductScreenDetail({Key? key, required this.product})
@@ -13,7 +16,6 @@ class ProductScreenDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return SliverList(
         delegate: SliverChildListDelegate([
       Container(
@@ -45,7 +47,21 @@ class ProductScreenDetail extends StatelessWidget {
               width: MediaQuery.of(context).size.width * .8,
               height: 40,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<Cart>(context, listen: false)
+                      .addItemToCartWithQuntity(
+                          title: product.title,
+                          id: product.id,
+                          price:
+                              product.sizePrice[ProductSize.selectedSize.value]
+                                  as double,
+                          imageUrl: product.imageUrl,
+                          type: product.type,
+                          size: ProductSize.selectedSize.value,
+                          quntity: ProductQuntity.quetity.value);
+                  Navigator.of(context)
+                      .pushReplacementNamed(CartScreen.routeName);
+                },
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
                 ),
