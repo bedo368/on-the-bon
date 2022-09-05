@@ -1,17 +1,19 @@
 class OrderItem {
-  final String id;
   final String productId;
   final double quantity;
   final String title;
   final double price;
   final String size;
+  final String imageUrl;
+  final String type;
 
-  OrderItem({
-    required this.id,
-    required this.quantity,
-    required this.title,
-    required this.price,
-    required this.size,
+  const OrderItem({
     required this.productId,
+    required this.title,
+    required this.type,
+    required this.price,
+    required this.imageUrl,
+    this.quantity = 1,
+    required this.size,
   });
 }

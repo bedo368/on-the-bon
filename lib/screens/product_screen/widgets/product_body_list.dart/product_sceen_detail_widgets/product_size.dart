@@ -11,7 +11,6 @@ class ProductSize extends StatelessWidget {
       ValueNotifier<String>("كبير");
   @override
   Widget build(BuildContext context) {
-
     final sizesLiest = sizePrice.keys.toList();
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
@@ -31,15 +30,20 @@ class ProductSize extends StatelessWidget {
                 builder: (context, v, e) {
                   return ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: v == sizesLiest[index]
-                              ? Theme.of(context).colorScheme.secondary
-                              : Colors.grey,
-                          padding: const EdgeInsets.all(0),
-                          textStyle: const TextStyle(fontSize: 10)),
+                        primary: v == sizesLiest[index]
+                            ? Theme.of(context).colorScheme.secondary
+                            : const Color.fromRGBO(235, 235, 235, 1),
+                        padding: const EdgeInsets.all(0),
+                      ),
                       onPressed: () {
                         ProductSize.selectedSize.value = sizesLiest[index];
                       },
-                      child: Text(sizesLiest[index]));
+                      child: Text(sizesLiest[index],
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: v == sizesLiest[index]
+                                  ? Colors.white
+                                  : Colors.black)));
                 },
               ),
             );

@@ -3,9 +3,9 @@ import 'package:on_the_bon/providers/cart_item.dart';
 
 class Cart with ChangeNotifier {
   final Map<String, CartItem> items = {};
-  Map<String, CartItem> get cartItems {
+  List<CartItem> get cartItems {
     // notifyListeners();
-    return {...items};
+    return [...items.values];
   }
 
   double get totalPrice {
@@ -28,7 +28,7 @@ class Cart with ChangeNotifier {
     String itemkey = "";
     items.forEach(
       (key, value) {
-        if (id == value.id && size == value.size) {
+        if (id == value.productid && size == value.size) {
           value.increaseQuntity(quntity);
           itemkey = key;
           return;
@@ -36,8 +36,10 @@ class Cart with ChangeNotifier {
       },
     );
     if (!items.containsKey(itemkey)) {
-      items[DateTime.now().toString()] = CartItem(
-          id: id,
+      final String itemId = DateTime.now().toString();
+      items[itemId] = CartItem(
+          id: itemId,
+          productid: id,
           title: title,
           type: type,
           price: price,

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
+import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 
-import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter.dart';
+import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_graid.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
   static String routeName = "/";
+  static final ValueNotifier<ProductsType> productType =
+      ValueNotifier<ProductsType>(ProductsType.food);
 
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<Products>(context).allProducts;
+    Provider.of<Products>(context).fetchProductAsync();
+    final products = Provider.of<Products>(context).getProductWithType();
     final globalKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
@@ -46,10 +51,11 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const ProdcutsFiltter(),
+            const ProdcutsFiltterByType(),
+            const ProductsFillterBySubType(),
             Container(
                 margin: const EdgeInsets.only(top: 40),
-                child: ProductGraid(products)),
+                child: ProductGraid(products))
           ],
         ),
       ),

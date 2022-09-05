@@ -19,24 +19,20 @@ class ProductQuntity extends StatelessWidget {
             style: TextStyle(color: Colors.white, fontSize: 22),
             textAlign: TextAlign.end,
           ),
-          Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: IconButton(
-                onPressed: () {
-                  if (ProductQuntity.quetity.value > 0) {
-                    ProductQuntity.quetity.value -= 1;
-                  }
-                },
-                icon: const Icon(
-                  Icons.remove,
-                  color: Colors.white,
-                  size: 30,
-                )),
-          ),
+          IconButton(
+              hoverColor: Colors.amber,
+              onPressed: () {
+                ProductQuntity.quetity.value += 1;
+              },
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
+              )),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 15),
-            width: 30,
-            height: 44,
+            width: 40,
+            height: 35,
             decoration: BoxDecoration(
                 color: const Color.fromRGBO(249, 242, 246, 1),
                 borderRadius: BorderRadius.circular(3)),
@@ -45,18 +41,19 @@ class ProductQuntity extends StatelessWidget {
                 builder: (context, v, e) {
                   return Center(
                       child: Text(
-                    "${quetity.value}",
+                    "${quetity.value.toInt()}",
                     style: const TextStyle(fontSize: 16),
                   ));
                 }),
           ),
           IconButton(
-              hoverColor: Colors.amber,
               onPressed: () {
-                ProductQuntity.quetity.value += 1;
+                if (ProductQuntity.quetity.value > 1) {
+                  ProductQuntity.quetity.value -= 1;
+                }
               },
               icon: const Icon(
-                Icons.add,
+                Icons.remove,
                 color: Colors.white,
                 size: 30,
               )),

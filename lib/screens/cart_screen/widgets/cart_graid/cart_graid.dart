@@ -10,8 +10,7 @@ class CartGraid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartData = Provider.of<Cart>(context);
-    final cartItmesKeys = cartData.cartItems.keys.toList();
-    final Map<String, CartItem> itemsList = cartData.cartItems;
+    final List<CartItem> itemsList = cartData.cartItems;
 
     return SizedBox(
       width: MediaQuery.of(context).size.width * .9,
@@ -31,15 +30,16 @@ class CartGraid extends StatelessWidget {
             primary: false,
             itemBuilder: (context, index) {
               return CartItemWidget(
-                cartItemId: cartItmesKeys[index],
+                cartItemId: itemsList[index].id,
                 cartItem: CartItem(
-                    id: itemsList[cartItmesKeys[index]]!.id,
-                    title: itemsList[cartItmesKeys[index]]!.title,
-                    price: itemsList[cartItmesKeys[index]]!.price,
-                    imageUrl: itemsList[cartItmesKeys[index]]!.imageUrl,
-                    quantity: itemsList[cartItmesKeys[index]]!.quantity,
-                    type: itemsList[cartItmesKeys[index]]!.type,
-                    size: itemsList[cartItmesKeys[index]]!.size),
+                    id: itemsList[index].id,
+                    productid: itemsList[index].productid,
+                    title: itemsList[index].title,
+                    price: itemsList[index].price,
+                    imageUrl: itemsList[index].imageUrl,
+                    quantity: itemsList[index].quantity,
+                    type: itemsList[index].type,
+                    size: itemsList[index].size),
               );
             },
             itemCount: itemsList.length,

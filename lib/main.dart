@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
           initialData: FirebaseAuth.instance.currentUser,
         ),
         ChangeNotifierProvider(create: (context) => Products()),
-        ChangeNotifierProvider(create: (context) => Cart())
+        ChangeNotifierProvider(create: (context) => Cart()),
+        ChangeNotifierProvider(create: (context) => Orders())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

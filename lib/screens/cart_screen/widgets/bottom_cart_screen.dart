@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +11,22 @@ class CartScreenBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartData = Provider.of<Cart>(context);
+    final GlobalKey<FormState> formKey = GlobalKey();
+
+    String phoneNumber = "";
+    String location = "";
+    Future submitOrder() async {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
+      await Provider.of<Orders>(context, listen: false).addOrder(
+          orderItems: cartData.items.values.toList(),
+          phoneNumber: phoneNumber,
+          location: location,
+          userId: Provider.of<User>(context, listen: false).uid);
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+    }
 
     return cartData.items.isNotEmpty
         ? Container(
@@ -29,30 +47,62 @@ class CartScreenBottom extends StatelessWidget {
                 ),
               ),
               Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Container(
-                margin: const EdgeInsets.only(bottom: 40, top: 10),
-                child: Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: TextFormField(
-                        textAlign: TextAlign.end,
-                        decoration: cartInput("رقم الهاتف"),
-                      ),
+                    margin: const EdgeInsets.only(bottom: 40, top: 10),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.end,
+                            decoration: cartInput("رقم الهاتف"),
+                            validator: ((value) {
+                              if (value!.isNotEmpty) {
+                                if (value.length != 11) {
+                                  return "من فضلك  ادخل رقم هاتف صحيح";
+                                } else if (int.tryParse(value) == null) {
+                                  return "من فضلك  ادخل رقم هاتف صحيح";
+                                }
+                              }
+                              if (value.isEmpty) {
+                                return "من فضلك ادخل رقم هاتفك";
+                              }
+                              phoneNumber = value;
+                              return null;
+                            }),
+                          ),
+                        ),
+                        TextFormField(
+                          textAlign: TextAlign.right,
+                          decoration: cartInput("العنوان"),
+                          validator: ((value) {
+                            if (value!.isNotEmpty) {
+                              if (value.length <= 8) {
+                                return " من فضلك  ادخل اسم الحي بشكل صحيح";
+                              }
+                            }
+                            if (value.isEmpty) {
+                              return "من فضلك  ادخل اسم الحي";
+                            }
+                            location = value;
+                            return null;
+                          }),
+                        ),
+                      ],
                     ),
-                    TextFormField(
-                      textAlign: TextAlign.right,
-                      decoration: cartInput("العنوان"),
-                    ),
-                  ],
-                ),
-              )),
+                  )),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(OrdersScreen.routeName);
+                  onPressed: () async {
+                    try {
+                      await submitOrder();
+                      // ignore: use_build_context_synchronously
+
+                    } catch (e) {}
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).colorScheme.secondary,
