@@ -266,8 +266,7 @@ class CustomBotton extends StatelessWidget {
                 ? ElevatedButton.icon(
                     icon: Icon(icon),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(10),
-                      primary: backgoundColor,
+                      padding: const EdgeInsets.all(10), backgroundColor: backgoundColor,
                     ),
                     onPressed: onPress,
                     label: Text(
@@ -276,8 +275,7 @@ class CustomBotton extends StatelessWidget {
                     ))
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(10),
-                      primary: backgoundColor,
+                      padding: const EdgeInsets.all(10), backgroundColor: backgoundColor,
                     ),
                     onPressed: onPress,
                     child: Text(

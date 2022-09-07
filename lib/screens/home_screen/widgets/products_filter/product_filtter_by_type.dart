@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
@@ -11,6 +12,7 @@ class ProdcutsFiltterByType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> types = productsTypeToString.keys.toList();
     return ValueListenableBuilder(
         valueListenable: HomeScreen.productType,
         builder: (context, v, c) {
@@ -21,99 +23,69 @@ class ProdcutsFiltterByType extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: MediaQuery.of(context).size.width,
-                  child: const Text(
-                    ": الأنواع",
-                    style: TextStyle(fontSize: 23),
-                    textAlign: TextAlign.right,
-                  ),
+                  child: Consumer<Products>(builder: (context, v, c) {
+                    return Text(
+                      " النوع : ${v.getCurrentType}",
+                      style: const TextStyle(fontSize: 23),
+                      textAlign: TextAlign.right,
+                    );
+                  }),
                 ),
                 Container(
+                  height: 65,
                   padding:
                       const EdgeInsets.only(right: 10, top: 10, bottom: 10),
                   width: MediaQuery.of(context).size.width,
-                  color: const Color.fromARGB(102, 248, 235, 202),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     reverse: true,
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      textDirection: TextDirection.rtl,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            HomeScreen.productType.value =
-                                ProductsType.hotDrinks;
-                            Provider.of<Products>(context, listen: false)
-                                .setType(ProductsType.hotDrinks);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color: v == ProductsType.hotDrinks
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Colors.grey,
-                            ),
-                            margin: const EdgeInsets.all(5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 3),
-                            child: const Center(
-                              child: Text(
-                                "مشروبات ساخنه",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
+                        ListView.builder(
+                          primary: false,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                final productData = Provider.of<Products>(
+                                    context,
+                                    listen: false);
+                                HomeScreen.productType.value =
+                                    productsTypeToString[types[index]]
+                                        as ProductsType;
+                                productData.setType(
+                                    productsTypeToString[types[index]]
+                                        as ProductsType);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40),
+                                  color: v == productsTypeToString[types[index]]
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : const Color.fromARGB(255, 224, 223, 223),
+                                ),
+                                margin: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 3),
+                                child: Center(
+                                  child: Text(
+                                    types[index],
+                                    style: TextStyle(
+                                        color: v ==
+                                                productsTypeToString[
+                                                    types[index]]
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontSize: 15),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            HomeScreen.productType.value =
-                                ProductsType.coldDrinks;
-                            Provider.of<Products>(context, listen: false)
-                                .setType(ProductsType.coldDrinks);
+                            );
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color: v == ProductsType.coldDrinks
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Colors.grey,
-                            ),
-                            margin: const EdgeInsets.all(5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 3),
-                            child: const Center(
-                              child: Text(
-                                "مشروبات بارده",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            HomeScreen.productType.value = ProductsType.food;
-                            Provider.of<Products>(context, listen: false)
-                                .setType(ProductsType.food);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color: v == ProductsType.food
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Colors.grey,
-                            ),
-                            margin: const EdgeInsets.all(5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 3),
-                            child: const Center(
-                              child: Text(
-                                "مأكولات",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                              ),
-                            ),
-                          ),
+                          itemCount: productsTypeToString.length,
                         )
                       ],
                     ),

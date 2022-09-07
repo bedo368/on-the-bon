@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,8 +8,8 @@ import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
+import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
-import 'package:on_the_bon/screens/products_type_screen/prodcuts_type_screen.dart';
 import 'package:on_the_bon/screens/sign_screen/sign_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -23,15 +23,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  get initialData => null;
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StreamProvider<User?>.value(
-          value: FirebaseAuth.instance.authStateChanges(),
-          initialData: FirebaseAuth.instance.currentUser,
+        StreamProvider<auth.User?>.value(
+          value: auth.FirebaseAuth.instance.authStateChanges(),
+          initialData: auth.FirebaseAuth.instance.currentUser,
         ),
         ChangeNotifierProvider(create: (context) => Products()),
         ChangeNotifierProvider(create: (context) => Cart()),
@@ -49,7 +47,7 @@ class MyApp extends StatelessWidget {
                     .copyWith(secondary: const Color.fromRGBO(177, 35, 35, 1)))
             .copyWith(backgroundColor: const Color.fromRGBO(46, 18, 8, 1)),
         home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
+          stream: auth.FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return const HomeScreen();
@@ -58,10 +56,10 @@ class MyApp extends StatelessWidget {
           },
         ),
         routes: {
-          ProductsTypeScreen.routeName: (context) => const ProductsTypeScreen(),
           ProductScreen.routeName: (context) => const ProductScreen(),
           CartScreen.routeName: (context) => const CartScreen(),
           OrdersScreen.routeName: (context) => const OrdersScreen(),
+          ProductManageScreen.routeName: (context) => const ProductManageScreen(),
         },
       ),
     );

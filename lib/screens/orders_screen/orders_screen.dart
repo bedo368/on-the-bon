@@ -53,6 +53,6 @@ ButtonStyle customBotton() {
       textStyle: const TextStyle(
         fontSize: 14,
       ),
-      primary: Colors.transparent,
+      backgroundColor: Colors.transparent,
       shadowColor: Colors.transparent);
 }

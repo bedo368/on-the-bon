@@ -8,7 +8,7 @@ class OrderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Card(
         color: Theme.of(context).colorScheme.secondary,
         child: Padding(
@@ -21,7 +21,7 @@ class OrderWidget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Center(
                     child: Container(
-                      margin: EdgeInsets.only(right: 5),
+                      margin: const EdgeInsets.only(right: 5),
                       child: Row(
                         textDirection: TextDirection.rtl,
                         mainAxisAlignment: MainAxisAlignment.start,

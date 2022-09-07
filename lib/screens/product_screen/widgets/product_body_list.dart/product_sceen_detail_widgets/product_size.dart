@@ -30,7 +30,7 @@ class ProductSize extends StatelessWidget {
                 builder: (context, v, e) {
                   return ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: v == sizesLiest[index]
+                        backgroundColor: v == sizesLiest[index]
                             ? Theme.of(context).colorScheme.secondary
                             : const Color.fromRGBO(235, 235, 235, 1),
                         padding: const EdgeInsets.all(0),

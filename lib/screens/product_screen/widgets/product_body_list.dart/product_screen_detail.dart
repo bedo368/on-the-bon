@@ -16,10 +16,12 @@ class ProductScreenDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProductSize.selectedSize.value = product.sizePrice.keys.first;
     return SliverList(
         delegate: SliverChildListDelegate([
       Container(
         padding: const EdgeInsets.only(bottom: 100),
+        height: MediaQuery.of(context).size.height * .7,
         width: MediaQuery.of(context).size.width,
         color: const Color.fromRGBO(44, 7, 7, 1),
         child: Column(
@@ -52,9 +54,9 @@ class ProductScreenDetail extends StatelessWidget {
                       .addItemToCartWithQuntity(
                           title: product.title,
                           id: product.id,
-                          price:
-                              product.sizePrice[ProductSize.selectedSize.value]
-                                  as double,
+                          price: product
+                                  .sizePrice[ProductSize.selectedSize.value] ??
+                              product.sizePrice.values.first,
                           imageUrl: product.imageUrl,
                           type: product.type,
                           size: ProductSize.selectedSize.value,
@@ -63,7 +65,7 @@ class ProductScreenDetail extends StatelessWidget {
                       .pushReplacementNamed(CartScreen.routeName);
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).colorScheme.secondary,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
                 child: const Text("اطلب الأن"),
               ),

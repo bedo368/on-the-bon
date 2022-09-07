@@ -20,9 +20,9 @@ class Order {
 
   double get totalPrice {
     double price = 0;
-    ordersItems.forEach((element) {
+    for (var element in ordersItems) {
       price += element.price;
-    });
+    }
     return price;
   }
 }

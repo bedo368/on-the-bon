@@ -105,14 +105,20 @@ class CartScreenBottom extends StatelessWidget {
                     } catch (e) {}
                   },
                   style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).colorScheme.secondary,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                       padding: const EdgeInsets.symmetric(vertical: 5)),
                   child: const Text("تأكيد الطلب"),
                 ),
               )
             ]),
           )
-        : Container();
+        : SizedBox(
+          height: 500,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(
+              child: Text("العربه فارغه قم بملئها من فضلك" , style: TextStyle(fontSize: 20),),
+            ),
+          );
   }
 }
 

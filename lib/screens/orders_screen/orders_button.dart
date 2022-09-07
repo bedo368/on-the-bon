@@ -10,7 +10,6 @@ class OrdersButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void getOrder() {}
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: Row(

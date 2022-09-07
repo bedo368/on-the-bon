@@ -9,7 +9,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: Center(

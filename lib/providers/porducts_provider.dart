@@ -5,23 +5,24 @@ import 'package:on_the_bon/type_enum/types.dart';
 
 class Products with ChangeNotifier {
   final ProductList _productList = {};
-  final Map<String, List<String>> types = {};
-  String currentType = "";
-  String currentSubType = "";
+  final Map<String, Map<String, String>> types = {};
+  String _currentType = "";
+  String _currentSubType = "";
 
   fetchProductAsync() {
     tempData.forEach((key, value) {
-      if (currentType.isEmpty) {
-        currentType = value.type;
-        currentSubType = value.subType;
+      if (_currentType.isEmpty) {
+        _currentType = value.type;
+        _currentSubType = value.subType;
       }
       if (_productList.containsKey(value.type)) {
         _productList[value.type]![key] = value;
-        types[value.type]!.add(value.subType);
+        types[value.type]!.putIfAbsent(value.subType, () => value.subType);
       }
       if (!_productList.containsKey(value.type)) {
         _productList[value.type] = {};
-        types[value.type] = [value.subType];
+        types[value.type] = {};
+        types[value.type]!.putIfAbsent(value.subType, () => value.subType);
         _productList[value.type]![key] = value;
       }
     });
@@ -37,23 +38,45 @@ class Products with ChangeNotifier {
     return allProduct;
   }
 
-  List<Product> getProductWithType() {
-    return [..._productList[currentType]!.values];
+  List<Product> get getProductWithType {
+    final List<Product> products = [];
+
+    for (var e in _productList[_currentType]!.values) {
+      if (e.subType == _currentSubType) {
+        products.add(e);
+      }
+    }
+
+    return products;
   }
 
   void setType(ProductsType type) {
     if (type == ProductsType.food) {
-      currentType = "مأكولات";
+      _currentType = "مأكولات";
     } else if (type == ProductsType.hotDrinks) {
-      currentType = "مشروبات ساخنة";
+      _currentType = "مشروبات ساخنة";
     } else if (type == ProductsType.coldDrinks) {
-      currentType = "مشروبات باردة";
+      _currentType = "مشروبات باردة";
     }
+    _currentSubType = types[_currentType]!.values.first;
+    notifyListeners();
+  }
+
+  String get getCurrentType {
+    return _currentType;
+  }
+
+  String get currentSubType {
+    return _currentSubType;
+  }
+
+  void setSubYype(String subtype) {
+    _currentSubType = subtype;
     notifyListeners();
   }
 
   List<String> get getSupTypes {
-    return [...?types[currentType]] ;
+    return types[_currentType]!.values.toList();
   }
 
   Product fetchProductByTypeAndId({required String type, required String id}) {
