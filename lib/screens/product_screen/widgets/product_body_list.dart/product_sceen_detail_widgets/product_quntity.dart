@@ -39,11 +39,15 @@ class ProductQuntity extends StatelessWidget {
             child: ValueListenableBuilder(
                 valueListenable: ProductQuntity.quetity,
                 builder: (context, v, e) {
-                  return Center(
-                      child: Text(
-                    "${quetity.value.toInt()}",
-                    style: const TextStyle(fontSize: 16),
-                  ));
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 400),
+                    child: Center(
+                        key: ValueKey(quetity.value.toInt()),
+                        child: Text(
+                          "${quetity.value.toInt()}",
+                          style: const TextStyle(fontSize: 16),
+                        )),
+                  );
                 }),
           ),
           IconButton(

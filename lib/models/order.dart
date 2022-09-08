@@ -7,7 +7,7 @@ class Order {
   final String phoneNumber;
   final String location;
   final String id;
-  final OrderType orderType;
+  final OrderTypeEnum orderType;
 
   Order({
     required this.ordersItems,

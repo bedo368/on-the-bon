@@ -56,6 +56,8 @@ class CartScreenBottom extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             keyboardType: TextInputType.number,
                             textAlign: TextAlign.end,
                             decoration: cartInput("رقم الهاتف"),
@@ -76,6 +78,7 @@ class CartScreenBottom extends StatelessWidget {
                           ),
                         ),
                         TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           textAlign: TextAlign.right,
                           decoration: cartInput("العنوان"),
                           validator: ((value) {
@@ -113,10 +116,13 @@ class CartScreenBottom extends StatelessWidget {
             ]),
           )
         : SizedBox(
-          height: 500,
+            height: 500,
             width: MediaQuery.of(context).size.width,
             child: const Center(
-              child: Text("العربه فارغه قم بملئها من فضلك" , style: TextStyle(fontSize: 20),),
+              child: Text(
+                "العربه فارغه قم بملئها من فضلك",
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           );
   }

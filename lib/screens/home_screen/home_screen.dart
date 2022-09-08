@@ -14,8 +14,8 @@ import 'package:provider/provider.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
   static String routeName = "/";
-  static final ValueNotifier<ProductsType> productType =
-      ValueNotifier<ProductsType>(ProductsType.food);
+  static final ValueNotifier<ProductsTypeEnum> productType =
+      ValueNotifier<ProductsTypeEnum>(ProductsTypeEnum.food);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -27,11 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<Products>(context, listen: false).fetchProductAsync();
     final type = Provider.of<Products>(context, listen: false).getCurrentType;
     if (type == "مأكولات") {
-      HomeScreen.productType.value = ProductsType.food;
+      HomeScreen.productType.value = ProductsTypeEnum.food;
     } else if (type == "مشروبات ساخنة") {
-      HomeScreen.productType.value = ProductsType.hotDrinks;
+      HomeScreen.productType.value = ProductsTypeEnum.hotDrinks;
     } else if (type == "مشروبات باردة") {
-      HomeScreen.productType.value = ProductsType.coldDrinks;
+      HomeScreen.productType.value = ProductsTypeEnum.coldDrinks;
     }
 
     super.initState();
@@ -44,20 +44,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: globalKey,
       drawer: Drawer(
-        backgroundColor: const Color.fromARGB(255, 117, 23, 23),
-        child: Column(
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(ProductManageScreen.routeName);
-                },
-                child: const Text("Mange Product"))
-          ],
+        child: Container(
+          margin: const EdgeInsets.only(top: 40),
+          child: Column(
+            children: [
+              ListTile(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(ProductManageScreen.routeName);
+                  },
+                  leading: const Text("Mange Product")),
+            ],
+          ),
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
           "On The Bon",
           style: TextStyle(fontFamily: "RockSalt"),

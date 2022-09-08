@@ -1,21 +1,33 @@
-enum ProductSize { meduim, large }
-
-enum OrderType {
+enum OrderTypeEnum {
   successfulOrder,
   orderInProgress,
   rejectedOrder,
 }
 
-enum ProductsType { food, hotDrinks, coldDrinks }
+enum ProductsTypeEnum { food, hotDrinks, coldDrinks }
 
-final Map<String, ProductsType> productsTypeToString = {
-  "مأكولات": ProductsType.food,
-  "مشروبات باردة": ProductsType.coldDrinks,
-  "مشروبات ساخنة": ProductsType.hotDrinks,
+final Map<String, ProductsTypeEnum> productsStringToType = {
+  "مأكولات": ProductsTypeEnum.food,
+  "مشروبات باردة": ProductsTypeEnum.coldDrinks,
+  "مشروبات ساخنة": ProductsTypeEnum.hotDrinks,
 };
 
-final Map<ProductsType, String> productstringToproductsType = {
-  ProductsType.food: "مأكولات",
-  ProductsType.hotDrinks: "مشروبات ساخنة",
-  ProductsType.coldDrinks: "مشروبات باردة"
+final Map<ProductsTypeEnum, String> productsTypeToString = {
+  ProductsTypeEnum.food: "مأكولات",
+  ProductsTypeEnum.hotDrinks: "مشروبات ساخنة",
+  ProductsTypeEnum.coldDrinks: "مشروبات باردة"
+};
+
+enum ProductSizeEnum { meduim, large, small }
+
+final productSizeEnumToString = {
+  "meduim": ProductSizeEnum.meduim,
+  "large": ProductSizeEnum.large,
+  "small": ProductSizeEnum.small
+};
+
+final productSizeStringtoEnum = {
+  ProductSizeEnum.meduim: "meduim",
+  ProductSizeEnum.large: "large",
+  ProductSizeEnum.small: "small"
 };

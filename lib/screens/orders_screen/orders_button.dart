@@ -5,8 +5,8 @@ class OrdersButton extends StatelessWidget {
   const OrdersButton({
     Key? key,
   }) : super(key: key);
-  static final ValueNotifier<OrderType> activeOrders =
-      ValueNotifier<OrderType>(OrderType.orderInProgress);
+  static final ValueNotifier<OrderTypeEnum> activeOrders =
+      ValueNotifier<OrderTypeEnum>(OrderTypeEnum.orderInProgress);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +20,13 @@ class OrdersButton extends StatelessWidget {
               builder: (context, v, c) {
                 return GestureDetector(
                   onTap: () {
-                    OrdersButton.activeOrders.value = OrderType.rejectedOrder;
+                    OrdersButton.activeOrders.value =
+                        OrderTypeEnum.rejectedOrder;
                   },
                   child: Container(
                       decoration: BoxDecoration(
                           border: Border(
-                              bottom: v == OrderType.rejectedOrder
+                              bottom: v == OrderTypeEnum.rejectedOrder
                                   ? BorderSide(
                                       width: 1.0,
                                       color: Theme.of(context)
@@ -45,12 +46,13 @@ class OrdersButton extends StatelessWidget {
               builder: (context, v, c) {
                 return GestureDetector(
                   onTap: () {
-                    OrdersButton.activeOrders.value = OrderType.successfulOrder;
+                    OrdersButton.activeOrders.value =
+                        OrderTypeEnum.successfulOrder;
                   },
                   child: Container(
                       decoration: BoxDecoration(
                           border: Border(
-                              bottom: v == OrderType.successfulOrder
+                              bottom: v == OrderTypeEnum.successfulOrder
                                   ? BorderSide(
                                       width: 1.0,
                                       color: Theme.of(context)
@@ -70,12 +72,13 @@ class OrdersButton extends StatelessWidget {
               builder: (context, v, c) {
                 return GestureDetector(
                   onTap: () {
-                    OrdersButton.activeOrders.value = OrderType.orderInProgress;
+                    OrdersButton.activeOrders.value =
+                        OrderTypeEnum.orderInProgress;
                   },
                   child: Container(
                       decoration: BoxDecoration(
                           border: Border(
-                              bottom: v == OrderType.orderInProgress
+                              bottom: v == OrderTypeEnum.orderInProgress
                                   ? BorderSide(
                                       width: 1.0,
                                       color: Theme.of(context)
@@ -87,7 +90,7 @@ class OrdersButton extends StatelessWidget {
                       child: Text(
                         "الطلبات الحالية",
                         style: TextStyle(
-                            color: v == OrderType.orderInProgress
+                            color: v == OrderTypeEnum.orderInProgress
                                 ? Theme.of(context).colorScheme.secondary
                                 : Colors.black),
                       )),

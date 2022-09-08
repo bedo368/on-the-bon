@@ -17,7 +17,7 @@ class Orders with ChangeNotifier {
     required String userId,
   }) async {
     _orders[DateTime.now().toString()] = Order(
-        orderType: OrderType.orderInProgress,
+        orderType: OrderTypeEnum.orderInProgress,
         ordersItems: orderItems,
         userId: userId,
         phoneNumber: phoneNumber,

@@ -13,6 +13,7 @@ class ProductManageCard extends StatelessWidget {
         Container(
           color: Colors.white,
           width: MediaQuery.of(context).size.width * .25,
+          height: 70,
           child: Image.network(
             product.imageUrl,
             fit: BoxFit.cover,

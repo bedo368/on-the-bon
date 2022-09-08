@@ -50,12 +50,12 @@ class Products with ChangeNotifier {
     return products;
   }
 
-  void setType(ProductsType type) {
-    if (type == ProductsType.food) {
+  void setType(ProductsTypeEnum type) {
+    if (type == ProductsTypeEnum.food) {
       _currentType = "مأكولات";
-    } else if (type == ProductsType.hotDrinks) {
+    } else if (type == ProductsTypeEnum.hotDrinks) {
       _currentType = "مشروبات ساخنة";
-    } else if (type == ProductsType.coldDrinks) {
+    } else if (type == ProductsTypeEnum.coldDrinks) {
       _currentType = "مشروبات باردة";
     }
     _currentSubType = types[_currentType]!.values.first;

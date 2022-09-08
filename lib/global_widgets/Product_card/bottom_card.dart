@@ -31,7 +31,7 @@ class BottomCard extends StatelessWidget {
             bottomLeft: Radius.circular(15),
             bottomRight: Radius.circular(15),
           )),
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).primaryColor,
           child: Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 10),
             child: Column(

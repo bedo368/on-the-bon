@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
@@ -12,7 +11,7 @@ class ProdcutsFiltterByType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> types = productsTypeToString.keys.toList();
+    final List<String> types = productsStringToType.keys.toList();
     return ValueListenableBuilder(
         valueListenable: HomeScreen.productType,
         builder: (context, v, c) {
@@ -53,19 +52,23 @@ class ProdcutsFiltterByType extends StatelessWidget {
                                 final productData = Provider.of<Products>(
                                     context,
                                     listen: false);
-                                HomeScreen.productType.value =
-                                    productsTypeToString[types[index]]
-                                        as ProductsType;
-                                productData.setType(
-                                    productsTypeToString[types[index]]
-                                        as ProductsType);
+                                if (HomeScreen.productType.value !=
+                                    productsStringToType[types[index]]) {
+                                  HomeScreen.productType.value =
+                                      productsStringToType[types[index]]
+                                          as ProductsTypeEnum;
+                                  productData.setType(
+                                      productsStringToType[types[index]]
+                                          as ProductsTypeEnum);
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(40),
-                                  color: v == productsTypeToString[types[index]]
+                                  color: v == productsStringToType[types[index]]
                                       ? Theme.of(context).colorScheme.secondary
-                                      : const Color.fromARGB(255, 224, 223, 223),
+                                      : const Color.fromARGB(
+                                          255, 224, 223, 223),
                                 ),
                                 margin: const EdgeInsets.all(5),
                                 padding: const EdgeInsets.symmetric(
@@ -75,7 +78,7 @@ class ProdcutsFiltterByType extends StatelessWidget {
                                     types[index],
                                     style: TextStyle(
                                         color: v ==
-                                                productsTypeToString[
+                                                productsStringToType[
                                                     types[index]]
                                             ? Colors.white
                                             : Colors.black,
@@ -85,7 +88,7 @@ class ProdcutsFiltterByType extends StatelessWidget {
                               ),
                             );
                           },
-                          itemCount: productsTypeToString.length,
+                          itemCount: productsStringToType.length,
                         )
                       ],
                     ),

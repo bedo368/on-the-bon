@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/screens/add_edit_product_screens/add_product_screen.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
@@ -38,11 +39,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+                scaffoldBackgroundColor:const Color.fromARGB(255, 254, 255, 253) ,
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
                   textStyle: GoogleFonts.itim(fontSize: 18),
                 )),
-                primaryColor: const Color.fromRGBO(46, 18, 8, 1),
+                primaryColor: const Color.fromRGBO(5, 14, 14, 1),
                 colorScheme: ColorScheme.fromSwatch()
                     .copyWith(secondary: const Color.fromRGBO(177, 35, 35, 1)))
             .copyWith(backgroundColor: const Color.fromRGBO(46, 18, 8, 1)),
@@ -59,7 +61,9 @@ class MyApp extends StatelessWidget {
           ProductScreen.routeName: (context) => const ProductScreen(),
           CartScreen.routeName: (context) => const CartScreen(),
           OrdersScreen.routeName: (context) => const OrdersScreen(),
-          ProductManageScreen.routeName: (context) => const ProductManageScreen(),
+          AddProductScreen.routeName: (context) => const AddProductScreen(),
+          ProductManageScreen.routeName: (context) =>
+              const ProductManageScreen(),
         },
       ),
     );
