@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:on_the_bon/screens/add_edit_product_screens/widets/add_product_form.dart';
 
 class AddProductScreen extends StatelessWidget {
@@ -7,6 +8,15 @@ class AddProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // String id =
+    //     (ModalRoute.of(context)!.settings.arguments as dynamic)['id'] ?? "";
+    // String type =
+    //     (ModalRoute.of(context)!.settings.arguments as dynamic)['type'] ?? "";
+    // final Product currentPeoduct = Provider.of<Products>(context, listen: false)
+    //     .fetchProductByTypeAndId(type: type, id: id);
+
+    print("rebuild aaa");
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
@@ -18,13 +28,17 @@ class AddProductScreen extends StatelessWidget {
               textAlign: TextAlign.end,
             ),
           )),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Column(
-            children: const [
-              AddProductForm(),
-            ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Column(
+              children: const [
+                AddProductForm(
+                    // currentPeoduct: currentPeoduct,
+                    ),
+              ],
+            ),
           ),
         ),
       ),

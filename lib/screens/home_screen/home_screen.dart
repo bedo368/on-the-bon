@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: globalKey,
       drawer: Drawer(
+        
         child: Container(
           margin: const EdgeInsets.only(top: 40),
           child: Column(
@@ -59,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       appBar: AppBar(
+        
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
           "On The Bon",

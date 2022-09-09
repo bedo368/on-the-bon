@@ -18,16 +18,16 @@ final Map<ProductsTypeEnum, String> productsTypeToString = {
   ProductsTypeEnum.coldDrinks: "مشروبات باردة"
 };
 
-enum ProductSizeEnum { meduim, large, small }
+enum ProductSizeEnum { small, large, meduim }
 
 final productSizeEnumToString = {
-  "meduim": ProductSizeEnum.meduim,
-  "large": ProductSizeEnum.large,
-  "small": ProductSizeEnum.small
+  "وسط": ProductSizeEnum.small,
+  "كبير": ProductSizeEnum.large,
+  "صغير": ProductSizeEnum.meduim
 };
 
 final productSizeStringtoEnum = {
-  ProductSizeEnum.meduim: "meduim",
-  ProductSizeEnum.large: "large",
-  ProductSizeEnum.small: "small"
+  ProductSizeEnum.small: "صغير",
+  ProductSizeEnum.meduim: "وسط",
+  ProductSizeEnum.large: "كبير",
 };

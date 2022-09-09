@@ -22,7 +22,11 @@ class ProductManageScreen extends StatelessWidget {
                   context: context,
                   delegate: MySearchDelegate(
                     Provider.of<Products>(context, listen: false).allProducts,
-                    (context, id, type) {},
+                    (context, id, type) {
+                      Navigator.of(context).pushNamed(
+                          AddProductScreen.routeName,
+                          arguments: {"id": id, "type": type});
+                    },
                   ),
                 );
               },
