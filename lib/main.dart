@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
-import 'package:on_the_bon/screens/add_edit_product_screens/add_product_screen.dart';
+import 'package:on_the_bon/screens/edit_product_screen/edit_product_screen.dart';
+import 'package:on_the_bon/screens/add_product_screens/add_product_screen.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-                scaffoldBackgroundColor:const Color.fromARGB(255, 254, 255, 253) ,
+                scaffoldBackgroundColor:
+                    const Color.fromARGB(255, 254, 255, 253),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
                   textStyle: GoogleFonts.itim(fontSize: 18),
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
           CartScreen.routeName: (context) => const CartScreen(),
           OrdersScreen.routeName: (context) => const OrdersScreen(),
           AddProductScreen.routeName: (context) => const AddProductScreen(),
+          EditProductScreen.routeName: (context) => const EditProductScreen(),
           ProductManageScreen.routeName: (context) =>
               const ProductManageScreen(),
         },

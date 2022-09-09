@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/image_picker.dart';
-import 'package:on_the_bon/models/product.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
 
-import 'package:on_the_bon/screens/add_edit_product_screens/widets/size_price_selective.dart';
+
+import 'package:on_the_bon/screens/add_product_screens/widets/size_price_selective.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
-import 'package:provider/provider.dart';
 
 class AddProductForm extends StatelessWidget {
   const AddProductForm({
@@ -16,19 +14,10 @@ class AddProductForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey();
-    String id = "";
-    String type = "";
-    if (ModalRoute.of(context)!.settings.arguments != null) {
-      id = (ModalRoute.of(context)!.settings.arguments as dynamic)['id'] ?? "";
-      type =
-          (ModalRoute.of(context)!.settings.arguments as dynamic)['type'] ?? "";
-    }
+    final GlobalKey<FormState> formKey = GlobalKey();
+   
+   
 
-    final Product currentPeoduct = Provider.of<Products>(context, listen: false)
-        .fetchProductByTypeAndId(type: type, id: id);
-
-    print("rerender");
     final List<ProductSizeEnum> sizeListEnum =
         productSizeStringtoEnum.keys.toList();
 
@@ -41,7 +30,7 @@ class AddProductForm extends StatelessWidget {
     }
 
     return Form(
-        key: _formKey,
+        key: formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * .8,
@@ -50,7 +39,6 @@ class AddProductForm extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: TextFormField(
-                    initialValue: currentPeoduct?.title,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "من فضلك ادخل اسم المنتج";
@@ -66,7 +54,6 @@ class AddProductForm extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: TextFormField(
-                    initialValue: currentPeoduct?.discription,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "من فضلك ادخل اسم المنتج";
@@ -107,8 +94,7 @@ class AddProductForm extends StatelessWidget {
                               child: Text(value));
                         }).toList(),
                         onChanged: (s) {},
-                        value: productsStringToType[currentPeoduct!.type] ??
-                            ProductsTypeEnum.hotDrinks,
+                        value: ProductsTypeEnum.hotDrinks,
                       ),
                     )
                   ],
@@ -117,7 +103,6 @@ class AddProductForm extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: TextFormField(
-                    initialValue: currentPeoduct!.subType,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "من فضلك ادخل اسم المنتج";
@@ -141,7 +126,7 @@ class AddProductForm extends StatelessWidget {
                     Expanded(
                       child: ImagePickerWedgit(
                         (pickedImage) {},
-                        imageUrl: currentPeoduct!.imageUrl,
+                        imageUrl: null,
                       ),
                     )
                   ],
@@ -170,9 +155,7 @@ class AddProductForm extends StatelessWidget {
                           backgroundColor: Colors.green),
                       onPressed: () {},
                       // ignore: unnecessary_null_comparison
-                      child: Text(currentPeoduct != null
-                          ? "تعديل المنتج"
-                          : " اضف المنتج")))
+                      child: const Text("تعديل المنتج")))
             ],
           ),
         ));
