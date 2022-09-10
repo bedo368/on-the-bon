@@ -22,9 +22,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoading = true;
+
   @override
   void initState() {
-    Provider.of<Products>(context, listen: false).fetchProductAsync();
+    Provider.of<Products>(context, listen: false)
+        .fetchProductAsync()
+        .then((value) {
+      setState(() {
+        isLoading = false;
+      });
+    });
+
     final type = Provider.of<Products>(context, listen: false).getCurrentType;
     if (type == "مأكولات") {
       HomeScreen.productType.value = ProductsTypeEnum.food;
@@ -44,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: globalKey,
       drawer: Drawer(
-        
         child: Container(
           margin: const EdgeInsets.only(top: 40),
           child: Column(
@@ -60,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       appBar: AppBar(
-        
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
           "On The Bon",
@@ -90,17 +97,57 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.search)),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const ProdcutsFiltterByType(),
-            const ProductsFillterBySubType(),
-            Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: const ProductGraid())
-          ],
-        ),
-      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  const ProdcutsFiltterByType(),
+                  const ProductsFillterBySubType(),
+                  const ProductTypeNotifier(),
+                  Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: const ProductGraid())
+                ],
+              ),
+            ),
+    );
+  }
+}
+
+class ProductTypeNotifier extends StatelessWidget {
+  const ProductTypeNotifier({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      width: MediaQuery.of(context).size.width,
+      color: Theme.of(context).primaryColor,
+      child: Consumer<Products>(builder: (context, v, c) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          transitionBuilder: (child, animation) =>
+              SlideTransition(
+                  position: animation.drive(Tween<Offset>(
+                      begin: const Offset(0, -1),
+                      end: const Offset(0, 0))),
+                  child: child),
+          child: Text(
+            key: ValueKey(v.getCurrentType),
+            "  ${v.getCurrentType}  ",
+            style: const TextStyle(
+                fontSize: 23, color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+        );
+      }),
     );
   }
 }

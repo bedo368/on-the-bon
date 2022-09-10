@@ -16,7 +16,7 @@ class EditProductFrom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey();
+    final GlobalKey<FormState> formKey = GlobalKey();
     String id = "";
     String type = "";
     if (ModalRoute.of(context)!.settings.arguments != null) {
@@ -40,7 +40,7 @@ class EditProductFrom extends StatelessWidget {
     }
 
     return Form(
-        key: _formKey,
+        key: formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * .8,

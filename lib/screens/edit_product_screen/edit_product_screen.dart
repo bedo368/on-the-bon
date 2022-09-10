@@ -7,7 +7,6 @@ class EditProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("render edit");
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,

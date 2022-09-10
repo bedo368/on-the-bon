@@ -17,7 +17,6 @@ class ProductsFillterBySubType extends StatelessWidget {
         margin: const EdgeInsets.only(top: 10),
         child: SizedBox(
           height: 40,
-          width: MediaQuery.of(context).size.width,
           child: Row(
             textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +39,6 @@ class ProductsFillterBySubType extends StatelessWidget {
                                     .currentSubType;
                           },
                           child: Container(
-                              width: 60,
                               decoration: BoxDecoration(
                                   border: Border(
                                       bottom: v == subTypes[index]

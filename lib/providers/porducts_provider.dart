@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:on_the_bon/models/product.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
@@ -8,24 +12,43 @@ class Products with ChangeNotifier {
   final Map<String, Map<String, String>> types = {};
   String _currentType = "";
   String _currentSubType = "";
+  final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  fetchProductAsync() {
-    tempData.forEach((key, value) {
-      if (_currentType.isEmpty) {
-        _currentType = value.type;
-        _currentSubType = value.subType;
-      }
-      if (_productList.containsKey(value.type)) {
-        _productList[value.type]![key] = value;
-        types[value.type]!.putIfAbsent(value.subType, () => value.subType);
-      }
-      if (!_productList.containsKey(value.type)) {
-        _productList[value.type] = {};
-        types[value.type] = {};
-        types[value.type]!.putIfAbsent(value.subType, () => value.subType);
-        _productList[value.type]![key] = value;
-      }
-    });
+  Future fetchProductAsync() async {
+    final productsList = await db.collection("products").get();
+
+    productsList.docs.toList().forEach(
+      (element) {
+        final Map<String, double> sizePrice = {...element.data()["sizePrice"]};
+
+        final product = Product(
+            id: element.id,
+            title: element.data()["title"],
+            discription: element.data()["discription"],
+            sizePrice: sizePrice,
+            type: element.data()["type"],
+            subType: element.data()["subType"],
+            imageUrl: element.data()["imageUrl"]);
+
+        if (_currentType.isEmpty) {
+          _currentType = product.type;
+          _currentSubType = product.subType;
+        }
+        if (_productList.containsKey(product.type)) {
+          _productList[product.type]![product.id] = product;
+          types[product.type]!
+              .putIfAbsent(product.subType, () => product.subType);
+        }
+        if (!_productList.containsKey(product.type)) {
+          _productList[product.type] = {};
+          types[product.type] = {};
+          types[product.type]!
+              .putIfAbsent(product.subType, () => product.subType);
+          _productList[product.type]![product.id] = product;
+        }
+      },
+    );
+    notifyListeners();
   }
 
   List<Product> get allProducts {
@@ -40,6 +63,15 @@ class Products with ChangeNotifier {
 
   List<Product> get getProductWithType {
     final List<Product> products = [];
+
+    if (!_productList.containsKey(_currentType)) {
+      print("not exist");
+      return [];
+    }
+
+    if (_productList[_currentType] == null) {
+      return [];
+    }
 
     for (var e in _productList[_currentType]!.values) {
       if (e.subType == _currentSubType) {
@@ -58,6 +90,12 @@ class Products with ChangeNotifier {
     } else if (type == ProductsTypeEnum.coldDrinks) {
       _currentType = "مشروبات باردة";
     }
+    if (!_productList.containsKey(_currentType)) {
+      notifyListeners();
+
+      return;
+    }
+
     _currentSubType = types[_currentType]!.values.first;
     notifyListeners();
   }
@@ -76,6 +114,9 @@ class Products with ChangeNotifier {
   }
 
   List<String> get getSupTypes {
+    if (!_productList.containsKey(_currentType)) {
+      return [];
+    }
     return types[_currentType]!.values.toList();
   }
 
@@ -94,6 +135,38 @@ class Products with ChangeNotifier {
         subType: '',
         title: '',
         type: '');
+  }
+
+  Future createNewProduct(Product newProduct, File image) async {
+    try {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child("products_image")
+          .child("${DateTime.now()}.png");
+
+      await ref.putFile(image);
+      final url = await ref.getDownloadURL();
+
+      final productId = await db.collection("products").add({
+        "title": newProduct.title,
+        "discription": newProduct.discription,
+        "sizePrice": newProduct.sizePrice,
+        "imageUrl": url,
+        "type": newProduct.type,
+        "subType": newProduct.subType,
+      });
+
+      _productList[newProduct.type]![productId.id] = Product(
+          id: productId.id,
+          title: newProduct.title,
+          discription: newProduct.discription,
+          sizePrice: newProduct.sizePrice,
+          type: newProduct.type,
+          subType: newProduct.subType,
+          imageUrl: url);
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 

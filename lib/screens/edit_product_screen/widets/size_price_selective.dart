@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 
+// ignore: must_be_immutable
 class SizePriceSelective extends StatelessWidget {
-  SizePriceSelective(
+   SizePriceSelective(
       {Key? key,
       required this.type,
       required this.addPriceWithSize,
@@ -15,10 +16,11 @@ class SizePriceSelective extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _controller = TextEditingController();
+    final TextEditingController controller = TextEditingController();
+    // ignore: no_leading_underscores_for_local_identifiers
     double _price = price;
     if (_price != 0) {
-      _controller.text = _price.toString();
+      controller.text = _price.toString();
     }
     return SizedBox(
       width: MediaQuery.of(context).size.width * .8,
@@ -43,16 +45,16 @@ class SizePriceSelective extends StatelessWidget {
               height: 50,
               child: TextField(
                   keyboardType: TextInputType.number,
-                  controller: _controller,
+                  controller: controller,
                   textDirection: TextDirection.rtl,
                   decoration: const InputDecoration(
                       hintText: "السعر",
                       hintTextDirection: TextDirection.rtl))),
           IconButton(
               onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  _price = double.tryParse(_controller.text) ?? 0;
-                  if (double.tryParse(_controller.text) != null) {
+                if (controller.text.isNotEmpty) {
+                  _price = double.tryParse(controller.text) ?? 0;
+                  if (double.tryParse(controller.text) != null) {
                     addPriceWithSize(type, _price);
                   }
                 }

@@ -1,25 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/image_picker.dart';
-
+import 'package:on_the_bon/models/product.dart';
+import 'package:on_the_bon/providers/porducts_provider.dart';
 
 import 'package:on_the_bon/screens/add_product_screens/widets/size_price_selective.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
+import 'package:provider/provider.dart';
 
 class AddProductForm extends StatelessWidget {
   const AddProductForm({
     Key? key,
-    // required this.currentPeoduct,
   }) : super(key: key);
-  // final Product currentPeoduct;
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey();
-   
-   
 
     final List<ProductSizeEnum> sizeListEnum =
         productSizeStringtoEnum.keys.toList();
+
+    final ValueNotifier<bool> isLoding = ValueNotifier<bool>(false);
 
     final Map<String, double> priceSizeMap = {};
     void addPriceSize(ProductSizeEnum type, double price) {
@@ -27,6 +29,59 @@ class AddProductForm extends StatelessWidget {
         priceSizeMap[productSizeStringtoEnum[type]!] = price;
       }
       priceSizeMap.putIfAbsent(productSizeStringtoEnum[type]!, () => price);
+    }
+
+    final Map<String, dynamic> formData = {
+      "title": "",
+      "discription": "",
+      "subType": "",
+      "type": "",
+      "image": File(""),
+    };
+
+    // ignore: no_leading_underscores_for_local_identifiers
+    Future<void> _formSubmit() async {
+      try {
+        if (!formKey.currentState!.validate()) {
+          return;
+        } else if (formKey.currentState!.validate()) {
+          if (priceSizeMap.isEmpty) {
+            return;
+          }
+          if ((formData["image"] as File).path == "") {
+            return;
+          }
+          if (formData["type"] == "") {
+            return;
+          }
+          final newProductData = Product(
+              id: "",
+              title: formData["title"],
+              discription: formData["discription"],
+              sizePrice: priceSizeMap,
+              type: formData["type"],
+              subType: formData["subType"],
+              imageUrl: "");
+          await Provider.of<Products>(context, listen: false)
+              .createNewProduct(newProductData, formData["image"]);
+        }
+      } catch (error) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: const Text(
+                "حدث خطا ما يرجي المحاوله مجددا",
+                textAlign: TextAlign.center,
+              ),
+            )));
+        isLoding.value = false;
+
+        rethrow;
+      }
+
+      isLoding.value = false;
     }
 
     return Form(
@@ -42,11 +97,15 @@ class AddProductForm extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "من فضلك ادخل اسم المنتج";
-                      } else if (value.length < 4) {
+                      } else if (value.length < 3) {
                         return "اسم المنتج قصير للغايه ";
                       }
+                      formData["title"] = value;
 
                       return null;
+                    },
+                    onSaved: (value) {
+                      formData["title"] = value;
                     },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("اسم المنتج", context),
@@ -61,9 +120,12 @@ class AddProductForm extends StatelessWidget {
                         return "اسم المنتج قصير للغايه ";
                       }
 
+                      formData["discription"] = value;
                       return null;
                     },
-                    scrollController: ScrollController(),
+                    onSaved: (value) {
+                      formData["discription"] = value;
+                    },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("الوصف", context),
                     maxLines: 2,
@@ -93,8 +155,14 @@ class AddProductForm extends StatelessWidget {
                                   as ProductsTypeEnum,
                               child: Text(value));
                         }).toList(),
-                        onChanged: (s) {},
-                        value: ProductsTypeEnum.hotDrinks,
+                        onChanged: (value) {
+                          formData["type"] = productsTypeToString[value];
+                        },
+                        onSaved: (value) {
+                          print(value);
+                          formData["type"] = productsTypeToString[value];
+                        },
+                        value: null,
                       ),
                     )
                   ],
@@ -105,12 +173,16 @@ class AddProductForm extends StatelessWidget {
                   child: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "من فضلك ادخل اسم المنتج";
+                        return "من فضلك ادخل النوع الفرعي للمنتج";
                       } else if (value.length < 4) {
-                        return "اسم المنتج قصير للغايه ";
+                        return "النوع الفرعي قصير للغايه ";
                       }
+                      formData["subType"] = value;
 
                       return null;
+                    },
+                    onSaved: (value) {
+                      formData["subType"] = value;
                     },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("النوع الفرعي", context),
@@ -125,7 +197,9 @@ class AddProductForm extends StatelessWidget {
                         child: const Text("الصوره")),
                     Expanded(
                       child: ImagePickerWedgit(
-                        (pickedImage) {},
+                        (pickedImage) {
+                          formData["image"] = pickedImage;
+                        },
                         imageUrl: null,
                       ),
                     )
@@ -146,16 +220,30 @@ class AddProductForm extends StatelessWidget {
                 },
                 itemCount: 3,
               ),
-              Container(
-                  height: 44,
-                  margin: const EdgeInsets.only(top: 20),
-                  width: MediaQuery.of(context).size.width * .8,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green),
-                      onPressed: () {},
-                      // ignore: unnecessary_null_comparison
-                      child: const Text("تعديل المنتج")))
+              ValueListenableBuilder<bool>(
+                valueListenable: isLoding,
+                builder: (context, value, child) {
+                  return Container(
+                      height: 44,
+                      margin: const EdgeInsets.only(top: 20),
+                      width: MediaQuery.of(context).size.width * .8,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green),
+                          onPressed: value
+                              ? null
+                              : () async {
+                                  isLoding.value = true;
+                                  await _formSubmit();
+                                },
+                          // ignore: unnecessary_null_comparison
+                          child: value
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : const Text("اضف المنتج")));
+                },
+              )
             ],
           ),
         ));

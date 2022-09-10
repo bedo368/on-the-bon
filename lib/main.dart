@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                 primaryColor: const Color.fromRGBO(5, 14, 14, 1),
                 colorScheme: ColorScheme.fromSwatch()
                     .copyWith(secondary: const Color.fromRGBO(177, 35, 35, 1)))
-            .copyWith(backgroundColor: const Color.fromRGBO(46, 18, 8, 1)),
+            .copyWith(backgroundColor: const Color.fromRGBO(5, 14, 14, 1)),
         home: StreamBuilder(
           stream: auth.FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {

@@ -20,17 +20,6 @@ class ProdcutsFiltterByType extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  width: MediaQuery.of(context).size.width,
-                  child: Consumer<Products>(builder: (context, v, c) {
-                    return Text(
-                      " النوع : ${v.getCurrentType}",
-                      style: const TextStyle(fontSize: 23),
-                      textAlign: TextAlign.right,
-                    );
-                  }),
-                ),
-                Container(
                   height: 65,
                   padding:
                       const EdgeInsets.only(right: 10, top: 10, bottom: 10),
@@ -40,7 +29,7 @@ class ProdcutsFiltterByType extends StatelessWidget {
                     reverse: true,
                     child: Row(
                       textDirection: TextDirection.rtl,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         ListView.builder(
                           primary: false,

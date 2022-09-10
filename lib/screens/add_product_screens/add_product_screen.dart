@@ -8,13 +8,6 @@ class AddProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String id =
-    //     (ModalRoute.of(context)!.settings.arguments as dynamic)['id'] ?? "";
-    // String type =
-    //     (ModalRoute.of(context)!.settings.arguments as dynamic)['type'] ?? "";
-    // final Product currentPeoduct = Provider.of<Products>(context, listen: false)
-    //     .fetchProductByTypeAndId(type: type, id: id);
-
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
@@ -32,9 +25,7 @@ class AddProductScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 30),
             child: Column(
               children: const [
-                AddProductForm(
-                    // currentPeoduct: currentPeoduct,
-                    ),
+                AddProductForm(),
               ],
             ),
           ),

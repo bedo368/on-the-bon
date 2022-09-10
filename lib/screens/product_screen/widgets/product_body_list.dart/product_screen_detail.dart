@@ -23,7 +23,7 @@ class ProductScreenDetail extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 100),
         height: MediaQuery.of(context).size.height * .7,
         width: MediaQuery.of(context).size.width,
-        color: const Color.fromRGBO(44, 7, 7, 1),
+        color: Theme.of(context).primaryColor,
         child: Column(
           children: [
             ProductType(
