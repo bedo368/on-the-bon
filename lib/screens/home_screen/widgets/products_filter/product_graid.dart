@@ -11,6 +11,7 @@ class ProductGraid extends StatelessWidget {
     final productList = Provider.of<Products>(context).getProductWithType;
 
     return AnimatedSwitcher(
+      
       transitionBuilder: (child, animation) => SlideTransition(
           position: animation.drive(Tween<Offset>(
               begin: const Offset(-1, 0), end: const Offset(0, 0))),

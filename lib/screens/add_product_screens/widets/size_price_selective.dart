@@ -11,7 +11,7 @@ class SizePriceSelective extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
     double _price = 0;
     return SizedBox(
       width: MediaQuery.of(context).size.width * .8,

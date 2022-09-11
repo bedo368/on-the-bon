@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/image_picker.dart';
 import 'package:on_the_bon/models/product.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/edit_product_screen/widets/size_price_selective.dart';
+import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
@@ -10,33 +13,94 @@ import 'package:provider/provider.dart';
 class EditProductFrom extends StatelessWidget {
   const EditProductFrom({
     Key? key,
-    // required this.currentPeoduct,
   }) : super(key: key);
-  // final Product currentPeoduct;
 
+  static GlobalKey<FormState> formKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey();
     String id = "";
-    String type = "";
     if (ModalRoute.of(context)!.settings.arguments != null) {
       id = (ModalRoute.of(context)!.settings.arguments as dynamic)['id'] ?? "";
-      type =
-          (ModalRoute.of(context)!.settings.arguments as dynamic)['type'] ?? "";
     }
+    final ValueNotifier<bool> isLoding = ValueNotifier<bool>(false);
+    final Map<String, dynamic> formData = {
+      "title": "",
+      "discription": "",
+      "subType": "",
+      "type": "",
+      "image": File(""),
+    };
 
-    final Product currentPeoduct = Provider.of<Products>(context, listen: false)
-        .fetchProductByTypeAndId(type: type, id: id);
+    final Product? currentPeoduct =
+        Provider.of<Products>(context, listen: false)
+            .fetchProductByTypeAndId(id: id);
 
     final List<ProductSizeEnum> sizeListEnum =
         productSizeStringtoEnum.keys.toList();
 
-    final Map<String, double> priceSizeMap = {};
     void addPriceSize(ProductSizeEnum type, double price) {
-      if (priceSizeMap.containsKey(productSizeStringtoEnum[type]!)) {
-        priceSizeMap[productSizeStringtoEnum[type]!] = price;
+      if (currentPeoduct!.sizePrice
+          .containsKey(productSizeStringtoEnum[type]!)) {
+        currentPeoduct.sizePrice[productSizeStringtoEnum[type]!] = price;
       }
-      priceSizeMap.putIfAbsent(productSizeStringtoEnum[type]!, () => price);
+      currentPeoduct.sizePrice
+          .putIfAbsent(productSizeStringtoEnum[type]!, () => price);
+    }
+
+    // ignore: no_leading_underscores_for_local_identifiers
+    Future<void> _formSubmit() async {
+      try {
+        formKey.currentState!.save();
+        formData["image"] = ImagePickerWedgit.imageHolder ?? File("");
+        if (!formKey.currentState!.validate()) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.red,
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: const Text(
+                  "يرجي ملئ معلومات المنتج",
+                  textAlign: TextAlign.center,
+                ),
+              )));
+          isLoding.value = false;
+
+          return;
+        } else if (formKey.currentState!.validate()) {
+          final newProductData = Product(
+              id: currentPeoduct!.id,
+              title: formData["title"],
+              discription: formData["discription"],
+              sizePrice: currentPeoduct.sizePrice,
+              type: formData["type"],
+              subType: formData["subType"],
+              imageUrl: currentPeoduct.imageUrl);
+
+          await Provider.of<Products>(context, listen: false)
+              .editProduct(product: newProductData, image: formData["image"]);
+
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pushReplacementNamed(ProductScreen.routeName,
+              arguments: {"id": newProductData.id});
+        }
+      } catch (error) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: const Text(
+                "حدث خطا ما يرجي المحاوله مجددا",
+                textAlign: TextAlign.center,
+              ),
+            )));
+
+        isLoding.value = false;
+
+        rethrow;
+      }
+
+      isLoding.value = false;
     }
 
     return Form(
@@ -49,7 +113,7 @@ class EditProductFrom extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: TextFormField(
-                    initialValue: currentPeoduct.title,
+                    initialValue: currentPeoduct!.title,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "من فضلك ادخل اسم المنتج";
@@ -58,6 +122,9 @@ class EditProductFrom extends StatelessWidget {
                       }
 
                       return null;
+                    },
+                    onSaved: (newValue) {
+                      formData['title'] = newValue;
                     },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("اسم المنتج", context),
@@ -74,6 +141,9 @@ class EditProductFrom extends StatelessWidget {
                       }
 
                       return null;
+                    },
+                    onSaved: (newValue) {
+                      formData['discription'] = newValue;
                     },
                     scrollController: ScrollController(),
                     textAlign: TextAlign.end,
@@ -106,8 +176,10 @@ class EditProductFrom extends StatelessWidget {
                               child: Text(value));
                         }).toList(),
                         onChanged: (s) {},
-                        value: productsStringToType[currentPeoduct.type] ??
-                            ProductsTypeEnum.hotDrinks,
+                        onSaved: (newValue) {
+                          formData['type'] = productsTypeToString[newValue];
+                        },
+                        value: productsStringToType[currentPeoduct.type],
                       ),
                     )
                   ],
@@ -126,6 +198,9 @@ class EditProductFrom extends StatelessWidget {
 
                       return null;
                     },
+                    onSaved: (newValue) {
+                      formData['subType'] = newValue;
+                    },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("النوع الفرعي", context),
                   )),
@@ -139,7 +214,11 @@ class EditProductFrom extends StatelessWidget {
                         child: const Text("الصوره")),
                     Expanded(
                       child: ImagePickerWedgit(
-                        (pickedImage) {},
+                        (pickedImage) {
+                          ImagePickerWedgit.imageHolder = pickedImage;
+
+                          formData["image"] = pickedImage;
+                        },
                         imageUrl: currentPeoduct.imageUrl,
                       ),
                     )
@@ -163,18 +242,30 @@ class EditProductFrom extends StatelessWidget {
                 },
                 itemCount: 3,
               ),
-              Container(
-                  height: 44,
-                  margin: const EdgeInsets.only(top: 20),
-                  width: MediaQuery.of(context).size.width * .8,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green),
-                      onPressed: () {},
-                      // ignore: unnecessary_null_comparison
-                      child: Text(currentPeoduct != null
-                          ? "تعديل المنتج"
-                          : " اضف المنتج")))
+              ValueListenableBuilder<bool>(
+                valueListenable: isLoding,
+                builder: (context, value, child) {
+                  return Container(
+                      height: 44,
+                      margin: const EdgeInsets.only(top: 20),
+                      width: MediaQuery.of(context).size.width * .8,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green),
+                          onPressed: value
+                              ? null
+                              : () async {
+                                  isLoding.value = true;
+                                  await _formSubmit();
+                                },
+                          // ignore: unnecessary_null_comparison
+                          child: value
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : const Text("تعديل المنتج")));
+                },
+              )
             ],
           ),
         ));

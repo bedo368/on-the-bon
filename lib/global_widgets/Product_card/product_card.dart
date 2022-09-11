@@ -31,7 +31,6 @@ class ProductCard extends StatelessWidget {
                     Navigator.of(context).pushNamed(ProductScreen.routeName,
                         arguments: {
                           "id": currentProduct.id,
-                          "type": currentProduct.type
                         });
                   },
                   child: SizedBox(

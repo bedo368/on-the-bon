@@ -12,6 +12,7 @@ class ImagePickerWedgit extends StatefulWidget {
 
   final void Function(File pickedImage) pickedImagefn;
   final String? imageUrl;
+  static File? imageHolder;
 
   @override
   State<ImagePickerWedgit> createState() => _ImagePickerWedgitState();

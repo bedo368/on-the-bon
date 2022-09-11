@@ -15,25 +15,33 @@ class ProductScreen extends StatelessWidget {
     ProductQuntity.quetity.value = 1;
     String id = (ModalRoute.of(context)!.settings.arguments
         as Map<String, String>)['id'] as String;
-    String type = (ModalRoute.of(context)!.settings.arguments
-        as Map<String, String>)['type'] as String;
-    final Product product = Provider.of<Products>(context)
-        .fetchProductByTypeAndId(id: id, type: type);
+
+    final Product? product =
+        Provider.of<Products>(context).fetchProductByTypeAndId(id: id);
 
     return Scaffold(
-      body: CustomScrollView(
-        key: GlobalKey(),
-        slivers: [
-          ProductAppBar(
-            id: product.id,
-            imageUrl: product.imageUrl,
-            title: product.title,
-          ),
-          ProductScreenDetail(
-            product: product,
-          ),
-        ],
-      ),
+      appBar: product == null
+          ? AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+            )
+          : null,
+      body: product == null
+          ? const Center(
+              child: Text("المنتج غير متاح الان من فضلك حاول مره اخري"),
+            )
+          : CustomScrollView(
+              key: GlobalKey(),
+              slivers: [
+                ProductAppBar(
+                  id: product.id,
+                  imageUrl: product.imageUrl,
+                  title: product.title,
+                ),
+                ProductScreenDetail(
+                  product: product,
+                ),
+              ],
+            ),
     );
   }
 }

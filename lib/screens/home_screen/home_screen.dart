@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
@@ -15,7 +16,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
   static String routeName = "/";
   static final ValueNotifier<ProductsTypeEnum> productType =
-      ValueNotifier<ProductsTypeEnum>(ProductsTypeEnum.food);
+      ValueNotifier<ProductsTypeEnum>(ProductsTypeEnum.hotDrinks);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -32,16 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isLoading = false;
       });
+      Provider.of<Products>(context, listen: false)
+          .setType(HomeScreen.productType.value);
     });
-
-    final type = Provider.of<Products>(context, listen: false).getCurrentType;
-    if (type == "مأكولات") {
-      HomeScreen.productType.value = ProductsTypeEnum.food;
-    } else if (type == "مشروبات ساخنة") {
-      HomeScreen.productType.value = ProductsTypeEnum.hotDrinks;
-    } else if (type == "مشروبات باردة") {
-      HomeScreen.productType.value = ProductsTypeEnum.coldDrinks;
-    }
 
     super.initState();
   }
@@ -98,8 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Center(
+              child: SpinKitChasingDots(
+                color: Theme.of(context).primaryColor,
+              ),
             )
           : SingleChildScrollView(
               child: Column(
@@ -126,24 +122,20 @@ class ProductTypeNotifier extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 20),
-      padding:
-          const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       width: MediaQuery.of(context).size.width,
       color: Theme.of(context).primaryColor,
       child: Consumer<Products>(builder: (context, v, c) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
-          transitionBuilder: (child, animation) =>
-              SlideTransition(
-                  position: animation.drive(Tween<Offset>(
-                      begin: const Offset(0, -1),
-                      end: const Offset(0, 0))),
-                  child: child),
+          transitionBuilder: (child, animation) => SlideTransition(
+              position: animation.drive(Tween<Offset>(
+                  begin: const Offset(0, -1), end: const Offset(0, 0))),
+              child: child),
           child: Text(
             key: ValueKey(v.getCurrentType),
             "  ${v.getCurrentType}  ",
-            style: const TextStyle(
-                fontSize: 23, color: Colors.white),
+            style: const TextStyle(fontSize: 23, color: Colors.white),
             textAlign: TextAlign.center,
           ),
         );

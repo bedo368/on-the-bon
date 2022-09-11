@@ -39,7 +39,7 @@ class ProductManageScreen extends StatelessWidget {
               icon: const Icon(Icons.add))
         ],
       ),
-      body: const ProductManageGraid(),
+      body: const SingleChildScrollView(child: ProductManageGraid()),
     );
   }
 }

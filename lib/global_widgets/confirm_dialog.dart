@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
 Future<void> showMyDialog({
+  required String content,
+  required String title,
   required BuildContext context,
   required Function onConfirm,
+   Function? onCancel = null,
 }) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text(
-          'حذف من عربة التسوق',
+        title: Text(
+          title,
           textAlign: TextAlign.end,
         ),
         content: SingleChildScrollView(
           child: Column(
-            children: const <Widget>[
+            children: <Widget>[
               Text(
-                'هل تريد حذف المنتج من العربه ',
+                content,
               ),
             ],
           ),
@@ -33,6 +36,7 @@ Future<void> showMyDialog({
           TextButton(
             child: const Text('الغاء'),
             onPressed: () {
+              onCancel!();
               Navigator.of(context).pop();
             },
           ),

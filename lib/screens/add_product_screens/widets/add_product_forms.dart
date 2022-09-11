@@ -6,6 +6,7 @@ import 'package:on_the_bon/models/product.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 
 import 'package:on_the_bon/screens/add_product_screens/widets/size_price_selective.dart';
+import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +15,9 @@ class AddProductForm extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  static GlobalKey<FormState> formKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey();
-
     final List<ProductSizeEnum> sizeListEnum =
         productSizeStringtoEnum.keys.toList();
 
@@ -39,19 +39,75 @@ class AddProductForm extends StatelessWidget {
       "image": File(""),
     };
 
+
+
+
+    
+
     // ignore: no_leading_underscores_for_local_identifiers
     Future<void> _formSubmit() async {
       try {
+        formKey.currentState!.save();
+        formData["image"] = ImagePickerWedgit.imageHolder;
         if (!formKey.currentState!.validate()) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.red,
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: const Text(
+                  "يرجي ملئ معلومات المنتج",
+                  textAlign: TextAlign.center,
+                ),
+              )));
+          isLoding.value = false;
+
           return;
         } else if (formKey.currentState!.validate()) {
           if (priceSizeMap.isEmpty) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red,
+                content: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: const Text(
+                    "من فضلك ادخل سعر واحد علي الاقل",
+                    textAlign: TextAlign.center,
+                  ),
+                )));
+            isLoding.value = false;
+
             return;
           }
           if ((formData["image"] as File).path == "") {
+            ImagePickerWedgit.imageHolder = File("");
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red,
+                content: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: const Text(
+                    "خطا في الصوره حاول مره اخرى",
+                    textAlign: TextAlign.center,
+                  ),
+                )));
+            isLoding.value = false;
+
             return;
           }
           if (formData["type"] == "") {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red,
+                content: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: const Text(
+                    "تاكد من اختيار نوع المنتج",
+                    textAlign: TextAlign.center,
+                  ),
+                )));
+            isLoding.value = false;
+
             return;
           }
           final newProductData = Product(
@@ -64,6 +120,10 @@ class AddProductForm extends StatelessWidget {
               imageUrl: "");
           await Provider.of<Products>(context, listen: false)
               .createNewProduct(newProductData, formData["image"]);
+
+          // ignore: use_build_context_synchronously
+          Navigator.of(context)
+              .pushReplacementNamed(ProductManageScreen.routeName);
         }
       } catch (error) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -76,6 +136,7 @@ class AddProductForm extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             )));
+
         isLoding.value = false;
 
         rethrow;
@@ -100,12 +161,12 @@ class AddProductForm extends StatelessWidget {
                       } else if (value.length < 3) {
                         return "اسم المنتج قصير للغايه ";
                       }
-                      formData["title"] = value;
+                      formData["title"] = value.trim();
 
                       return null;
                     },
                     onSaved: (value) {
-                      formData["title"] = value;
+                      formData["title"] = value!.trim();
                     },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("اسم المنتج", context),
@@ -120,11 +181,11 @@ class AddProductForm extends StatelessWidget {
                         return "اسم المنتج قصير للغايه ";
                       }
 
-                      formData["discription"] = value;
+                      formData["discription"] = value.trim();
                       return null;
                     },
                     onSaved: (value) {
-                      formData["discription"] = value;
+                      formData["discription"] = value!.trim();
                     },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("الوصف", context),
@@ -159,8 +220,7 @@ class AddProductForm extends StatelessWidget {
                           formData["type"] = productsTypeToString[value];
                         },
                         onSaved: (value) {
-                          print(value);
-                          formData["type"] = productsTypeToString[value];
+                          formData["type"] = productsTypeToString[value] ?? "";
                         },
                         value: null,
                       ),
@@ -177,12 +237,12 @@ class AddProductForm extends StatelessWidget {
                       } else if (value.length < 4) {
                         return "النوع الفرعي قصير للغايه ";
                       }
-                      formData["subType"] = value;
+                      formData["subType"] = value.trim();
 
                       return null;
                     },
                     onSaved: (value) {
-                      formData["subType"] = value;
+                      formData["subType"] = value!.trim();
                     },
                     textAlign: TextAlign.end,
                     decoration: formInputDecortion("النوع الفرعي", context),
@@ -198,6 +258,8 @@ class AddProductForm extends StatelessWidget {
                     Expanded(
                       child: ImagePickerWedgit(
                         (pickedImage) {
+                          ImagePickerWedgit.imageHolder = pickedImage;
+
                           formData["image"] = pickedImage;
                         },
                         imageUrl: null,

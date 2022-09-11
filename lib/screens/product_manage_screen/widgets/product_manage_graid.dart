@@ -15,8 +15,16 @@ class ProductManageGraid extends StatelessWidget {
         margin: const EdgeInsets.only(top: 40),
         width: MediaQuery.of(context).size.width * .8,
         child: ListView.builder(
+          primary: false,
+          shrinkWrap: true,
           itemBuilder: (context, index) {
-            return ProductManageCard(product: products[index]);
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: ProductManageCard(
+                product: products[index],
+                key: ValueKey(products[index].id),
+              ),
+            );
           },
           itemCount: products.length,
         ),

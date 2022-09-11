@@ -13,6 +13,7 @@ class ProductsFillterBySubType extends StatelessWidget {
         Provider.of<Products>(context, listen: false).currentSubType;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      reverse: true,
       child: Container(
         margin: const EdgeInsets.only(top: 10),
         child: SizedBox(

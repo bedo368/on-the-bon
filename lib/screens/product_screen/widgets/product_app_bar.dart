@@ -40,15 +40,20 @@ class ProductAppBar extends StatelessWidget {
       expandedHeight: 300,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        title: Container(
-          padding: const EdgeInsets.only(right: 10),
-          width: MediaQuery.of(context).size.width,
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
+        title: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            
+            color: Color.fromARGB(104, 255, 255, 255),
+            padding: const EdgeInsets.only(left: 15  ,right: 2),
+            margin: const EdgeInsets.only(right: 10),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
+              textAlign: TextAlign.end,
             ),
-            textAlign: TextAlign.end,
           ),
         ),
         background: SizedBox(

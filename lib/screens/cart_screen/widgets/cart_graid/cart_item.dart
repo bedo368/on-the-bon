@@ -64,6 +64,8 @@ class CartItemWidget extends StatelessWidget {
                         if (cartItem.quantity <= 1) {
                           await showMyDialog(
                               context: context,
+                              title: 'حذف من عربة التسوق',
+                              content: 'هل تريد حذف المنتج من العربه ',
                               onConfirm: () {
                                 cartData.decreaseItemBy1(cartItemId);
                               });
