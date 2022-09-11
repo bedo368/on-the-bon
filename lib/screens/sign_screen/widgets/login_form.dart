@@ -52,9 +52,9 @@ class _LoginFormState extends State<LoginForm> {
                 textAlign: TextAlign.center,
               )),
         );
-       
+
       }
-     
+      
     } else {
       final scoffldMessanger = ScaffoldMessenger.of(context);
       try {
@@ -73,9 +73,9 @@ class _LoginFormState extends State<LoginForm> {
                 textAlign: TextAlign.center,
               )),
         );
-       
+
       }
-      
+
     }
     setState(() {
       isLoading = false;
@@ -126,6 +126,10 @@ class _LoginFormState extends State<LoginForm> {
 
                                   return null;
                                 }),
+                                textInputAction: TextInputAction.next,
+                                onSaved: (newValue) {
+                                  _formdata["name"] = newValue!;
+                                },
                                 key: const Key("Full name"),
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColor),
@@ -147,6 +151,9 @@ class _LoginFormState extends State<LoginForm> {
                           }
                           return "invalid email ";
                         }),
+                        onSaved: (newValue) {
+                          _formdata["email"] = newValue!;
+                        },
                         key: const Key("Email"),
                         style: TextStyle(color: Theme.of(context).primaryColor),
                         decoration: formInputDecortion("Email")),
@@ -166,6 +173,10 @@ class _LoginFormState extends State<LoginForm> {
 
                           return null;
                         }),
+                        onSaved: (newValue) {
+                          _formdata["password"] = newValue!;
+                        },
+                        textInputAction: TextInputAction.next,
                         key: const Key("password"),
                         style: TextStyle(color: Theme.of(context).primaryColor),
                         decoration: formInputDecortion("Password")),
@@ -183,6 +194,7 @@ class _LoginFormState extends State<LoginForm> {
 
                             return null;
                           }),
+                          textInputAction: TextInputAction.next,
                           key: const Key("conformpassword"),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
@@ -266,7 +278,8 @@ class CustomBotton extends StatelessWidget {
                 ? ElevatedButton.icon(
                     icon: Icon(icon),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(10), backgroundColor: backgoundColor,
+                      padding: const EdgeInsets.all(10),
+                      backgroundColor: backgoundColor,
                     ),
                     onPressed: onPress,
                     label: Text(
@@ -275,7 +288,8 @@ class CustomBotton extends StatelessWidget {
                     ))
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(10), backgroundColor: backgoundColor,
+                      padding: const EdgeInsets.all(10),
+                      backgroundColor: backgoundColor,
                     ),
                     onPressed: onPress,
                     child: Text(

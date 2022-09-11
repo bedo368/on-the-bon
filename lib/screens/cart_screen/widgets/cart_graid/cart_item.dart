@@ -68,7 +68,8 @@ class CartItemWidget extends StatelessWidget {
                               content: 'هل تريد حذف المنتج من العربه ',
                               onConfirm: () {
                                 cartData.decreaseItemBy1(cartItemId);
-                              });
+                              },
+                              onCancel: () {});
                           return;
                         }
                         cartData.decreaseItemBy1(cartItemId);
@@ -127,9 +128,14 @@ class CartItemWidget extends StatelessWidget {
                   borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(5),
                       bottomRight: Radius.circular(5)),
-                  child: Image.network(
-                    cartItem.imageUrl,
+                  child: FadeInImage(
+                    image: NetworkImage(
+                      cartItem.imageUrl,
+                    ),
+                    placeholder: const AssetImage(
+                        "assets/images/product_placeholder.png"),
                     fit: BoxFit.cover,
+                    placeholderFit: BoxFit.cover,
                   )),
             ),
           ],

@@ -5,12 +5,12 @@ Future<void> showMyDialog({
   required String title,
   required BuildContext context,
   required Function onConfirm,
-   Function? onCancel = null,
+  required Function onCancel,
 }) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
+    builder: (BuildContext context1) {
       return AlertDialog(
         title: Text(
           title,
@@ -30,14 +30,14 @@ Future<void> showMyDialog({
             child: const Text('حذف'),
             onPressed: () {
               onConfirm();
-              Navigator.of(context).pop();
+              Navigator.of(context1).pop();
             },
           ),
           TextButton(
             child: const Text('الغاء'),
             onPressed: () {
-              onCancel!();
-              Navigator.of(context).pop();
+              onCancel();
+              Navigator.of(context1).pop();
             },
           ),
         ],

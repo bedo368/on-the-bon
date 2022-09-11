@@ -16,19 +16,19 @@ class CartScreenBottom extends StatelessWidget {
     String phoneNumber = "";
     String location = "";
     submitOrder() {
-      print("unvalid");
       if (!formKey.currentState!.validate()) {
         return;
       }
-      print(phoneNumber);
       formKey.currentState!.save();
 
       Provider.of<Orders>(context, listen: false).addOrder(
           orderItems: cartData.items.values.toList(),
           phoneNumber: phoneNumber,
           location: location,
+          totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
           userId: Provider.of<User>(context, listen: false).uid);
       Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+      Provider.of<Cart>(context ,listen: false).clearCart();
     }
 
     return cartData.items.isNotEmpty

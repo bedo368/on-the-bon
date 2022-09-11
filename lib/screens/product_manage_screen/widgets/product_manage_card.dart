@@ -20,9 +20,14 @@ class ProductManageCard extends StatelessWidget {
           color: Colors.white,
           width: MediaQuery.of(context).size.width * .25,
           height: 70,
-          child: Image.network(
-            product.imageUrl,
+          child: FadeInImage(
+            image: NetworkImage(
+              product.imageUrl,
+            ),
+            placeholder:
+                const AssetImage("assets/images/product_placeholder.png"),
             fit: BoxFit.cover,
+            placeholderFit: BoxFit.cover,
           ),
         ),
         Expanded(

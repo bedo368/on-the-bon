@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/Product_card/bottom_card.dart';
 import 'package:on_the_bon/models/product.dart';
@@ -28,10 +29,10 @@ class ProductCard extends StatelessWidget {
                 )),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushNamed(ProductScreen.routeName,
-                        arguments: {
-                          "id": currentProduct.id,
-                        });
+                    Navigator.of(context)
+                        .pushNamed(ProductScreen.routeName, arguments: {
+                      "id": currentProduct.id,
+                    });
                   },
                   child: SizedBox(
                     height: 180,
@@ -39,16 +40,20 @@ class ProductCard extends StatelessWidget {
                     child: Hero(
                       tag: currentProduct.id,
                       child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                        child: Image.network(
-                          currentProduct.imageUrl,
-                          fit: BoxFit.cover,
-                          cacheHeight: 500,
-                        ),
-                      ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: currentProduct.imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) {
+                              return Image.asset(
+                                "assets/images/product_placeholder.png",
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          )),
                     ),
                   ),
                 ),

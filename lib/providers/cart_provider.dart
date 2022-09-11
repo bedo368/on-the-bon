@@ -75,4 +75,8 @@ class Cart with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearCart() {
+    items.clear();
+  }
 }

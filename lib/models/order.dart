@@ -8,6 +8,7 @@ class Order {
   final String location;
   final String id;
   final OrderTypeEnum orderType;
+  final double totalPrice;
 
   Order({
     required this.ordersItems,
@@ -16,13 +17,8 @@ class Order {
     required this.location,
     required this.id,
     required this.orderType,
+    required this.totalPrice,
   });
 
-  double get totalPrice {
-    double price = 0;
-    for (var element in ordersItems) {
-      price += element.price;
-    }
-    return price;
-  }
+  
 }

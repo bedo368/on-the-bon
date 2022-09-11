@@ -15,6 +15,7 @@ class Orders with ChangeNotifier {
     required String phoneNumber,
     required String location,
     required String userId,
+    required double totalPrice ,
   }) {
     final String id = DateTime.now().toString();
     _orders[id] = Order(
@@ -23,6 +24,7 @@ class Orders with ChangeNotifier {
         userId: userId,
         phoneNumber: phoneNumber,
         location: location,
+        totalPrice: totalPrice,
         id: id);
   }
 }
