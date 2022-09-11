@@ -8,23 +8,26 @@ import 'package:provider/provider.dart';
 class CartScreenBottom extends StatelessWidget {
   const CartScreenBottom({Key? key}) : super(key: key);
 
+  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final cartData = Provider.of<Cart>(context);
-    final GlobalKey<FormState> formKey = GlobalKey();
 
     String phoneNumber = "";
     String location = "";
-    Future submitOrder() async {
+    submitOrder() {
+      print("unvalid");
       if (!formKey.currentState!.validate()) {
         return;
       }
-      await Provider.of<Orders>(context, listen: false).addOrder(
+      print(phoneNumber);
+      formKey.currentState!.save();
+
+      Provider.of<Orders>(context, listen: false).addOrder(
           orderItems: cartData.items.values.toList(),
           phoneNumber: phoneNumber,
           location: location,
           userId: Provider.of<User>(context, listen: false).uid);
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
     }
 
@@ -75,6 +78,10 @@ class CartScreenBottom extends StatelessWidget {
                               phoneNumber = value;
                               return null;
                             }),
+                            onSaved: (newval) {
+                              phoneNumber = newval!;
+                            },
+                            textInputAction: TextInputAction.next,
                           ),
                         ),
                         TextFormField(
@@ -93,19 +100,23 @@ class CartScreenBottom extends StatelessWidget {
                             location = value;
                             return null;
                           }),
+                          onSaved: (newval) {
+                            location = newval!;
+                          },
+                          onFieldSubmitted: (_) async {
+                            submitOrder();
+                          },
                         ),
                       ],
                     ),
                   )),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
+                height: 40,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await submitOrder();
-                      // ignore: use_build_context_synchronously
-
-                    } catch (e) {}
+                  onPressed: () {
+                    print("object");
+                    submitOrder();
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.secondary,

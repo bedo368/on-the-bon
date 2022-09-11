@@ -103,18 +103,18 @@ class Products with ChangeNotifier {
   }
 
   Future editProduct({required Product product, required File image}) async {
-    print(product);
     try {
       final ref = FirebaseStorage.instance
           .ref()
           .child("products_image")
           .child("${DateTime.now()}.png");
 
-      String? url = product.imageUrl;
+      String url = product.imageUrl;
 
       if (image.path != "") {
         await ref.putFile(image);
-        await FirebaseStorage.instance.ref(url).delete();
+        await FirebaseStorage.instance.refFromURL(url).delete();
+
         url = await ref.getDownloadURL();
       }
 
@@ -145,6 +145,8 @@ class Products with ChangeNotifier {
 
   Future deleteProductById(Product product) async {
     try {
+      await FirebaseStorage.instance.refFromURL(product.imageUrl).delete();
+
       await db.collection("products").doc(product.id).delete();
 
       _productList.remove(product.id);

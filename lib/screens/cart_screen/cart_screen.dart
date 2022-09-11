@@ -26,7 +26,7 @@ class CartScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:  const [
                 
-                CartGraid(),
+                CartGraid(), 
                 CartScreenBottom(),
               ],
             ))),

@@ -10,18 +10,19 @@ class Orders with ChangeNotifier {
     return [..._orders.values];
   }
 
-  Future<void> addOrder({
+  addOrder({
     required List<CartItem> orderItems,
     required String phoneNumber,
     required String location,
     required String userId,
-  }) async {
-    _orders[DateTime.now().toString()] = Order(
+  }) {
+    final String id = DateTime.now().toString();
+    _orders[id] = Order(
         orderType: OrderTypeEnum.orderInProgress,
         ordersItems: orderItems,
         userId: userId,
         phoneNumber: phoneNumber,
         location: location,
-        id: DateTime.now().toString());
+        id: id);
   }
 }

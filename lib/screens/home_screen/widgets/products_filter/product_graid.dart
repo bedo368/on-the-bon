@@ -16,7 +16,7 @@ class ProductGraid extends StatelessWidget {
           position: animation.drive(Tween<Offset>(
               begin: const Offset(-1, 0), end: const Offset(0, 0))),
           child: child),
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 150),
       child: productList.isEmpty
           ? const Center(
               child: Text("عذرا المنتجات غير متاحه الان"),
