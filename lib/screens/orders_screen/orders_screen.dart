@@ -31,6 +31,7 @@ class OrdersScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width*.9,
               margin: const EdgeInsets.only(top: 40),
               child: ListView.builder(
+                reverse: true,
                 primary: false,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {

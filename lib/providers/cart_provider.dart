@@ -28,7 +28,7 @@ class Cart with ChangeNotifier {
     String itemkey = "";
     items.forEach(
       (key, value) {
-        if (id == value.productid && size == value.size) {
+        if (id == value.productId && size == value.size) {
           value.increaseQuntity(quntity);
           itemkey = key;
           return;
@@ -39,9 +39,8 @@ class Cart with ChangeNotifier {
       final String itemId = DateTime.now().toString();
       items[itemId] = CartItem(
           id: itemId,
-          productid: id,
+          productId: id,
           title: title,
-          type: type,
           price: price,
           imageUrl: imageUrl,
           size: size);

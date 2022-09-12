@@ -1,8 +1,8 @@
-import 'package:on_the_bon/providers/cart_item.dart';
+import 'package:on_the_bon/models/order_item.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 
 class Order {
-  final List<CartItem> ordersItems;
+  final List<OrderItem> ordersItems;
   final String userId;
   final String phoneNumber;
   final String location;

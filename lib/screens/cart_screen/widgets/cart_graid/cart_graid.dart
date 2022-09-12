@@ -33,12 +33,11 @@ class CartGraid extends StatelessWidget {
                 cartItemId: itemsList[index].id,
                 cartItem: CartItem(
                     id: itemsList[index].id,
-                    productid: itemsList[index].productid,
+                    productId: itemsList[index].productId,
                     title: itemsList[index].title,
                     price: itemsList[index].price,
                     imageUrl: itemsList[index].imageUrl,
                     quantity: itemsList[index].quantity,
-                    type: itemsList[index].type,
                     size: itemsList[index].size),
               );
             },

@@ -1,5 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
@@ -7,6 +9,7 @@ import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_f
 
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_graid.dart';
+import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
@@ -35,6 +38,24 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       Provider.of<Products>(context, listen: false)
           .setType(HomeScreen.productType.value);
+    });
+
+    FirebaseMessaging.onMessage.listen((event) {
+      print("event.toString()");
+      print(event.toString());
+      print(event.category.toString());
+      print(event.mutableContent.toString());
+      print(event.notification!.title);
+      print(event.notification!.body);
+      print(event.toString());
+      showMyDialog(
+          content: event.notification!.body ?? "",
+          title: event.notification!.title ?? "",
+          context: context,
+          onConfirm: () {
+            Navigator.of(context).pushNamed(OrdersScreen.routeName);
+          },
+          onCancel: () {});
     });
 
     super.initState();

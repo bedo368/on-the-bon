@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
@@ -9,26 +10,38 @@ class CartScreenBottom extends StatelessWidget {
   const CartScreenBottom({Key? key}) : super(key: key);
 
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<bool> isLoading = ValueNotifier(false);
     final cartData = Provider.of<Cart>(context);
 
     String phoneNumber = "";
     String location = "";
-    submitOrder() {
+    submitOrder() async {
+      isLoading.value = true;
       if (!formKey.currentState!.validate()) {
         return;
       }
       formKey.currentState!.save();
 
-      Provider.of<Orders>(context, listen: false).addOrder(
-          orderItems: cartData.items.values.toList(),
-          phoneNumber: phoneNumber,
-          location: location,
-          totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
-          userId: Provider.of<User>(context, listen: false).uid);
-      Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
-      Provider.of<Cart>(context ,listen: false).clearCart();
+      try {
+        await Provider.of<Orders>(context, listen: false).addOrder(
+            orderItems: cartData.items.values.toList(),
+            phoneNumber: phoneNumber,
+            location: location,
+            totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
+            userId: Provider.of<User>(context, listen: false).uid);
+
+        isLoading.value = false;
+        // ignore: use_build_context_synchronously
+        Provider.of<Cart>(context, listen: false).clearCart();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+      } catch (e) {
+        isLoading.value = false;
+        rethrow;
+      }
     }
 
     return cartData.items.isNotEmpty
@@ -110,19 +123,33 @@ class CartScreenBottom extends StatelessWidget {
                       ],
                     ),
                   )),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                child: ElevatedButton(
-                  onPressed: () {
-                    print("object");
-                    submitOrder();
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      padding: const EdgeInsets.symmetric(vertical: 5)),
-                  child: const Text("تأكيد الطلب"),
-                ),
+              ValueListenableBuilder<bool>(
+                valueListenable: isLoading,
+                builder: (context, value, child) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: value
+                          ? null
+                          : () async {
+                              await submitOrder();
+                            },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          padding: const EdgeInsets.symmetric(vertical: 5)),
+                      child: value
+                          ? const Center(
+                              child: SpinKitPouringHourGlassRefined(
+                                color: Colors.green,
+                                size: 30,
+                              ),
+                            )
+                          : const Text("تأكيد الطلب"),
+                    ),
+                  );
+                },
               )
             ]),
           )

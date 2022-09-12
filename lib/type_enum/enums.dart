@@ -4,6 +4,12 @@ enum OrderTypeEnum {
   rejectedOrder,
 }
 
+final Map<String, OrderTypeEnum> orderTypeStringToEnum = {
+  "الطلبات الحالية": OrderTypeEnum.orderInProgress,
+  "الطلبات الناجحة": OrderTypeEnum.successfulOrder,
+  "الطلبات المروفضه": OrderTypeEnum.rejectedOrder,
+};
+
 enum ProductsTypeEnum { food, hotDrinks, coldDrinks }
 
 final Map<String, ProductsTypeEnum> productsStringToType = {

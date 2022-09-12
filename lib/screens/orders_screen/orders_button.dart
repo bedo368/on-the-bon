@@ -5,98 +5,71 @@ class OrdersButton extends StatelessWidget {
   const OrdersButton({
     Key? key,
   }) : super(key: key);
+  
   static final ValueNotifier<OrderTypeEnum> activeOrders =
       ValueNotifier<OrderTypeEnum>(OrderTypeEnum.orderInProgress);
 
   @override
   Widget build(BuildContext context) {
+    final List<String> buttonsText = orderTypeStringToEnum.keys.toList();
     return Container(
       margin: const EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          ValueListenableBuilder(
-              valueListenable: OrdersButton.activeOrders,
-              builder: (context, v, c) {
-                return GestureDetector(
-                  onTap: () {
-                    OrdersButton.activeOrders.value =
-                        OrderTypeEnum.rejectedOrder;
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: v == OrderTypeEnum.rejectedOrder
-                                  ? BorderSide(
-                                      width: 1.0,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary)
-                                  : const BorderSide(
-                                      width: 0, color: Colors.white))),
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: const Text(
-                        "الطلبات المرفوضه",
-                        style: TextStyle(color: Colors.black),
-                      )),
-                );
-              }),
-          ValueListenableBuilder(
-              valueListenable: OrdersButton.activeOrders,
-              builder: (context, v, c) {
-                return GestureDetector(
-                  onTap: () {
-                    OrdersButton.activeOrders.value =
-                        OrderTypeEnum.successfulOrder;
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: v == OrderTypeEnum.successfulOrder
-                                  ? BorderSide(
-                                      width: 1.0,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary)
-                                  : const BorderSide(
-                                      width: 0, color: Colors.white))),
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: const Text(
-                        "الطلبات السابقه",
-                        style: TextStyle(color: Colors.black),
-                      )),
-                );
-              }),
-          ValueListenableBuilder(
-              valueListenable: OrdersButton.activeOrders,
-              builder: (context, v, c) {
-                return GestureDetector(
-                  onTap: () {
-                    OrdersButton.activeOrders.value =
-                        OrderTypeEnum.orderInProgress;
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: v == OrderTypeEnum.orderInProgress
-                                  ? BorderSide(
-                                      width: 1.0,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary)
-                                  : const BorderSide(
-                                      width: 0, color: Colors.white))),
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "الطلبات الحالية",
-                        style: TextStyle(
-                            color: v == OrderTypeEnum.orderInProgress
-                                ? Theme.of(context).colorScheme.secondary
-                                : Colors.black),
-                      )),
-                );
-              }),
-        ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        reverse: true,
+        child: AnimatedContainer(
+          duration: const Duration(seconds: 3),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 25,
+            child: Row(
+              textDirection: TextDirection.rtl,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ListView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+                  reverse: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: ((context, index) {
+                    return ValueListenableBuilder(
+                      key: ValueKey(buttonsText[index]),
+                      valueListenable: OrdersButton.activeOrders,
+                      builder: (context, v, c) {
+                        return GestureDetector(
+                          onTap: () {
+                            OrdersButton.activeOrders.value =
+                                orderTypeStringToEnum[buttonsText[index]]!;
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: v ==
+                                              orderTypeStringToEnum[
+                                                  buttonsText[index]]
+                                          ? BorderSide(
+                                              width: 1.0,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary)
+                                          : const BorderSide(
+                                              width: 0, color: Colors.white))),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                buttonsText[index],
+                                style: const TextStyle(color: Colors.black),
+                              )),
+                        );
+                      },
+                    );
+                  }),
+                  itemCount: 3,
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
