@@ -66,13 +66,11 @@ class BottomCard extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.white),
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(
                             "السعر : $price",
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.white),
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],
                       ),

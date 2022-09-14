@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -43,9 +44,8 @@ class ProductAppBar extends StatelessWidget {
         title: Align(
           alignment: Alignment.bottomRight,
           child: Container(
-            
-            color: Color.fromARGB(104, 255, 255, 255),
-            padding: const EdgeInsets.only(left: 15  ,right: 2),
+            color: const Color.fromARGB(104, 255, 255, 255),
+            padding: const EdgeInsets.only(left: 15, right: 2),
             margin: const EdgeInsets.only(right: 10),
             child: Text(
               title,
@@ -59,11 +59,18 @@ class ProductAppBar extends StatelessWidget {
         background: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Hero(
-              tag: id,
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-              )),
+            tag: id,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              placeholder: (context, url) {
+                return Image.asset(
+                  "assets/images/product_placeholder.png",
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

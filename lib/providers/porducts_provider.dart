@@ -118,7 +118,7 @@ class Products with ChangeNotifier {
         url = await ref.getDownloadURL();
       }
 
-      final productId = await db.collection("products").doc(product.id).set({
+      await db.collection("products").doc(product.id).set({
         "title": product.title,
         "discription": product.discription,
         "type": product.type,

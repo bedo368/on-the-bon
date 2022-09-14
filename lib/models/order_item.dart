@@ -11,7 +11,7 @@ class OrderItem {
     required this.title,
     required this.price,
     required this.imageUrl,
-    this.quantity = 1,
+    required this.quantity ,
     required this.size,
   });
 }

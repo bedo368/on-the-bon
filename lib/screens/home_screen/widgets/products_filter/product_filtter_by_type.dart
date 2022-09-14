@@ -16,6 +16,7 @@ class ProdcutsFiltterByType extends StatelessWidget {
         valueListenable: HomeScreen.productType,
         builder: (context, v, c) {
           return Container(
+            color: const Color.fromARGB(137, 248, 244, 244),
             margin: const EdgeInsets.only(top: 40),
             child: Column(
               children: [

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
@@ -20,14 +21,15 @@ class ProductManageCard extends StatelessWidget {
           color: Colors.white,
           width: MediaQuery.of(context).size.width * .25,
           height: 70,
-          child: FadeInImage(
-            image: NetworkImage(
-              product.imageUrl,
-            ),
-            placeholder:
-                const AssetImage("assets/images/product_placeholder.png"),
+          child: CachedNetworkImage(
+            imageUrl: product.imageUrl,
             fit: BoxFit.cover,
-            placeholderFit: BoxFit.cover,
+            placeholder: (context, url) {
+              return Image.asset(
+                "assets/images/product_placeholder.png",
+                fit: BoxFit.cover,
+              );
+            },
           ),
         ),
         Expanded(

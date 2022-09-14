@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
+import 'package:on_the_bon/helper/auth.dart';
+import 'package:on_the_bon/helper/subscribe_to_admin.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
@@ -36,18 +38,18 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isLoading = false;
       });
+
+      subscreibToAdmin();
+
       Provider.of<Products>(context, listen: false)
           .setType(HomeScreen.productType.value);
     });
 
-    FirebaseMessaging.onMessage.listen((event) {
-      print("event.toString()");
-      print(event.toString());
-      print(event.category.toString());
-      print(event.mutableContent.toString());
-      print(event.notification!.title);
-      print(event.notification!.body);
-      print(event.toString());
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      Navigator.of(context).pushNamed(CartScreen.routeName);
+    });
+
+    FirebaseMessaging.onMessage.listen((event) async {
       showMyDialog(
           content: event.notification!.body ?? "",
           title: event.notification!.title ?? "",
@@ -78,6 +80,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         .pushNamed(ProductManageScreen.routeName);
                   },
                   leading: const Text("Mange Product")),
+              ListTile(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(OrdersScreen.routeName);
+                  },
+                  leading: const Text("my orders")),
+              ListTile(
+                  onTap: () async {
+                    await Auth.signOut();
+                  },
+                  leading: const Text("my orders")),
             ],
           ),
         ),

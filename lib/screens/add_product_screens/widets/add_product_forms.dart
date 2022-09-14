@@ -21,7 +21,7 @@ class AddProductForm extends StatelessWidget {
     final List<ProductSizeEnum> sizeListEnum =
         productSizeStringtoEnum.keys.toList();
 
-    final ValueNotifier<bool> isLoding = ValueNotifier<bool>(false);
+    final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
     final Map<String, double> priceSizeMap = {};
     void addPriceSize(ProductSizeEnum type, double price) {
@@ -60,7 +60,7 @@ class AddProductForm extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               )));
-          isLoding.value = false;
+          isLoading.value = false;
 
           return;
         } else if (formKey.currentState!.validate()) {
@@ -75,7 +75,7 @@ class AddProductForm extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 )));
-            isLoding.value = false;
+            isLoading.value = false;
 
             return;
           }
@@ -91,7 +91,7 @@ class AddProductForm extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 )));
-            isLoding.value = false;
+            isLoading.value = false;
 
             return;
           }
@@ -106,7 +106,7 @@ class AddProductForm extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 )));
-            isLoding.value = false;
+            isLoading.value = false;
 
             return;
           }
@@ -137,12 +137,12 @@ class AddProductForm extends StatelessWidget {
               ),
             )));
 
-        isLoding.value = false;
+        isLoading.value = false;
 
         rethrow;
       }
 
-      isLoding.value = false;
+      isLoading.value = false;
     }
 
     return Form(
@@ -283,7 +283,7 @@ class AddProductForm extends StatelessWidget {
                 itemCount: 3,
               ),
               ValueListenableBuilder<bool>(
-                valueListenable: isLoding,
+                valueListenable: isLoading,
                 builder: (context, value, child) {
                   return Container(
                       height: 44,
@@ -295,7 +295,7 @@ class AddProductForm extends StatelessWidget {
                           onPressed: value
                               ? null
                               : () async {
-                                  isLoding.value = true;
+                                  isLoading.value = true;
                                   await _formSubmit();
                                 },
                           // ignore: unnecessary_null_comparison

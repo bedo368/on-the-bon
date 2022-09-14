@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/providers/cart_item.dart';
@@ -125,18 +126,20 @@ class CartItemWidget extends StatelessWidget {
               width: 120,
               height: 90,
               child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(5),
-                      bottomRight: Radius.circular(5)),
-                  child: FadeInImage(
-                    image: NetworkImage(
-                      cartItem.imageUrl,
-                    ),
-                    placeholder: const AssetImage(
-                        "assets/images/product_placeholder.png"),
-                    fit: BoxFit.cover,
-                    placeholderFit: BoxFit.cover,
-                  )),
+                borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(5),
+                    bottomRight: Radius.circular(5)),
+                child: CachedNetworkImage(
+                  imageUrl: cartItem.imageUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return Image.asset(
+                      "assets/images/product_placeholder.png",
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),

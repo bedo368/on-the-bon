@@ -3,7 +3,7 @@ import 'package:on_the_bon/type_enum/enums.dart';
 
 // ignore: must_be_immutable
 class SizePriceSelective extends StatelessWidget {
-   SizePriceSelective(
+  SizePriceSelective(
       {Key? key,
       required this.type,
       required this.addPriceWithSize,
@@ -47,6 +47,14 @@ class SizePriceSelective extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   controller: controller,
                   textDirection: TextDirection.rtl,
+                  onEditingComplete: () {
+                    if (controller.text.isNotEmpty) {
+                      _price = double.tryParse(controller.text) ?? 0;
+                      if (double.tryParse(controller.text) != null) {
+                        addPriceWithSize(type, _price);
+                      }
+                    }
+                  },
                   decoration: const InputDecoration(
                       hintText: "السعر",
                       hintTextDirection: TextDirection.rtl))),

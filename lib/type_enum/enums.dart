@@ -1,11 +1,11 @@
 enum OrderTypeEnum {
   successfulOrder,
-  orderInProgress,
+  orderInProgres,
   rejectedOrder,
 }
 
 final Map<String, OrderTypeEnum> orderTypeStringToEnum = {
-  "الطلبات الحالية": OrderTypeEnum.orderInProgress,
+  "الطلبات الحالية": OrderTypeEnum.orderInProgres,
   "الطلبات الناجحة": OrderTypeEnum.successfulOrder,
   "الطلبات المروفضه": OrderTypeEnum.rejectedOrder,
 };

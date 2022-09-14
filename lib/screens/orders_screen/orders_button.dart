@@ -4,10 +4,13 @@ import 'package:on_the_bon/type_enum/enums.dart';
 class OrdersButton extends StatelessWidget {
   const OrdersButton({
     Key? key,
+    required this.fetchOrderFunction,
   }) : super(key: key);
-  
+
+  final Function() fetchOrderFunction;
+
   static final ValueNotifier<OrderTypeEnum> activeOrders =
-      ValueNotifier<OrderTypeEnum>(OrderTypeEnum.orderInProgress);
+      ValueNotifier<OrderTypeEnum>(OrderTypeEnum.orderInProgres);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,8 @@ class OrdersButton extends StatelessWidget {
                           onTap: () {
                             OrdersButton.activeOrders.value =
                                 orderTypeStringToEnum[buttonsText[index]]!;
+
+                            fetchOrderFunction();
                           },
                           child: Container(
                               decoration: BoxDecoration(

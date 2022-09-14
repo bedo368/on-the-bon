@@ -23,23 +23,16 @@ void main() async {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  NotificationSettings settings = await messaging.requestPermission(
+  await messaging.requestPermission(
     alert: true,
     announcement: false,
     badge: true,
     carPlay: false,
-    criticalAlert: true,
+    criticalAlert: false,
     provisional: false,
     sound: true,
   );
 
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    print('User granted permission');
-  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-    print('User granted provisional permission');
-  } else {
-    print('User declined or has not accepted permission');
-  }
   runApp(const MyApp());
 }
 
@@ -61,13 +54,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+                textTheme: const TextTheme(
+                    bodyText1: TextStyle(fontSize: 22, color: Colors.white)),
                 scaffoldBackgroundColor:
-                    const Color.fromARGB(255, 254, 255, 253),
+                    const Color.fromARGB(255, 255, 255, 255),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
-                  textStyle: GoogleFonts.itim(fontSize: 18),
-                )),
-                primaryColor: const Color.fromRGBO(5, 14, 14, 1),
+                        textStyle: GoogleFonts.itim(fontSize: 18))),
+                primaryColor: const Color.fromARGB(255, 73, 31, 31),
                 colorScheme: ColorScheme.fromSwatch()
                     .copyWith(secondary: const Color.fromRGBO(177, 35, 35, 1)))
             .copyWith(backgroundColor: const Color.fromRGBO(5, 14, 14, 1)),

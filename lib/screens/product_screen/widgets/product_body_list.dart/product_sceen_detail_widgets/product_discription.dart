@@ -17,15 +17,12 @@ class PrdocutDiscription extends StatelessWidget {
         children: [
           const Text(
             ": الوصف",
-            style: TextStyle(color: Colors.white, fontSize: 17),
+            style: TextStyle(color: Colors.white, fontSize: 22),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Text(
-              discription,
-              style: const TextStyle(color: Colors.white, fontSize: 15),
-              textAlign: TextAlign.end,
-            ),
+          Text(
+            discription,
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+            textAlign: TextAlign.end,
           ),
         ],
       ),

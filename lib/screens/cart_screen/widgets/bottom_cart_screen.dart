@@ -21,6 +21,8 @@ class CartScreenBottom extends StatelessWidget {
     submitOrder() async {
       isLoading.value = true;
       if (!formKey.currentState!.validate()) {
+        isLoading.value = false;
+
         return;
       }
       formKey.currentState!.save();

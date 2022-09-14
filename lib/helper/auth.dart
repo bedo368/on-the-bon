@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -6,6 +7,7 @@ class Auth {
   static signInWithGoogle(BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final GoogleSignIn googleSignIn = GoogleSignIn();
+    googleSignIn.disconnect();
 
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
@@ -111,5 +113,8 @@ class Auth {
 
   static signOut() async {
     await FirebaseAuth.instance.signOut();
+    final fcm = FirebaseMessaging.instance;
+    await fcm.getToken();
+    fcm.unsubscribeFromTopic("Admin");
   }
 }

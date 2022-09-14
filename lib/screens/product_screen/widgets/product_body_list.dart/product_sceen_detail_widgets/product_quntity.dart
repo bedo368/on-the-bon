@@ -15,7 +15,7 @@ class ProductQuntity extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text(
-            "الكمية ",
+            ": الكمية ",
             style: TextStyle(color: Colors.white, fontSize: 22),
             textAlign: TextAlign.end,
           ),
@@ -40,7 +40,12 @@ class ProductQuntity extends StatelessWidget {
                 valueListenable: ProductQuntity.quetity,
                 builder: (context, v, e) {
                   return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 100),
+                    transitionBuilder: (child, animation) => SlideTransition(
+                        position: animation.drive(Tween<Offset>(
+                            begin: const Offset(0, -1),
+                            end: const Offset(0, 0))),
+                        child: child),
                     child: Center(
                         key: ValueKey(quetity.value.toInt()),
                         child: Text(

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:on_the_bon/models/order.dart';
 import 'package:on_the_bon/models/order_item.dart';
@@ -16,36 +15,44 @@ class Orders with ChangeNotifier {
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<List<Order>> getOrdersforUserByType(OrderTypeEnum type) async {
-    try {
-      if (type == OrderTypeEnum.orderInProgress) {
-        final orders = await db
-            .collection("orderInProgress")
-            .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            .get();
-        for (var element in orders.docs) {
-          
-          final List<OrderItem> items =
-              (element.data()["ordersItems"] as List<Map<String, dynamic>>)
-                  .map((e) {
-            return OrderItem(
-                productId: e["productId"],
-                title: e["title"],
-                price: e["price"],
-                imageUrl: e["imageUrl"],
-                size: e["size"]);
-          }).toList();
+  Future getOrdersforUserByType(OrderTypeEnum type) async {
+    final ordersTypeEnumToString = {
+      OrderTypeEnum.successfulOrder: "successfulOrder",
+      OrderTypeEnum.orderInProgres: "orderInProgres",
+      OrderTypeEnum.rejectedOrder: "rejectedOrder",
+    };
 
-          _orders[element.id] = Order(
-              ordersItems: items,
-              userId: element.data()["userId"],
-              phoneNumber: element.data()["phoneNumber"],
-              location: element.data()["location"],
-              id: element.id,
-              orderType: element.data()["orderType"],
-              totalPrice: element.data()["totalPrice"]);
+    final String orderType = ordersTypeEnumToString[type]!;
+    try {
+      _orders.clear();
+      final orders = await db
+          .collection(orderType)
+          .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+      for (var element in orders.docs) {
+        final List<OrderItem> items = [];
+
+        for (var e in (element.data()["orderItems"] as List<dynamic>)) {
+          items.add(OrderItem(
+              productId: e["productId"],
+              quantity: e["quantity"],
+              title: e["title"],
+              price: e["price"],
+              imageUrl: e["imageUrl"],
+              size: e["size"]));
         }
+
+        _orders[element.id] = Order(
+            ordersItems: items,
+            userId: element.data()["userId"],
+            phoneNumber: element.data()["PhoneNumber"],
+            location: element.data()["location"],
+            id: element.id,
+            orderType: type,
+            totalPrice: element.data()["totalPrice"]);
       }
+
+      notifyListeners();
     } catch (e) {
       rethrow;
     }
@@ -65,38 +72,21 @@ class Orders with ChangeNotifier {
         "id": e.id,
         "imageUrl": e.imageUrl,
         "price": e.price,
+        "title": e.title,
         "quantity": e.quantity,
         "size": e.size,
-        "productid": e.productId
+        "productId": e.productId
       };
     }).toList();
 
-    db.collection("users").doc(userId).set({"PhoneNumber": phoneNumber});
-    final newOrder = await db.collection("orderinprogress").add({
+    await db.collection("orderInProgres").add({
       "orderItems": items,
-      "userOwner": userId,
+      "userId": userId,
       "PhoneNumber": phoneNumber,
       "totalPrice": totalPrice,
+      "location": location
     });
 
-    final List<OrderItem> convertorderItems = orderItems.map((e) {
-      return OrderItem(
-          productId: e.productId,
-          title: e.title,
-          price: e.price,
-          imageUrl: e.imageUrl,
-          size: e.size);
-    }).toList();
-
-    final String id = newOrder.id;
-    _orders[id] = Order(
-        orderType: OrderTypeEnum.orderInProgress,
-        ordersItems: convertorderItems,
-        userId: userId,
-        phoneNumber: phoneNumber,
-        location: location,
-        totalPrice: totalPrice,
-        id: id);
-    notifyListeners();
+    await db.collection("users").doc(userId).set({"PhoneNumber": phoneNumber});
   }
 }
