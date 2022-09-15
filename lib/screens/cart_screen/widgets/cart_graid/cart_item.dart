@@ -63,7 +63,9 @@ class CartItemWidget extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         if (cartItem.quantity <= 1) {
-                          await showMyDialog(
+                          await showConfirmDialog(
+                              confirmText: "حذف",
+                              cancelText: "الغاء",
                               context: context,
                               title: 'حذف من عربة التسوق',
                               content: 'هل تريد حذف المنتج من العربه ',

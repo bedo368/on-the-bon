@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:on_the_bon/models/order.dart';
+import 'package:on_the_bon/providers/orders_provider.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
+import 'package:provider/provider.dart';
 
-class OrderWidget extends StatelessWidget {
-  const OrderWidget({Key? key, required this.order}) : super(key: key);
+class OrderManageItem extends StatelessWidget {
+  const OrderManageItem({Key? key, required this.order}) : super(key: key);
   final Order order;
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,9 @@ class OrderWidget extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            order.ordersItems[index].quantity.toInt().toString(),
+                            order.ordersItems[index].quantity
+                                .toInt()
+                                .toString(),
                             style: const TextStyle(color: Colors.white),
                           ),
                           const Text(
@@ -110,6 +115,38 @@ class OrderWidget extends StatelessWidget {
                   textAlign: TextAlign.end,
                 ),
               ),
+              Row(
+                children: [
+                  TextButton(
+                      onPressed: () async {
+                        print("طلب ناجح");
+                        await Provider.of<Orders>(context, listen: false)
+                            .cahngeOrderType(
+                                newtype: OrderTypeEnum.successfulOrder,
+                                orderId: order.id,
+                                oldType: order.orderType);
+
+                        print("طلب ناجح");
+                      },
+                      child: const Text(
+                        "طلب ناجح",
+                        style: TextStyle(color: Colors.amber),
+                      )),
+                  TextButton(
+                    onPressed: () async {
+                      await Provider.of<Orders>(context, listen: false)
+                          .cahngeOrderType(
+                              newtype: OrderTypeEnum.rejectedOrder,
+                              orderId: order.id,
+                              oldType: order.orderType);
+                    },
+                    child: const Text(
+                      "طلب مرفوض",
+                      style: TextStyle(color: Colors.amber),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

@@ -4,13 +4,13 @@ const admin = require("firebase-admin");
 
 admin.initializeApp(functions.config().functions);
 
-exports.orederTrigger = functions.firestore
+exports.orederTriggerByAdmins = functions.firestore
   .document("orderInProgres/{orderInProgresId}")
   .onCreate(async (snapshot, context) => {
     var payload = {
       notification: {
-        title: "new order",
-        body: " there is a new order please check ",
+        title: "طلب جديد",
+        body: " هناك طلب جديد قم بالتحقق ",
       },
       data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
     };

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
@@ -18,8 +19,10 @@ class CartScreenBottom extends StatelessWidget {
 
     String phoneNumber = "";
     String location = "";
+
     submitOrder() async {
       isLoading.value = true;
+
       if (!formKey.currentState!.validate()) {
         isLoading.value = false;
 
@@ -27,23 +30,35 @@ class CartScreenBottom extends StatelessWidget {
       }
       formKey.currentState!.save();
 
-      try {
-        await Provider.of<Orders>(context, listen: false).addOrder(
-            orderItems: cartData.items.values.toList(),
-            phoneNumber: phoneNumber,
-            location: location,
-            totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
-            userId: Provider.of<User>(context, listen: false).uid);
+      showConfirmDialog(
+          content:
+              "  هل انت متاكد من اضافة طلب جديد علي رقم التواصل $phoneNumber",
+          title: "اضافة طلب ",
+          confirmText: "اضافه",
+          cancelText: "الغاء",
+          context: context,
+          onConfirm: () async {
+            try {
+              await Provider.of<Orders>(context, listen: false).addOrder(
+                  orderItems: cartData.items.values.toList(),
+                  phoneNumber: phoneNumber,
+                  location: location,
+                  totalPrice:
+                      Provider.of<Cart>(context, listen: false).totalPrice,
+                  userId: Provider.of<User>(context, listen: false).uid);
 
-        isLoading.value = false;
-        // ignore: use_build_context_synchronously
-        Provider.of<Cart>(context, listen: false).clearCart();
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
-      } catch (e) {
-        isLoading.value = false;
-        rethrow;
-      }
+              isLoading.value = false;
+              // ignore: use_build_context_synchronously
+              Provider.of<Cart>(context, listen: false).clearCart();
+              // ignore: use_build_context_synchronously
+              Navigator.of(context)
+                  .pushReplacementNamed(OrdersScreen.routeName);
+            } catch (e) {
+              isLoading.value = false;
+              rethrow;
+            }
+          },
+          onCancel: () {});
     }
 
     return cartData.items.isNotEmpty
@@ -156,13 +171,27 @@ class CartScreenBottom extends StatelessWidget {
             ]),
           )
         : SizedBox(
-            height: 500,
-            width: MediaQuery.of(context).size.width,
-            child: const Center(
-              child: Text(
-                "العربه فارغه قم بملئها من فضلك",
-                style: TextStyle(fontSize: 20),
-              ),
+            height: MediaQuery.of(context).size.height * .8,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: Center(
+                    child: SpinKitCubeGrid(
+                      size: 60,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+                const Center(
+                  child: Text(
+                    "العربه فارغه قم بملئها من فضلك",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
             ),
           );
   }

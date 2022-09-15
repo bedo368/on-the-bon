@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-Future<void> showMyDialog({
+Future<void> showConfirmDialog({
   required String content,
   required String title,
+  required String confirmText,
+  required String cancelText,
   required BuildContext context,
   required Function onConfirm,
   required Function onCancel,
@@ -27,14 +29,14 @@ Future<void> showMyDialog({
         ),
         actions: <Widget>[
           TextButton(
-            child: const Text('حذف'),
+            child: Text(confirmText),
             onPressed: () {
               onConfirm();
               Navigator.of(context1).pop();
             },
           ),
           TextButton(
-            child: const Text('الغاء'),
+            child: Text(cancelText),
             onPressed: () {
               onCancel();
               Navigator.of(context1).pop();

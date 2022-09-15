@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/bottom_cart_screen.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/cart_graid/cart_graid.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -8,6 +10,8 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartData = Provider.of<Cart>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -24,10 +28,9 @@ class CartScreen extends StatelessWidget {
             child: Center(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children:  const [
-                
-                CartGraid(), 
-                CartScreenBottom(),
+              children:  [
+                if (cartData.cartItems.isNotEmpty) const CartGraid(),
+                const CartScreenBottom(),
               ],
             ))),
       ),

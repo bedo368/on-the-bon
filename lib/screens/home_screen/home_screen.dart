@@ -11,6 +11,7 @@ import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_f
 
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_graid.dart';
+import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
@@ -50,9 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     FirebaseMessaging.onMessage.listen((event) async {
-      showMyDialog(
+      showConfirmDialog(
           content: event.notification!.body ?? "",
           title: event.notification!.title ?? "",
+          confirmText: "ذهاب للصفحه",
+          cancelText: "اخفاء",
           context: context,
           onConfirm: () {
             Navigator.of(context).pushNamed(OrdersScreen.routeName);
@@ -86,10 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   leading: const Text("my orders")),
               ListTile(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(OrderManageScreen.routeName);
+                  },
+                  leading: const Text("manage orders")),
+              ListTile(
                   onTap: () async {
                     await Auth.signOut();
                   },
-                  leading: const Text("my orders")),
+                  leading: const Text("log out")),
             ],
           ),
         ),

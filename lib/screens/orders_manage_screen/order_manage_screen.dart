@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
-import 'package:on_the_bon/screens/orders_screen/widgets/orders_item.dart';
+import 'package:on_the_bon/screens/orders_manage_screen/wigets/order_manage_itme.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_button.dart';
 import 'package:provider/provider.dart';
 
-class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({Key? key}) : super(key: key);
-  static String routeName = "/orders";
+class OrderManageScreen extends StatefulWidget {
+  const OrderManageScreen({Key? key}) : super(key: key);
+  static String routeName = "/orders-manage";
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
+  State<OrderManageScreen> createState() => _OrderManageScreenState();
   static ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _OrderManageScreenState extends State<OrderManageScreen> {
   Future<void> fetchOrders() async {
-    OrdersScreen.isLoading.value = true;
+    OrderManageScreen.isLoading.value = true;
 
     try {
       await Provider.of<Orders>(context, listen: false)
-          .getOrdersforUserByType(OrdersButton.activeOrders.value);
-      OrdersScreen.isLoading.value = false;
+          .getOrdersForAdminsByType(OrdersButton.activeOrders.value);
+      OrderManageScreen.isLoading.value = false;
     } catch (e) {
-      OrdersScreen.isLoading.value = false;
+      OrderManageScreen.isLoading.value = false;
 
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,9 +34,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   void initState() {
-    OrdersScreen.isLoading.value = true;
+    OrderManageScreen.isLoading.value = true;
     fetchOrders().then((value) {
-      OrdersScreen.isLoading.value = false;
+      OrderManageScreen.isLoading.value = false;
     });
 
     super.initState();
@@ -67,7 +67,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               width: MediaQuery.of(context).size.width * .9,
               margin: const EdgeInsets.only(top: 40),
               child: ValueListenableBuilder<bool>(
-                  valueListenable: OrdersScreen.isLoading,
+                  valueListenable: OrderManageScreen.isLoading,
                   builder: (context, value, c) {
                     return value
                         ? const Center(
@@ -80,7 +80,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             primary: false,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              return OrderItem(
+                              return OrderManageItem(
                                 order: ordersData.orders[index],
                               );
                             },

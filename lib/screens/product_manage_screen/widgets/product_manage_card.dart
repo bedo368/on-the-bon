@@ -85,8 +85,10 @@ class ProductManageCard extends StatelessWidget {
                                   : () async {
                                       try {
                                         isLoading.value = true;
-                                        await showMyDialog(
+                                        await showConfirmDialog(
                                             context: context,
+                                            confirmText: "حذف",
+                                            cancelText: "الغاء",
                                             title: "حذف المنتج",
                                             content:
                                                 "حذف المنتج من قائمه المنتجات",
