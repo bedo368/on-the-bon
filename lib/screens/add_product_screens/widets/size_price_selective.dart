@@ -12,7 +12,7 @@ class SizePriceSelective extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
-    double _price = 0;
+    double price = 0;
     return SizedBox(
       width: MediaQuery.of(context).size.width * .8,
       child: Row(
@@ -40,9 +40,9 @@ class SizePriceSelective extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                   onEditingComplete: () {
                     if (controller.text.isNotEmpty) {
-                      _price = double.tryParse(controller.text) ?? 0;
+                      price = double.tryParse(controller.text) ?? 0;
                       if (double.tryParse(controller.text) != null) {
-                        addPriceWithSize(type, _price);
+                        addPriceWithSize(type, price);
                       }
                     }
                   },
@@ -52,9 +52,9 @@ class SizePriceSelective extends StatelessWidget {
           IconButton(
               onPressed: () {
                 if (controller.text.isNotEmpty) {
-                  _price = double.tryParse(controller.text) ?? 0;
+                  price = double.tryParse(controller.text) ?? 0;
                   if (double.tryParse(controller.text) != null) {
-                    addPriceWithSize(type, _price);
+                    addPriceWithSize(type, price);
                   }
                 }
               },

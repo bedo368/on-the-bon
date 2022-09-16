@@ -7,10 +7,11 @@ void subscreibToAdmin() async {
       .collection("admins")
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .get();
-
-  if (isAdmin.data()!["admin"] == true) {
-    final fcm = FirebaseMessaging.instance;
-    await fcm.getToken();
-    fcm.subscribeToTopic("Admin");
+  if (isAdmin.id.isNotEmpty) {
+    if (isAdmin.data()!["admin"] == true) {
+      final fcm = FirebaseMessaging.instance;
+      await fcm.getToken();
+      fcm.subscribeToTopic("Admin");
+    }
   }
 }

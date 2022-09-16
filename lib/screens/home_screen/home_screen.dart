@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final globalKey = GlobalKey<ScaffoldState>();
+    final allProduct = Provider.of<Products>(context).allProducts;
 
     return Scaffold(
       key: globalKey,
@@ -139,18 +140,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Theme.of(context).primaryColor,
               ),
             )
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  const ProdcutsFiltterByType(),
-                  const ProductsFillterBySubType(),
-                  const ProductTypeNotifier(),
-                  Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: const ProductGraid())
-                ],
-              ),
-            ),
+          : allProduct.isNotEmpty
+              ? SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const ProdcutsFiltterByType(),
+                      const ProductsFillterBySubType(),
+                      const ProductTypeNotifier(),
+                      Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: const ProductGraid())
+                    ],
+                  ),
+                )
+              : const Center( child: Text("خطأ في الاتصال بالانترنت من فضلك حاول مجددا")),
     );
   }
 }

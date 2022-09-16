@@ -115,16 +115,23 @@ class Orders with ChangeNotifier {
         "productId": e.productId
       };
     }).toList();
+    try {
+      final neworder = await db.collection("orderInProgres").add({
+        "orderItems": items,
+        "userId": userId,
+        "PhoneNumber": phoneNumber,
+        "totalPrice": totalPrice,
+        "location": location,
+        "createdAt": DateTime.now().toIso8601String(),
+      });
 
-    await db.collection("orderInProgres").add({
-      "orderItems": items,
-      "userId": userId,
-      "PhoneNumber": phoneNumber,
-      "totalPrice": totalPrice,
-      "location": location
-    });
-
-    await db.collection("users").doc(userId).set({"PhoneNumber": phoneNumber});
+      await db
+          .collection("users")
+          .doc(userId)
+          .update({"phoneNumber": phoneNumber, "location": location});
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> cahngeOrderType({

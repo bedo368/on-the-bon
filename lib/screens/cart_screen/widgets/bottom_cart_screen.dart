@@ -30,7 +30,7 @@ class CartScreenBottom extends StatelessWidget {
       }
       formKey.currentState!.save();
 
-      showConfirmDialog(
+      await showConfirmDialog(
           content:
               "  هل انت متاكد من اضافة طلب جديد علي رقم التواصل $phoneNumber",
           title: "اضافة طلب ",
@@ -47,14 +47,19 @@ class CartScreenBottom extends StatelessWidget {
                       Provider.of<Cart>(context, listen: false).totalPrice,
                   userId: Provider.of<User>(context, listen: false).uid);
 
-              isLoading.value = false;
-              // ignore: use_build_context_synchronously
               Provider.of<Cart>(context, listen: false).clearCart();
-              // ignore: use_build_context_synchronously
+
               Navigator.of(context)
                   .pushReplacementNamed(OrdersScreen.routeName);
+
+              isLoading.value = false;
             } catch (e) {
               isLoading.value = false;
+
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text(" حدث خطا ما من فضلك حاول مجددا")));
+
               rethrow;
             }
           },
@@ -134,7 +139,7 @@ class CartScreenBottom extends StatelessWidget {
                             location = newval!;
                           },
                           onFieldSubmitted: (_) async {
-                            submitOrder();
+                            await submitOrder();
                           },
                         ),
                       ],

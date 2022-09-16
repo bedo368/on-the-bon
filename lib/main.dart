@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
                         textStyle: GoogleFonts.itim(fontSize: 18))),
-                primaryColor: const Color.fromARGB(255, 73, 31, 31),
+                primaryColor: const Color.fromARGB(255, 61, 26, 26),
                 colorScheme: ColorScheme.fromSwatch()
                     .copyWith(secondary: const Color.fromRGBO(177, 35, 35, 1)))
             .copyWith(backgroundColor: const Color.fromRGBO(5, 14, 14, 1)),

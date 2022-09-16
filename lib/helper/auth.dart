@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
@@ -22,7 +23,19 @@ class Auth {
       );
 
       try {
-        await auth.signInWithCredential(credential);
+        final user = await auth.signInWithCredential(credential);
+        if (user.additionalUserInfo!.isNewUser) {
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.user!.uid)
+              .set({
+            "displayName": user.user!.displayName,
+            "email": user.user!.email,
+            "phoneNumber": user.user!.phoneNumber,
+            "photoURL": user.user!.photoURL,
+            "creationTime": user.user!.metadata.creationTime
+          });
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           // handle the error here

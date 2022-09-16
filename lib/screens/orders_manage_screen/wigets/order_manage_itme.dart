@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 
 import 'package:on_the_bon/models/order.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
@@ -119,14 +120,21 @@ class OrderManageItem extends StatelessWidget {
                 children: [
                   TextButton(
                       onPressed: () async {
-                        print("طلب ناجح");
-                        await Provider.of<Orders>(context, listen: false)
-                            .cahngeOrderType(
-                                newtype: OrderTypeEnum.successfulOrder,
-                                orderId: order.id,
-                                oldType: order.orderType);
-
-                        print("طلب ناجح");
+                        showConfirmDialog(
+                            content:
+                                " هل انت متاكد اضافه الطلب الي الطلبات الناجحه",
+                            title: "تاكيد اضافه الطلب",
+                            confirmText: "تاكيد",
+                            cancelText: "الغاء",
+                            context: context,
+                            onConfirm: () async {
+                              await Provider.of<Orders>(context, listen: false)
+                                  .cahngeOrderType(
+                                      newtype: OrderTypeEnum.successfulOrder,
+                                      orderId: order.id,
+                                      oldType: order.orderType);
+                            },
+                            onCancel: () {});
                       },
                       child: const Text(
                         "طلب ناجح",
@@ -134,11 +142,21 @@ class OrderManageItem extends StatelessWidget {
                       )),
                   TextButton(
                     onPressed: () async {
-                      await Provider.of<Orders>(context, listen: false)
-                          .cahngeOrderType(
-                              newtype: OrderTypeEnum.rejectedOrder,
-                              orderId: order.id,
-                              oldType: order.orderType);
+                      showConfirmDialog(
+                          content:
+                              " هل انت متاكد اضافه الطلب الي الطلبات المرفوضه",
+                          title: "تاكيد اضافه الطلب",
+                          confirmText: "تاكيد",
+                          cancelText: "الغاء",
+                          context: context,
+                          onConfirm: () async {
+                            await Provider.of<Orders>(context, listen: false)
+                                .cahngeOrderType(
+                                    newtype: OrderTypeEnum.rejectedOrder,
+                                    orderId: order.id,
+                                    oldType: order.orderType);
+                          },
+                          onCancel: () {});
                     },
                     child: const Text(
                       "طلب مرفوض",

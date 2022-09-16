@@ -16,3 +16,15 @@ exports.orederTriggerByAdmins = functions.firestore
     };
     admin.messaging().sendToTopic("Admin", payload);
   });
+
+
+
+  // exports.checkIsAdmin = functions.https.onCall(async(data, contxt)=> {
+    
+
+  //   const adminRole = await admin.firestore.document(`/adims/${contxt.auth.uid}`) ; 
+
+
+    
+
+  // })

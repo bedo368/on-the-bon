@@ -38,6 +38,12 @@ class Products with ChangeNotifier {
     } else if (type == ProductsTypeEnum.coldDrinks) {
       _currentType = "مشروبات باردة";
     }
+    if (!types.containsKey(productsTypeToString[type])) {
+      _currentType = productsTypeToString[type]!;
+      _currentSubType = "";
+      notifyListeners();
+      return;
+    }
     _currentSubType = types[_currentType]!.values.first;
     notifyListeners();
   }
@@ -56,6 +62,11 @@ class Products with ChangeNotifier {
   }
 
   List<String> get getSupTypes {
+    if (!types.containsKey(_currentType)) {
+      _currentSubType = "";
+      notifyListeners();
+      return [];
+    }
     return types[_currentType]!.values.toList();
   }
 
