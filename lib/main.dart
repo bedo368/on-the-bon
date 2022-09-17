@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,6 +34,7 @@ void main() async {
     provisional: false,
     sound: true,
   );
+  await FirebaseAppCheck.instance.activate();
 
   runApp(const MyApp());
 }

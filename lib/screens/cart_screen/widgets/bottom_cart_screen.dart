@@ -47,8 +47,10 @@ class CartScreenBottom extends StatelessWidget {
                       Provider.of<Cart>(context, listen: false).totalPrice,
                   userId: Provider.of<User>(context, listen: false).uid);
 
+              // ignore: use_build_context_synchronously
               Provider.of<Cart>(context, listen: false).clearCart();
 
+              // ignore: use_build_context_synchronously
               Navigator.of(context)
                   .pushReplacementNamed(OrdersScreen.routeName);
 
@@ -184,11 +186,8 @@ class CartScreenBottom extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   child: Center(
-                    child: SpinKitCubeGrid(
-                      size: 60,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                      child: Image.asset("assets/images/emptycart.gif",
+                          width: 150, fit: BoxFit.cover)),
                 ),
                 const Center(
                   child: Text(

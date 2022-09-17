@@ -116,7 +116,7 @@ class Orders with ChangeNotifier {
       };
     }).toList();
     try {
-      final neworder = await db.collection("orderInProgres").add({
+      await db.collection("orderInProgres").add({
         "orderItems": items,
         "userId": userId,
         "PhoneNumber": phoneNumber,

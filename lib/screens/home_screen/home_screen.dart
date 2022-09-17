@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/helper/auth.dart';
@@ -33,6 +34,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    InternetConnectionChecker.createInstance()
+        .hasConnection
+        .then((internetconnection) {
+      if (!internetconnection) {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+    });
+
     Provider.of<Products>(context, listen: false)
         .fetchProductAsync()
         .then((value) {
@@ -70,6 +82,40 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final globalKey = GlobalKey<ScaffoldState>();
     final allProduct = Provider.of<Products>(context).allProducts;
+
+    Future<void> onRefreash() async {
+      try {
+        final internetconnection =
+            await InternetConnectionChecker.createInstance().hasConnection;
+        if (!internetconnection) {
+          setState(() {
+            isLoading = false;
+          });
+          return;
+        }
+        // ignore: empty_catches
+      } catch (e) {}
+
+      try {
+        setState(() {
+          isLoading = true;
+        });
+        await Provider.of<Products>(context, listen: false).fetchProductAsync();
+
+        setState(() {
+          isLoading = false;
+        });
+
+        // ignore: use_build_context_synchronously
+        Provider.of<Products>(context, listen: false)
+            .setType(HomeScreen.productType.value);
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        rethrow;
+      }
+    }
 
     return Scaffold(
       key: globalKey,
@@ -141,19 +187,44 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           : allProduct.isNotEmpty
-              ? SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const ProdcutsFiltterByType(),
-                      const ProductsFillterBySubType(),
-                      const ProductTypeNotifier(),
-                      Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          child: const ProductGraid())
-                    ],
+              ? RefreshIndicator(
+                  onRefresh: onRefreash,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const ProdcutsFiltterByType(),
+                        const ProductsFillterBySubType(),
+                        const ProductTypeNotifier(),
+                        Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const ProductGraid())
+                      ],
+                    ),
                   ),
                 )
-              : const Center( child: Text("خطأ في الاتصال بالانترنت من فضلك حاول مجددا")),
+              : RefreshIndicator(
+                  onRefresh: onRefreash,
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 200),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              "assets/images/search.gif",
+                              fit: BoxFit.cover,
+                              width: 150,
+                            ),
+                            const Center(
+                                child: Text(
+                                    " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ")),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
     );
   }
 }
