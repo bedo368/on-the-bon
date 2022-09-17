@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
+import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
@@ -177,27 +178,10 @@ class CartScreenBottom extends StatelessWidget {
               )
             ]),
           )
-        : SizedBox(
-            height: MediaQuery.of(context).size.height * .8,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: Center(
-                      child: Image.asset("assets/images/emptycart.gif",
-                          width: 150, fit: BoxFit.cover)),
-                ),
-                const Center(
-                  child: Text(
-                    "العربه فارغه قم بملئها من فضلك",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ],
-            ),
-          );
+        : const IconGif(
+            width: 150,
+            content: "العربه فارغه قم بملئها من فضلك",
+            IconPath: "assets/images/emptycart.gif");
   }
 }
 

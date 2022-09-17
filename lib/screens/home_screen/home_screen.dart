@@ -1,9 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
+import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/helper/auth.dart';
 import 'package:on_the_bon/helper/subscribe_to_admin.dart';
 import 'package:on_the_bon/providers/porducts_provider.dart';
@@ -181,11 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: isLoading
-          ? Center(
-              child: SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
-              ),
-            )
+          ? const Center(
+              child: IconGif(
+              width: 90,
+              content: "",
+              IconPath: "assets/images/search.gif",
+            ))
           : allProduct.isNotEmpty
               ? RefreshIndicator(
                   onRefresh: onRefreash,
@@ -204,24 +205,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               : RefreshIndicator(
                   onRefresh: onRefreash,
-                  child: SingleChildScrollView(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 200),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "assets/images/search.gif",
-                              fit: BoxFit.cover,
-                              width: 150,
-                            ),
-                            const Center(
-                                child: Text(
-                                    " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ")),
-                          ],
-                        ),
-                      ),
+                  child: const SingleChildScrollView(
+                    child: IconGif(
+                      width: 150,
+                      content: " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
+                      IconPath: "assets/images/connection-error.gif",
                     ),
                   ),
                 ),
