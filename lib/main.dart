@@ -73,8 +73,16 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return const HomeScreen();
+            } else {
+              
+              if (auth.FirebaseAuth.instance.currentUser == null ) {
+                return const LogInScreen();
+              }
+              if (Provider.of<auth.User>(context).uid.isNotEmpty) {
+                return const HomeScreen();
+              }
+              return const LogInScreen();
             }
-            return const LogInScreen();
           },
         ),
         routes: {

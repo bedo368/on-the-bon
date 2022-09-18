@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class IconGif extends StatelessWidget {
   final double width;
   final String content;
-  final String IconPath;
+  final String iconPath;
   const IconGif({
     Key? key,
     required this.width,
     required this.content,
-    required this.IconPath,
+    required this.iconPath,
   }) : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class IconGif extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              IconPath,
+              iconPath,
               fit: BoxFit.cover,
               width: width,
             ),

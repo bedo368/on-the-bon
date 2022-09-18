@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/screens/sign_screen/widgets/login_form.dart';
+import 'package:on_the_bon/screens/sign_screen/widgets/login_with_google_only.dart';
 import 'package:on_the_bon/screens/sign_screen/widgets/sign_in_logo.dart';
 
 class LogInScreen extends StatelessWidget {
   const LogInScreen({Key? key}) : super(key: key);
+  static String routeName = "/login";
 
   @override
   Widget build(BuildContext context) {
+    // if (Provider.of<User>(context).uid != "") {
+    //   Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    // }
     final mediaQuery = MediaQuery.of(context);
 
     return Container(
@@ -34,7 +38,7 @@ class LogInScreen extends StatelessWidget {
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 50),
-                          child: const LoginForm(),
+                          child: const LoginWithGoogleForm(),
                         )
                       ],
                     ),

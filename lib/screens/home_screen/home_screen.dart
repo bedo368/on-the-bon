@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
+import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/helper/auth.dart';
@@ -58,10 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
           .setType(HomeScreen.productType.value);
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      Navigator.of(context).pushNamed(CartScreen.routeName);
-    });
-
     FirebaseMessaging.onMessage.listen((event) async {
       showConfirmDialog(
           content: event.notification!.body ?? "",
@@ -70,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           cancelText: "اخفاء",
           context: context,
           onConfirm: () {
-            Navigator.of(context).pushNamed(OrdersScreen.routeName);
+            Navigator.of(context).pushNamed(OrderManageScreen.routeName);
           },
           onCancel: () {});
     });
@@ -100,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           isLoading = true;
         });
+        // ignore: use_build_context_synchronously
         await Provider.of<Products>(context, listen: false).fetchProductAsync();
 
         setState(() {
@@ -119,6 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       key: globalKey,
+      extendBody: true,
+      bottomNavigationBar: ButtomNavigationBar(
+        key: GlobalKey(debugLabel: "key"),
+        routeName: HomeScreen.routeName,
+      ),
       drawer: Drawer(
         child: Container(
           margin: const EdgeInsets.only(top: 40),
@@ -185,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IconGif(
               width: 90,
               content: "",
-              IconPath: "assets/images/search.gif",
+              iconPath: "assets/images/search.gif",
             ))
           : allProduct.isNotEmpty
               ? RefreshIndicator(
@@ -209,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: IconGif(
                       width: 150,
                       content: " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
-                      IconPath: "assets/images/connection-error.gif",
+                      iconPath: "assets/images/connection-error.gif",
                     ),
                   ),
                 ),

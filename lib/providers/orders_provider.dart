@@ -116,19 +116,15 @@ class Orders with ChangeNotifier {
       };
     }).toList();
     try {
+      print("add order");
       await db.collection("orderInProgres").add({
         "orderItems": items,
         "userId": userId,
         "PhoneNumber": phoneNumber,
         "totalPrice": totalPrice,
         "location": location,
-        "createdAt": DateTime.now().toIso8601String(),
+        "createdAt": DateTime.now(),
       });
-
-      await db
-          .collection("users")
-          .doc(userId)
-          .update({"phoneNumber": phoneNumber, "location": location});
     } catch (e) {
       rethrow;
     }

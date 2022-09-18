@@ -1,18 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
+import 'package:on_the_bon/helper/auth.dart';
 import 'package:on_the_bon/providers/cart_provider.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:provider/provider.dart';
 
-class CartScreenBottom extends StatelessWidget {
+class CartScreenBottom extends StatefulWidget {
   const CartScreenBottom({Key? key}) : super(key: key);
 
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  static ValueNotifier<bool> usingCurrentPhone = ValueNotifier(true);
 
+  @override
+  State<CartScreenBottom> createState() => _CartScreenBottomState();
+}
+
+class _CartScreenBottomState extends State<CartScreenBottom> {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> isLoading = ValueNotifier(false);
@@ -20,57 +26,74 @@ class CartScreenBottom extends StatelessWidget {
 
     String phoneNumber = "";
     String location = "";
+    Future<void> addOrder(BuildContext context, String phone) async {
+      try {
+        isLoading.value = true;
+
+        await Provider.of<Orders>(context, listen: false).addOrder(
+            orderItems: cartData.items.values.toList(),
+            phoneNumber: phone,
+            location: location,
+            totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
+            userId: Provider.of<User>(context, listen: false).uid);
+
+        // ignore: use_build_context_synchronously
+        Provider.of<Cart>(context, listen: false).clearCart();
+
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+
+        isLoading.value = false;
+      } catch (e) {
+        isLoading.value = false;
+
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text(" حدث خطا ما من فضلك حاول مجددا")));
+
+        rethrow;
+      }
+    }
 
     submitOrder() async {
       isLoading.value = true;
 
-      if (!formKey.currentState!.validate()) {
+      if (!CartScreenBottom.formKey.currentState!.validate()) {
         isLoading.value = false;
 
         return;
       }
-      formKey.currentState!.save();
+      CartScreenBottom.formKey.currentState!.save();
 
-      await showConfirmDialog(
-          content:
-              "  هل انت متاكد من اضافة طلب جديد علي رقم التواصل $phoneNumber",
-          title: "اضافة طلب ",
-          confirmText: "اضافه",
-          cancelText: "الغاء",
+      if (Provider.of<User>(context, listen: false).phoneNumber != null &&
+          CartScreenBottom.usingCurrentPhone.value) {
+        try {
+          phoneNumber =
+              Provider.of<User>(context, listen: false).phoneNumber as String;
+            
+          await addOrder(context, phoneNumber);
+          return;
+        } catch (e) {
+          rethrow;
+        }
+      }
+      print(phoneNumber);
+      await Auth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          location: location,
           context: context,
-          onConfirm: () async {
+          confirmOrder: (context) async {
             try {
-              await Provider.of<Orders>(context, listen: false).addOrder(
-                  orderItems: cartData.items.values.toList(),
-                  phoneNumber: phoneNumber,
-                  location: location,
-                  totalPrice:
-                      Provider.of<Cart>(context, listen: false).totalPrice,
-                  userId: Provider.of<User>(context, listen: false).uid);
-
-              // ignore: use_build_context_synchronously
-              Provider.of<Cart>(context, listen: false).clearCart();
-
-              // ignore: use_build_context_synchronously
-              Navigator.of(context)
-                  .pushReplacementNamed(OrdersScreen.routeName);
-
-              isLoading.value = false;
+              await addOrder(context, phoneNumber);
             } catch (e) {
-              isLoading.value = false;
-
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text(" حدث خطا ما من فضلك حاول مجددا")));
-
               rethrow;
             }
-          },
-          onCancel: () {});
+          });
     }
 
     return cartData.items.isNotEmpty
         ? Container(
+            key: const ValueKey("cart"),
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             width: MediaQuery.of(context).size.width * .9,
             child: Column(children: [
@@ -88,41 +111,89 @@ class CartScreenBottom extends StatelessWidget {
                 ),
               ),
               Form(
-                  key: formKey,
+                  key: CartScreenBottom.formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 40, top: 10),
                     child: Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: TextFormField(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.end,
-                            decoration: cartInput("رقم الهاتف"),
-                            validator: ((value) {
-                              if (value!.isNotEmpty) {
-                                if (value.length != 11) {
-                                  return "من فضلك  ادخل رقم هاتف صحيح";
-                                } else if (int.tryParse(value) == null) {
-                                  return "من فضلك  ادخل رقم هاتف صحيح";
-                                }
-                              }
-                              if (value.isEmpty) {
-                                return "من فضلك ادخل رقم هاتفك";
-                              }
-                              phoneNumber = value;
-                              return null;
-                            }),
-                            onSaved: (newval) {
-                              phoneNumber = newval!;
-                            },
-                            textInputAction: TextInputAction.next,
+                        if (Provider.of<User>(context, listen: false)
+                                .phoneNumber !=
+                            null)
+                          Container(
+                            width: MediaQuery.of(context).size.width * .9,
+                            margin: const EdgeInsets.symmetric(vertical: 5),
+                            child: Row(
+                              textDirection: TextDirection.rtl,
+                              children: [
+                                const Text(" : رقم الهاتف الحالي  "),
+                                Text(
+                                  Provider.of<User>(context, listen: false)
+                                      .phoneNumber
+                                      .toString(),
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.end,
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      CartScreenBottom.usingCurrentPhone.value =
+                                          !CartScreenBottom
+                                              .usingCurrentPhone.value;
+                                    },
+                                    child: ValueListenableBuilder<bool>(
+                                        valueListenable:
+                                            CartScreenBottom.usingCurrentPhone,
+                                        builder: (context, value, child) {
+                                          return Text(value
+                                              ? "تغير الهاتف"
+                                              : "استخدام الرقم");
+                                        }))
+                              ],
+                            ),
                           ),
-                        ),
+                        ValueListenableBuilder<bool>(
+                            valueListenable: CartScreenBottom.usingCurrentPhone,
+                            builder: (context, value, child) {
+                              return !value ||
+                                      Provider.of<User>(context).phoneNumber ==
+                                          null
+                                  ? Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      child: TextFormField(
+                                        key: const ValueKey("رقم الهاتف"),
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        keyboardType: TextInputType.number,
+                                        textAlign: TextAlign.end,
+                                        decoration: cartInput("رقم الهاتف"),
+                                        validator: ((value) {
+                                          if (value!.isNotEmpty) {
+                                            if (value.length != 11) {
+                                              return "من فضلك  ادخل رقم هاتف صحيح";
+                                            } else if (int.tryParse(value) ==
+                                                null) {
+                                              return "من فضلك  ادخل رقم هاتف صحيح";
+                                            }
+                                          }
+                                          if (value.isEmpty) {
+                                            return "من فضلك ادخل رقم هاتفك";
+                                          }
+                                          phoneNumber = value;
+                                          return null;
+                                        }),
+                                        onSaved: (newval) {
+                                          phoneNumber = newval!;
+                                        },
+                                        textInputAction: TextInputAction.next,
+                                      ),
+                                    )
+                                  : Container();
+                            }),
                         TextFormField(
+                          key: const ValueKey("العنوان"),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textAlign: TextAlign.right,
                           decoration: cartInput("العنوان"),
@@ -181,7 +252,7 @@ class CartScreenBottom extends StatelessWidget {
         : const IconGif(
             width: 150,
             content: "العربه فارغه قم بملئها من فضلك",
-            IconPath: "assets/images/emptycart.gif");
+            iconPath: "assets/images/emptycart.gif");
   }
 }
 
@@ -200,3 +271,47 @@ InputDecoration cartInput(String label) {
         borderSide: BorderSide(color: Colors.white),
       ));
 }
+
+
+
+
+
+
+
+
+ // await showConfirmDialog(
+      //     content:
+      //         "  هل انت متاكد من اضافة طلب جديد علي رقم التواصل $phoneNumber",
+      //     title: "اضافة طلب ",
+      //     confirmText: "اضافه",
+      //     cancelText: "الغاء",
+      //     context: context,
+      //     onConfirm: () async {
+      //       try {
+      //         await Provider.of<Orders>(context, listen: false).addOrder(
+      //             orderItems: cartData.items.values.toList(),
+      //             phoneNumber: phoneNumber,
+      //             location: location,
+      //             totalPrice:
+      //                 Provider.of<Cart>(context, listen: false).totalPrice,
+      //             userId: Provider.of<User>(context, listen: false).uid);
+
+      //         // ignore: use_build_context_synchronously
+      //         Provider.of<Cart>(context, listen: false).clearCart();
+
+      //         // ignore: use_build_context_synchronously
+      //         Navigator.of(context)
+      //             .pushReplacementNamed(OrdersScreen.routeName);
+
+      //         isLoading.value = false;
+      //       } catch (e) {
+      //         isLoading.value = false;
+
+      //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //             content: Text(" حدث خطا ما من فضلك حاول مجددا")));
+
+      //         rethrow;
+      //       }
+      //     },
+      //     onCancel: () {});

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
+import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
 import 'package:on_the_bon/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_item.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_button.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -41,6 +42,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     } catch (e) {}
 
     try {
+      // ignore: use_build_context_synchronously
       await Provider.of<Orders>(context, listen: false)
           .getOrdersforUserByType(OrdersButton.activeOrders.value);
       OrdersScreen.isLoading.value = false;
@@ -66,6 +68,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   void initState() {
+    OrdersButton.activeOrders.value = OrderTypeEnum.orderInProgres;
     OrdersScreen.isLoading.value = true;
     fetchOrders().then((value) {
       OrdersScreen.isLoading.value = false;
@@ -78,6 +81,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     final ordersData = Provider.of<Orders>(context);
     return Scaffold(
+      extendBody: true,
+      bottomNavigationBar: ButtomNavigationBar(
+        routeName: OrdersScreen.routeName,
+      ),
       drawer: const Drawer(),
       appBar: AppBar(
         title: SizedBox(
@@ -91,8 +98,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
       ),
       body: isLoading
           ? const Center(
-              child:  IconGif(
-              IconPath: "assets/images/search.gif",
+              child: IconGif(
+              iconPath: "assets/images/search.gif",
               content: "",
               width: 100,
             ))
@@ -108,7 +115,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           margin: const EdgeInsets.only(top: 40),
                           child: ordersData.orders.isNotEmpty
                               ? ListView.builder(
-                                  reverse: true,
+                                reverse: true,
                                   primary: false,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
@@ -119,8 +126,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   itemCount: ordersData.orders.length,
                                 )
                               : const IconGif(
-                                  IconPath: "assets/images/emptycart.gif",
-                                  content: "عذا ليس لديك طلبات حاليا",
+                                  iconPath: "assets/images/emptycart.gif",
+                                  content: "عذرا ليس لديك طلبات حاليا",
                                   width: 150,
                                 ))
                     ],
@@ -130,7 +137,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   onRefresh: fetchOrders,
                   child: const SingleChildScrollView(
                       child: IconGif(
-                    IconPath: "assets/images/connection-error.gif",
+                    iconPath: "assets/images/connection-error.gif",
                     content: " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
                     width: 150,
                   )),

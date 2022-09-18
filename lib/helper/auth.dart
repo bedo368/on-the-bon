@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Auth {
@@ -90,6 +90,80 @@ class Auth {
     } catch (e) {
       throw "some thing wroung happen please try again";
     }
+  }
+
+  static Future<bool> verifyPhoneNumber(
+      {required String phoneNumber,
+      required BuildContext context,
+      required Function(BuildContext context) confirmOrder,
+      required String location}) async {
+    final auth = FirebaseAuth.instance;
+    bool confirmationState = false;
+    try {
+      print(auth.currentUser!.phoneNumber);
+      print("+2$phoneNumber");
+      if (auth.currentUser!.phoneNumber == null ||
+          auth.currentUser!.phoneNumber != "+2$phoneNumber") {
+        await FirebaseAuth.instance.verifyPhoneNumber(
+            phoneNumber: '+2$phoneNumber',
+            verificationCompleted: (PhoneAuthCredential credential) async {},
+            verificationFailed: (FirebaseAuthException e) {},
+            codeSent: (String verificationId, int? resendToken) async {
+              final TextEditingController textController =
+                  TextEditingController();
+
+              await showDialog(
+                  context: context,
+                  builder: ((context) {
+                    return AlertDialog(
+                      title: const Text(" ادخل كود التاكيد من فضلك"),
+                      content: TextField(
+                        controller: textController,
+                        keyboardType: TextInputType.number,
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () async {
+                              final smscidintial = PhoneAuthProvider.credential(
+                                  verificationId: verificationId,
+                                  smsCode: textController.text);
+                              try {
+                                await auth.currentUser!
+                                    .updatePhoneNumber(smscidintial);
+
+                                await FirebaseFirestore.instance
+                                    .collection("users")
+                                    .doc(auth.currentUser!.uid)
+                                    .update({
+                                  "phoneNumber": phoneNumber,
+                                  "location": location,
+                                  "verfiedPhone": true
+                                });
+                                // ignore: use_build_context_synchronously
+                                await confirmOrder(context);
+                                // ignore: use_build_context_synchronously
+                                Navigator.of(context).pop();
+                              } catch (e) {
+                                rethrow;
+                              }
+                            },
+                            child: const Text("تاكيد"))
+                      ],
+                    );
+                  }));
+            },
+            codeAutoRetrievalTimeout: (String verificationId) {},
+            timeout: const Duration(minutes: 2));
+
+        return confirmationState;
+      } else if (auth.currentUser!.phoneNumber! == "+2$phoneNumber") {
+        await confirmOrder(context);
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+    return confirmationState;
   }
 
   // static updatePhonNumber(User user) {
