@@ -2,15 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:on_the_bon/providers/cart_item.dart';
 
 class Cart with ChangeNotifier {
-  final Map<String, CartItem> items = {};
+  final Map<String, CartItem> _items = {};
+  double _itemsCount = 0;
   List<CartItem> get cartItems {
     // notifyListeners();
-    return [...items.values];
+    return [..._items.values];
+  }
+
+  double get itemsCount {
+    return _itemsCount;
   }
 
   double get totalPrice {
     double prcie = 0;
-    items.forEach((key, value) {
+    _items.forEach((key, value) {
       prcie += value.price * value.quantity;
     });
     return prcie;
@@ -26,56 +31,67 @@ class Cart with ChangeNotifier {
     double quntity = 1,
   }) {
     String itemkey = "";
-    items.forEach(
+    _items.forEach(
       (key, value) {
         if (id == value.productId && size == value.size) {
+          _itemsCount += quntity;
+
           value.increaseQuntity(quntity);
           itemkey = key;
           return;
         }
       },
     );
-    if (!items.containsKey(itemkey)) {
+    if (!_items.containsKey(itemkey)) {
       final String itemId = DateTime.now().toString();
-      items[itemId] = CartItem(
+      _itemsCount += quntity;
+
+      _items[itemId] = CartItem(
           id: itemId,
           productId: id,
           title: title,
           price: price,
           imageUrl: imageUrl,
-          size: size);
+          size: size,
+          quantity: quntity);
     }
 
     notifyListeners();
   }
 
   void increaseItemBy1(id) {
-    if (items.containsKey(id)) {
-      items[id]!.increaseQuntity(1);
+    if (_items.containsKey(id)) {
+      _itemsCount += 1;
+
+      _items[id]!.increaseQuntity(1);
     }
     notifyListeners();
   }
 
   void decreaseItemBy1(id) {
-    if (items.containsKey(id)) {
-      items[id]!.decreaseQuntity(1);
+    if (_items.containsKey(id)) {
+      _items[id]!.decreaseQuntity(1);
+      _itemsCount -= 1;
     }
 
-    if (items[id]!.quantity <= 0) {
-      items.remove(id);
+    if (_items[id]!.quantity <= 0) {
+      _items.remove(id);
     }
 
     notifyListeners();
   }
 
   void removeItem(id) {
-    if (items.containsKey(id)) {
-      items.remove(id);
+    if (_items.containsKey(id)) {
+      _itemsCount -= _items[id]!.quantity;
+
+      _items.remove(id);
     }
     notifyListeners();
   }
 
   void clearCart() {
-    items.clear();
+    _itemsCount = 0;
+    _items.clear();
   }
 }

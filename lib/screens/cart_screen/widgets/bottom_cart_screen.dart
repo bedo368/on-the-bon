@@ -20,10 +20,17 @@ class CartScreenBottom extends StatefulWidget {
 
 class _CartScreenBottomState extends State<CartScreenBottom> {
   @override
+  void initState() {
+    // TODO: implement initState
+    CartScreenBottom.usingCurrentPhone.value = true;
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> isLoading = ValueNotifier(false);
     final cartData = Provider.of<Cart>(context);
-
     String phoneNumber = "";
     String location = "";
     Future<void> addOrder(BuildContext context, String phone) async {
@@ -31,7 +38,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
         isLoading.value = true;
 
         await Provider.of<Orders>(context, listen: false).addOrder(
-            orderItems: cartData.items.values.toList(),
+            orderItems: cartData.cartItems,
             phoneNumber: phone,
             location: location,
             totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
@@ -70,30 +77,63 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
         try {
           phoneNumber =
               Provider.of<User>(context, listen: false).phoneNumber as String;
-            
+
           await addOrder(context, phoneNumber);
+          isLoading.value = false;
+
           return;
         } catch (e) {
+          isLoading.value = false;
+
           rethrow;
         }
       }
-      print(phoneNumber);
-      await Auth.verifyPhoneNumber(
-          phoneNumber: phoneNumber,
-          location: location,
-          context: context,
-          confirmOrder: (context) async {
-            try {
-              await addOrder(context, phoneNumber);
-            } catch (e) {
-              rethrow;
-            }
-          });
+
+      Future retry() async {
+        await Auth.verifyPhoneNumber(
+            onCancel: () {
+              Navigator.of(context).pop();
+              isLoading.value = false;
+            },
+            phoneNumber: phoneNumber,
+            location: location,
+            context: context,
+            confirmOrder: (context) async {
+              try {
+                await addOrder(context, phoneNumber);
+              } catch (e) {
+                isLoading.value = false;
+                rethrow;
+              }
+            });
+      }
+
+      try {
+        await Auth.verifyPhoneNumber(
+            onCancel: () {
+              Navigator.of(context).pop();
+              isLoading.value = false;
+            },
+            retry: retry,
+            phoneNumber: phoneNumber,
+            location: location,
+            context: context,
+            confirmOrder: (context) async {
+              try {
+                await addOrder(context, phoneNumber);
+                isLoading.value = false;
+              } catch (e) {
+                isLoading.value = false;
+                rethrow;
+              }
+            });
+      } catch (e) {
+        isLoading.value = false;
+      }
     }
 
-    return cartData.items.isNotEmpty
+    return cartData.cartItems.isNotEmpty
         ? Container(
-            key: const ValueKey("cart"),
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             width: MediaQuery.of(context).size.width * .9,
             child: Column(children: [
@@ -138,6 +178,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                                 ),
                                 TextButton(
                                     onPressed: () {
+                                      setState(() {});
                                       CartScreenBottom.usingCurrentPhone.value =
                                           !CartScreenBottom
                                               .usingCurrentPhone.value;
@@ -153,47 +194,49 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                               ],
                             ),
                           ),
-                        ValueListenableBuilder<bool>(
-                            valueListenable: CartScreenBottom.usingCurrentPhone,
-                            builder: (context, value, child) {
-                              return !value ||
-                                      Provider.of<User>(context).phoneNumber ==
-                                          null
-                                  ? Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: TextFormField(
-                                        key: const ValueKey("رقم الهاتف"),
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        keyboardType: TextInputType.number,
-                                        textAlign: TextAlign.end,
-                                        decoration: cartInput("رقم الهاتف"),
-                                        validator: ((value) {
-                                          if (value!.isNotEmpty) {
-                                            if (value.length != 11) {
-                                              return "من فضلك  ادخل رقم هاتف صحيح";
-                                            } else if (int.tryParse(value) ==
-                                                null) {
-                                              return "من فضلك  ادخل رقم هاتف صحيح";
+                        if (Provider.of<User>(context).phoneNumber == null ||
+                            !CartScreenBottom.usingCurrentPhone.value)
+                          ValueListenableBuilder<bool>(
+                              valueListenable:
+                                  CartScreenBottom.usingCurrentPhone,
+                              builder: (context, value, child) {
+                                return !value ||
+                                        Provider.of<User>(context)
+                                                .phoneNumber ==
+                                            null
+                                    ? Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        child: TextFormField(
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          keyboardType: TextInputType.number,
+                                          textAlign: TextAlign.end,
+                                          decoration: cartInput("رقم الهاتف"),
+                                          validator: ((value) {
+                                            if (value!.isNotEmpty) {
+                                              if (value.length != 11) {
+                                                return "من فضلك  ادخل رقم هاتف صحيح";
+                                              } else if (int.tryParse(value) ==
+                                                  null) {
+                                                return "من فضلك  ادخل رقم هاتف صحيح";
+                                              }
                                             }
-                                          }
-                                          if (value.isEmpty) {
-                                            return "من فضلك ادخل رقم هاتفك";
-                                          }
-                                          phoneNumber = value;
-                                          return null;
-                                        }),
-                                        onSaved: (newval) {
-                                          phoneNumber = newval!;
-                                        },
-                                        textInputAction: TextInputAction.next,
-                                      ),
-                                    )
-                                  : Container();
-                            }),
+                                            if (value.isEmpty) {
+                                              return "من فضلك ادخل رقم هاتفك";
+                                            }
+                                            phoneNumber = value;
+                                            return null;
+                                          }),
+                                          onSaved: (newval) {
+                                            phoneNumber = newval!;
+                                          },
+                                          textInputAction: TextInputAction.next,
+                                        ),
+                                      )
+                                    : Container();
+                              }),
                         TextFormField(
-                          key: const ValueKey("العنوان"),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textAlign: TextAlign.right,
                           decoration: cartInput("العنوان"),
@@ -237,7 +280,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                           padding: const EdgeInsets.symmetric(vertical: 5)),
                       child: value
                           ? const Center(
-                              child: SpinKitPouringHourGlassRefined(
+                              child: SpinKitPulse(
                                 color: Colors.green,
                                 size: 30,
                               ),

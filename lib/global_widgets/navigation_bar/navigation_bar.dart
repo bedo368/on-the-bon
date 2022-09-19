@@ -17,25 +17,31 @@ class ButtomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (routeName == HomeScreen.routeName) {
-      index = 0;
-    } else if (routeName == CartScreen.routeName) {
       index = 2;
+    } else if (routeName == CartScreen.routeName) {
+      index = 1;
     } else if (routeName == OrdersScreen.routeName) {
-      index = 3;
+      index = 0;
     }
 
     return SafeArea(
       child: CurvedNavigationBar(
         items: [
-          const Icon(
-            Icons.home,
-            size: 27,
-            color: Colors.white,
-          ),
-          const Icon(
-            Icons.favorite,
-            size: 27,
-            color: Colors.white,
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  Icons.download,
+                  size: 25,
+                  color: Colors.white,
+                ),
+                Text(
+                  "طلباتي",
+                  style: TextStyle(fontSize: 9, color: Colors.white),
+                )
+              ],
+            ),
           ),
           Stack(
             children: [
@@ -43,7 +49,7 @@ class ButtomNavigationBar extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Icon(
                   Icons.shopping_bag,
-                  size: 30,
+                  size: 33,
                   color: Colors.white,
                 ),
               ),
@@ -52,7 +58,7 @@ class ButtomNavigationBar extends StatelessWidget {
                 child: Center(
                   child: Consumer<Cart>(builder: (context, value, child) {
                     return Text(
-                      value.items.length.toString(),
+                      value.itemsCount.toInt().toString(),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.black,
@@ -65,13 +71,18 @@ class ButtomNavigationBar extends StatelessWidget {
             ],
           ),
           const Icon(
-            Icons.download,
-            size: 27,
+            Icons.home,
+            size: 33,
+            color: Colors.white,
+          ),
+          const Icon(
+            Icons.favorite,
+            size: 33,
             color: Colors.white,
           ),
           const Icon(
             Icons.search,
-            size: 27,
+            size: 33,
             color: Colors.white,
           ),
         ],
@@ -81,20 +92,21 @@ class ButtomNavigationBar extends StatelessWidget {
         index: ButtomNavigationBar.index,
         animationDuration: const Duration(milliseconds: 200),
         onTap: (index) {
-          if (index == 0) {
+          if (index == 2) {
             ButtomNavigationBar.index = index;
             if (routeName != HomeScreen.routeName) {
               Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             }
-          } else if (index == 2) {
+          } else if (index == 1) {
             ButtomNavigationBar.index = index;
             if (routeName != CartScreen.routeName) {
               Navigator.of(context).pushReplacementNamed(CartScreen.routeName);
             }
-          } else if (index == 3) {
+          } else if (index == 0) {
             ButtomNavigationBar.index = index;
             if (routeName != OrdersScreen.routeName) {
-              Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+              Navigator.of(context)
+                  .pushReplacementNamed(OrdersScreen.routeName);
             }
           } else if (index == 4) {
             showSearch(

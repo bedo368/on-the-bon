@@ -92,68 +92,135 @@ class Auth {
     }
   }
 
-  static Future<bool> verifyPhoneNumber(
-      {required String phoneNumber,
+  static Future verifyPhoneNumber(
+      {Function? retry,
+      required String phoneNumber,
       required BuildContext context,
+      required Function onCancel,
       required Function(BuildContext context) confirmOrder,
       required String location}) async {
     final auth = FirebaseAuth.instance;
     bool confirmationState = false;
     try {
-      print(auth.currentUser!.phoneNumber);
-      print("+2$phoneNumber");
       if (auth.currentUser!.phoneNumber == null ||
           auth.currentUser!.phoneNumber != "+2$phoneNumber") {
         await FirebaseAuth.instance.verifyPhoneNumber(
-            phoneNumber: '+2$phoneNumber',
-            verificationCompleted: (PhoneAuthCredential credential) async {},
-            verificationFailed: (FirebaseAuthException e) {},
-            codeSent: (String verificationId, int? resendToken) async {
-              final TextEditingController textController =
-                  TextEditingController();
+          phoneNumber: '+2$phoneNumber',
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            try {
+              await auth.currentUser!.updatePhoneNumber(credential);
 
-              await showDialog(
-                  context: context,
-                  builder: ((context) {
-                    return AlertDialog(
-                      title: const Text(" ادخل كود التاكيد من فضلك"),
-                      content: TextField(
-                        controller: textController,
-                        keyboardType: TextInputType.number,
+              await FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(auth.currentUser!.uid)
+                  .update({
+                "phoneNumber": phoneNumber,
+                "location": location,
+                "verfiedPhone": true
+              });
+              // ignore: use_build_context_synchronously
+              await confirmOrder(context);
+              // ignore: use_build_context_synchronously
+              // Navigator.of(context).pop();
+            } catch (e) {
+              print(e);
+              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content:
+                      Text("عذرا هناك خطا ما : قد يكون الهاتف مسجل من قبل ")));
+              Navigator.of(context).pop();
+
+              rethrow;
+            }
+            Navigator.of(context).pop();
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(e.message.toString()),
+              duration: const Duration(seconds: 20),
+            ));
+          },
+          codeSent: (String verificationId, int? resendToken) async {
+            final TextEditingController textController =
+                TextEditingController();
+
+            await showDialog(
+                context: context,
+                builder: ((context) {
+                  return AlertDialog(
+                    title: const Text(" ادخل كود التاكيد من فضلك"),
+                    content: SizedBox(
+                      height: 100,
+                      child: Column(
+                        children: [
+                          Text(" $phoneNumber :  وصلك كود علي رقم  "),
+                          TextField(
+                            controller: textController,
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
-                      actions: [
-                        TextButton(
-                            onPressed: () async {
-                              final smscidintial = PhoneAuthProvider.credential(
-                                  verificationId: verificationId,
-                                  smsCode: textController.text);
-                              try {
-                                await auth.currentUser!
-                                    .updatePhoneNumber(smscidintial);
+                    ),
+                    actions: [
+                      Row(
+                        children: [
+                          TextButton(
+                              onPressed: () async {
+                                final smscidintial =
+                                    PhoneAuthProvider.credential(
+                                        verificationId: verificationId,
+                                        smsCode: textController.text);
 
-                                await FirebaseFirestore.instance
-                                    .collection("users")
-                                    .doc(auth.currentUser!.uid)
-                                    .update({
-                                  "phoneNumber": phoneNumber,
-                                  "location": location,
-                                  "verfiedPhone": true
-                                });
-                                // ignore: use_build_context_synchronously
-                                await confirmOrder(context);
-                                // ignore: use_build_context_synchronously
-                                Navigator.of(context).pop();
-                              } catch (e) {
-                                rethrow;
-                              }
-                            },
-                            child: const Text("تاكيد"))
-                      ],
-                    );
-                  }));
-            },
-            codeAutoRetrievalTimeout: (String verificationId) {},
-            timeout: const Duration(minutes: 2));
+                                try {
+                                  await auth.currentUser!
+                                      .updatePhoneNumber(smscidintial);
+
+                                  await FirebaseFirestore.instance
+                                      .collection("users")
+                                      .doc(auth.currentUser!.uid)
+                                      .update({
+                                    "phoneNumber": phoneNumber,
+                                    "location": location,
+                                    "verfiedPhone": true
+                                  });
+                                  // ignore: use_build_context_synchronously
+                                  await confirmOrder(context);
+                                  // ignore: use_build_context_synchronously
+                                  // Navigator.of(context).pop();
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentMaterialBanner();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "عذرا هناك خطا ما : قد يكون الهاتف مسجل من قبل ")));
+                                  Navigator.of(context).pop();
+
+                                  rethrow;
+                                }
+                              },
+                              child: const Text("تاكيد")),
+                          TextButton(
+                              onPressed: () async {
+                                retry!();
+                              },
+                              child: const Text("اعاده الارسال")),
+                          TextButton(
+                              onPressed: () async {
+                                onCancel();
+                              },
+                              child: const Text("اعاده الارسال")),
+                        ],
+                      )
+                    ],
+                  );
+                }));
+          },
+          timeout: const Duration(minutes: 2),
+          codeAutoRetrievalTimeout: (String verificationId) {},
+        );
 
         return confirmationState;
       } else if (auth.currentUser!.phoneNumber! == "+2$phoneNumber") {
