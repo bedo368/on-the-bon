@@ -1,4 +1,4 @@
-import 'package:on_the_bon/models/order_item.dart';
+import 'package:on_the_bon/data/models/order_item.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 
 class Order {
@@ -9,6 +9,8 @@ class Order {
   final String id;
   final OrderTypeEnum orderType;
   final double totalPrice;
+  final DateTime createdAt;
+  final DateTime? deliverdAt;
 
   Order({
     required this.ordersItems,
@@ -18,7 +20,7 @@ class Order {
     required this.id,
     required this.orderType,
     required this.totalPrice,
+    required this.createdAt,
+    this.deliverdAt,
   });
-
-  
 }

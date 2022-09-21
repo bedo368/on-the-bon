@@ -1,5 +1,5 @@
-import 'package:on_the_bon/models/product.dart';
-import 'package:on_the_bon/providers/user_provider.dart';
+import 'package:on_the_bon/data/providers/product.dart';
+import 'package:on_the_bon/data/providers/user_provider.dart';
 
 typedef UserList = Map<String, UserData>;
 

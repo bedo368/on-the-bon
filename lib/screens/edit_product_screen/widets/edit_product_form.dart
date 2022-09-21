@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/image_picker.dart';
-import 'package:on_the_bon/models/product.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/providers/product.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/edit_product_screen/widets/size_price_selective.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 
@@ -31,15 +31,14 @@ class EditProductFrom extends StatelessWidget {
       "image": File(""),
     };
 
-    final Product? currentPeoduct =
-        Provider.of<Products>(context, listen: false)
-            .fetchProductByTypeAndId(id: id);
+    final Product currentPeoduct = Provider.of<Products>(context, listen: false)
+        .fetchProductByTypeAndId(id: id);
 
     final List<ProductSizeEnum> sizeListEnum =
         productSizeStringtoEnum.keys.toList();
 
     void addPriceSize(ProductSizeEnum type, double price) {
-      if (currentPeoduct!.sizePrice
+      if (currentPeoduct.sizePrice
           .containsKey(productSizeStringtoEnum[type]!)) {
         currentPeoduct.sizePrice[productSizeStringtoEnum[type]!] = price;
       }
@@ -68,7 +67,7 @@ class EditProductFrom extends StatelessWidget {
           return;
         } else if (formKey.currentState!.validate()) {
           final newProductData = Product(
-              id: currentPeoduct!.id,
+              id: currentPeoduct.id,
               title: formData["title"],
               discription: formData["discription"],
               sizePrice: currentPeoduct.sizePrice,
@@ -113,7 +112,7 @@ class EditProductFrom extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: TextFormField(
-                    initialValue: currentPeoduct!.title,
+                    initialValue: currentPeoduct.title,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "من فضلك ادخل اسم المنتج";

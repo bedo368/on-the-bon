@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 
-import 'package:on_the_bon/models/order.dart';
-import 'package:on_the_bon/providers/orders_provider.dart';
+import 'package:on_the_bon/data/models/order.dart';
+import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 

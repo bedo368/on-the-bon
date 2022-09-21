@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
-import 'package:on_the_bon/helper/auth.dart';
-import 'package:on_the_bon/providers/cart_provider.dart';
-import 'package:on_the_bon/providers/orders_provider.dart';
+import 'package:on_the_bon/data/helper/auth.dart';
+import 'package:on_the_bon/data/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +21,6 @@ class CartScreenBottom extends StatefulWidget {
 class _CartScreenBottomState extends State<CartScreenBottom> {
   @override
   void initState() {
-    // TODO: implement initState
     CartScreenBottom.usingCurrentPhone.value = true;
 
     super.initState();
@@ -194,14 +193,14 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                               ],
                             ),
                           ),
-                        if (Provider.of<User>(context).phoneNumber == null ||
+                        if (Provider.of<User>(context ,listen: false).phoneNumber == null ||
                             !CartScreenBottom.usingCurrentPhone.value)
                           ValueListenableBuilder<bool>(
                               valueListenable:
                                   CartScreenBottom.usingCurrentPhone,
                               builder: (context, value, child) {
                                 return !value ||
-                                        Provider.of<User>(context)
+                                        Provider.of<User>(context ,listen: false)
                                                 .phoneNumber ==
                                             null
                                     ? Container(

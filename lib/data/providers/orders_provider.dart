@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:on_the_bon/models/order.dart';
-import 'package:on_the_bon/models/order_item.dart';
-import 'package:on_the_bon/providers/cart_item.dart';
+import 'package:on_the_bon/data/models/order.dart';
+import 'package:on_the_bon/data/models/order_item.dart';
+import 'package:on_the_bon/data/providers/cart_item.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 
 class Orders with ChangeNotifier {
@@ -49,6 +49,10 @@ class Orders with ChangeNotifier {
             location: element.data()["location"],
             id: element.id,
             orderType: type,
+            createdAt: (element.data()["createdAt"] as Timestamp).toDate(),
+            deliverdAt: element.data()["createdAt"] != null
+                ? (element.data()["createdAt"] as Timestamp).toDate()
+                : null,
             totalPrice: element.data()["totalPrice"]);
       }
 
@@ -64,7 +68,10 @@ class Orders with ChangeNotifier {
     final String orderType = ordersTypeEnumToStringE[type]!;
     try {
       _orders.clear();
-      final orders = await db.collection(orderType).get();
+      final orders = await db
+          .collection(orderType)
+          .orderBy("createdAt", descending: false)
+          .get();
       for (var element in orders.docs) {
         final List<OrderItem> items = [];
 
@@ -85,6 +92,10 @@ class Orders with ChangeNotifier {
             location: element.data()["location"],
             id: element.id,
             orderType: type,
+            createdAt: (element.data()["createdAt"] as Timestamp).toDate(),
+            deliverdAt: element.data()["createdAt"] != null
+                ? (element.data()["createdAt"] as Timestamp).toDate()
+                : null,
             totalPrice: element.data()["totalPrice"]);
       }
 
@@ -116,7 +127,6 @@ class Orders with ChangeNotifier {
       };
     }).toList();
     try {
-      print("add order");
       await db.collection("orderInProgres").add({
         "orderItems": items,
         "userId": userId,
@@ -146,7 +156,9 @@ class Orders with ChangeNotifier {
         "userId": order.data()!["userId"],
         "PhoneNumber": order.data()!["PhoneNumber"],
         "totalPrice": order.data()!["totalPrice"],
-        "location": order.data()!["location"]
+        "location": order.data()!["location"],
+        "createdAt": order.data()!["createdAt"],
+        "deliverdAt": DateTime.now(),
       });
 
       await db

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/providers/cart_item.dart';
-import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/cart_item.dart';
+import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/cart_graid/cart_item.dart';
 import 'package:provider/provider.dart';
 

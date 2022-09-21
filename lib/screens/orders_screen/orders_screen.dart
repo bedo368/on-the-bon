@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
-import 'package:on_the_bon/providers/orders_provider.dart';
+import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_item.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_button.dart';
 import 'package:on_the_bon/type_enum/enums.dart';

@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/image_picker.dart';
-import 'package:on_the_bon/models/product.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/providers/product.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
 
 import 'package:on_the_bon/screens/add_product_screens/widets/size_price_selective.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';

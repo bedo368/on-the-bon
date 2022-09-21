@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/providers/product.dart';
+import 'package:provider/provider.dart';
 
 class ProductAppBar extends StatelessWidget {
   const ProductAppBar({
@@ -8,10 +10,12 @@ class ProductAppBar extends StatelessWidget {
     required this.title,
     required this.imageUrl,
     required this.id,
+    required this.isFav,
   }) : super(key: key);
   final String title;
   final String imageUrl;
   final String id;
+  final bool isFav;
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +31,21 @@ class ProductAppBar extends StatelessWidget {
       actions: [
         Container(
           margin: const EdgeInsets.only(right: 20),
-          child: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Ionicons.heart,
-              size: 40,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
+          child: Consumer<Product>(builder: (context, v, c) {
+            return IconButton(
+              onPressed: () {
+                Provider.of<Product>(context, listen: false)
+                    .updateProductFavoriteState(id);
+                Provider.of<Products>(context, listen: false)
+                    .updateUserFavoriteForProducts(id);
+              },
+              icon: Icon(
+                Icons.favorite,
+                size: 40,
+                color: v.isFav ? Theme.of(context).primaryColor : Colors.white,
+              ),
+            );
+          }),
         )
       ],
       backgroundColor: const Color.fromRGBO(249, 242, 246, 1),

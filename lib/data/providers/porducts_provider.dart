@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:on_the_bon/models/product.dart';
+import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:on_the_bon/type_enum/types.dart';
 
@@ -12,6 +13,8 @@ class Products with ChangeNotifier {
   final Map<String, Map<String, String>> types = {};
   String _currentType = "";
   String _currentSubType = "";
+  final userFavoriteId = {};
+  final _userFavorite = {};
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   List<Product> get allProducts {
@@ -30,6 +33,42 @@ class Products with ChangeNotifier {
     return productWtihType;
   }
 
+  void clearProducts (){
+    _productList.clear();
+    _userFavorite.clear();
+    userFavoriteId.clear();
+  }
+
+  Future getUserFavoriteAsync() async {
+    final user = await db
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    userFavoriteId.clear();
+    _userFavorite.clear();
+    if (user.data()!.keys.contains("faivorites")) {
+      for (var element in (user.data()!["faivorites"] as List)) {
+        userFavoriteId.putIfAbsent(element, () => element);
+        _userFavorite.putIfAbsent(element, () => _productList[element]);
+      }
+    }
+  }
+
+  void updateUserFavoriteForProducts(String id) {
+    if (userFavoriteId.containsKey(id)) {
+      userFavoriteId.remove(id);
+      _userFavorite.remove(id);
+    } else if (!userFavoriteId.containsKey(id)) {
+      userFavoriteId.putIfAbsent(id, () => _productList[id]);
+      _userFavorite.putIfAbsent(id, () => _productList[id]);
+    }
+    notifyListeners();
+  }
+
+  List<Product> get getFavProducts {
+    return [..._userFavorite.values];
+  }
+
   void setType(ProductsTypeEnum type) {
     if (type == ProductsTypeEnum.food) {
       _currentType = "مأكولات";
@@ -37,6 +76,7 @@ class Products with ChangeNotifier {
       _currentType = "مشروبات ساخنة";
     } else if (type == ProductsTypeEnum.coldDrinks) {
       _currentType = "مشروبات باردة";
+      notifyListeners();
     }
     if (!types.containsKey(productsTypeToString[type])) {
       _currentType = productsTypeToString[type]!;
@@ -70,8 +110,8 @@ class Products with ChangeNotifier {
     return types[_currentType]!.values.toList();
   }
 
-  Product? fetchProductByTypeAndId({required String id}) {
-    return _productList[id];
+  Product fetchProductByTypeAndId({required String id}) {
+    return _productList[id]!;
   }
 
   // applay opreation on database
@@ -154,21 +194,10 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future deleteProductById(Product product) async {
-    try {
-      await FirebaseStorage.instance.refFromURL(product.imageUrl).delete();
-
-      await db.collection("products").doc(product.id).delete();
-
-      _productList.remove(product.id);
-      notifyListeners();
-    } catch (error) {
-      rethrow;
-    }
-  }
-
   Future fetchProductAsync() async {
+    _productList.clear();
     final productsList = await db.collection("products").get();
+    await getUserFavoriteAsync();
 
     productsList.docs.toList().forEach(
       (element) {
@@ -181,7 +210,11 @@ class Products with ChangeNotifier {
             sizePrice: sizePrice,
             type: element.data()["type"],
             subType: element.data()["subType"],
-            imageUrl: element.data()["imageUrl"]);
+            imageUrl: element.data()["imageUrl"],
+            isFav: userFavoriteId.containsKey(element.id) ? true : false);
+        if (product.isFav) {
+          _userFavorite.putIfAbsent(element.id, () => product);
+        }
 
         types.putIfAbsent(product.type, () => {});
 
@@ -192,5 +225,18 @@ class Products with ChangeNotifier {
       },
     );
     notifyListeners();
+  }
+
+  Future deleteProductById(Product product) async {
+    try {
+      await FirebaseStorage.instance.refFromURL(product.imageUrl).delete();
+
+      await db.collection("products").doc(product.id).delete();
+
+      _productList.remove(product.id);
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
   }
 }

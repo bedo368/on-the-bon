@@ -4,12 +4,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:on_the_bon/providers/cart_provider.dart';
-import 'package:on_the_bon/providers/orders_provider.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/helper/subscribe_to_admin.dart';
+import 'package:on_the_bon/data/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/orders_provider.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/edit_product_screen/edit_product_screen.dart';
 import 'package:on_the_bon/screens/add_product_screens/add_product_screen.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
+import 'package:on_the_bon/screens/favorite_screen/favorite_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
@@ -34,6 +36,7 @@ void main() async {
     provisional: false,
     sound: true,
   );
+
   await FirebaseAppCheck.instance.activate();
 
   runApp(const MyApp());
@@ -71,11 +74,12 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: auth.FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
+            subscreibToAdmin();
+
             if (snapshot.hasData) {
               return const HomeScreen();
             } else {
-              
-              if (auth.FirebaseAuth.instance.currentUser == null ) {
+              if (auth.FirebaseAuth.instance.currentUser == null) {
                 return const LogInScreen();
               }
               if (Provider.of<auth.User>(context).uid.isNotEmpty) {
@@ -94,6 +98,7 @@ class MyApp extends StatelessWidget {
           EditProductScreen.routeName: (context) => const EditProductScreen(),
           ProductManageScreen.routeName: (context) =>
               const ProductManageScreen(),
+          FaivoriteScreen.routeName: (context) => const FaivoriteScreen(),
         },
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class BottomCard extends StatelessWidget {

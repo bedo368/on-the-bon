@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:on_the_bon/providers/orders_provider.dart';
+import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/wigets/order_manage_itme.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_button.dart';
 import 'package:provider/provider.dart';

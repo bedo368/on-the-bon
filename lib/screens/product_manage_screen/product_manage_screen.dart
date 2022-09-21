@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/add_product_screens/add_product_screen.dart';
 import 'package:on_the_bon/screens/edit_product_screen/edit_product_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/widgets/product_manage_graid.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_size.dart';
-import 'package:on_the_bon/models/product.dart';
+import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_discription.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_price.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_quntity.dart';

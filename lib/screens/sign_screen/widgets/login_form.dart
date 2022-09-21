@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/dvider_with_text.dart';
-import 'package:on_the_bon/helper/auth.dart';
+import 'package:on_the_bon/data/helper/auth.dart';
 import 'package:on_the_bon/screens/sign_screen/widgets/goolge_sign_button.dart';
 
 class LoginForm extends StatefulWidget {

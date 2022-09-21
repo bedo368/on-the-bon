@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:on_the_bon/models/order.dart';
+import 'package:on_the_bon/data/models/order.dart';
 
 class OrderItem extends StatelessWidget {
   const OrderItem({Key? key, required this.order}) : super(key: key);

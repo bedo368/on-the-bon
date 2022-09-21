@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
-import 'package:on_the_bon/models/product.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/providers/product.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/edit_product_screen/edit_product_screen.dart';
 import 'package:provider/provider.dart';
 

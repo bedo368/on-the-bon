@@ -1,14 +1,10 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
-import 'package:on_the_bon/helper/auth.dart';
-import 'package:on_the_bon/helper/subscribe_to_admin.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
-import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
+import 'package:on_the_bon/data/helper/auth.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
@@ -31,10 +27,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
+    isLoading = true;
+
     InternetConnectionChecker.createInstance()
         .hasConnection
         .then((internetconnection) {
@@ -45,31 +43,23 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       }
     });
-
-    Provider.of<Products>(context, listen: false)
-        .fetchProductAsync()
-        .then((value) {
-      setState(() {
-        isLoading = false;
-      });
-
-      subscreibToAdmin();
+    if (Provider.of<Products>(context, listen: false).allProducts.isEmpty) {
+      isLoading = true;
 
       Provider.of<Products>(context, listen: false)
-          .setType(HomeScreen.productType.value);
-    });
+          .fetchProductAsync()
+          .then((value) {
+        setState(() {
+          isLoading = false;
+        });
 
-    FirebaseMessaging.onMessage.listen((event) async {
-      showConfirmDialog(
-          content: event.notification!.body ?? "",
-          title: event.notification!.title ?? "",
-          confirmText: "ذهاب للصفحه",
-          cancelText: "اخفاء",
-          context: context,
-          onConfirm: () {
-            Navigator.of(context).pushNamed(OrderManageScreen.routeName);
-          },
-          onCancel: () {});
+        Provider.of<Products>(context, listen: false)
+            .setType(HomeScreen.productType.value);
+      });
+    }
+
+    setState(() {
+      isLoading = false;
     });
 
     super.initState();
@@ -77,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final globalKey = GlobalKey<ScaffoldState>();
-    final allProduct = Provider.of<Products>(context).allProducts;
+    final allProduct =
+        Provider.of<Products>(context, listen: false).allProducts;
 
     Future<void> onRefreash() async {
       try {
@@ -116,10 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      key: globalKey,
       extendBody: true,
       bottomNavigationBar: ButtomNavigationBar(
-        key: GlobalKey(debugLabel: "key"),
         routeName: HomeScreen.routeName,
       ),
       drawer: Drawer(
@@ -146,6 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: const Text("manage orders")),
               ListTile(
                   onTap: () async {
+                    Provider.of<Products>(context, listen: false)
+                        .clearProducts();
                     await Auth.signOut();
                   },
                   leading: const Text("log out")),
@@ -160,14 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontFamily: "RockSalt"),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(CartScreen.routeName);
-              },
-              icon: const Icon(
-                Icons.shopping_cart,
-                color: Colors.white,
-              )),
           IconButton(
               onPressed: () {
                 showSearch(
@@ -195,13 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   onRefresh: onRefreash,
                   child: SingleChildScrollView(
                     child: Column(
-                      children: [
-                        const ProdcutsFiltterByType(),
-                        const ProductsFillterBySubType(),
-                        const ProductTypeNotifier(),
-                        Container(
-                            margin: const EdgeInsets.only(top: 20),
-                            child: const ProductGraid())
+                      children: const [
+                        ProdcutsFiltterByType(),
+                        ProductsFillterBySubType(),
+                        ProductTypeNotifier(),
+                        ProductGraid()
                       ],
                     ),
                   ),

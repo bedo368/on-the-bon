@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
-import 'package:on_the_bon/providers/cart_item.dart';
-import 'package:on_the_bon/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/cart_item.dart';
+import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class CartItemWidget extends StatelessWidget {

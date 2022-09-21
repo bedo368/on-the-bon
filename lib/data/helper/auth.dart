@@ -123,7 +123,6 @@ class Auth {
               // ignore: use_build_context_synchronously
               // Navigator.of(context).pop();
             } catch (e) {
-              print(e);
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content:
@@ -132,6 +131,7 @@ class Auth {
 
               rethrow;
             }
+            // ignore: use_build_context_synchronously
             Navigator.of(context).pop();
           },
           verificationFailed: (FirebaseAuthException e) {

@@ -1,9 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
-import 'package:on_the_bon/providers/cart_provider.dart';
-import 'package:on_the_bon/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
+import 'package:on_the_bon/screens/favorite_screen/favorite_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
@@ -22,6 +23,8 @@ class ButtomNavigationBar extends StatelessWidget {
       index = 1;
     } else if (routeName == OrdersScreen.routeName) {
       index = 0;
+    } else if (routeName == FaivoriteScreen.routeName) {
+      index = 3;
     }
 
     return SafeArea(
@@ -118,6 +121,11 @@ class ButtomNavigationBar extends StatelessWidget {
                       ProductScreen.routeName,
                       arguments: {"id": id, "type": type});
                 }));
+          } else if (index == 3) {
+            if (routeName != FaivoriteScreen.routeName) {
+              Navigator.of(context)
+                  .pushReplacementNamed(FaivoriteScreen.routeName);
+            }
           }
         },
         color: Theme.of(context).colorScheme.secondary,
