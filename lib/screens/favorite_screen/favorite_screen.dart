@@ -15,14 +15,10 @@ class FaivoriteScreen extends StatefulWidget {
 }
 
 class _FaivoriteScreenState extends State<FaivoriteScreen> {
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
-    setState(() {
-      isLoading = true;
-    });
-
     Provider.of<Products>(context, listen: false)
         .getUserFavoriteAsync()
         .then((value) {
@@ -59,10 +55,8 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
               iconPath: "assets/images/search.gif",
             ))
           : allFavProducts.isNotEmpty
-              ? SingleChildScrollView(
-                  child: Column(
-                    children: const [ProductGraid()],
-                  ),
+              ? const SingleChildScrollView(
+                  child: ProductGraid(),
                 )
               : RefreshIndicator(
                   onRefresh: () async {},

@@ -5,6 +5,7 @@ import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/data/helper/auth.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
+import 'package:on_the_bon/main.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
@@ -27,11 +28,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
-    isLoading = true;
+    setState(() {
+      isLoading = true;
+    });
 
     InternetConnectionChecker.createInstance()
         .hasConnection
@@ -43,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       }
     });
-    if (Provider.of<Products>(context, listen: false).allProducts.isEmpty) {
-      isLoading = true;
 
+    if (Provider.of<Products>(context, listen: false).allProducts.isEmpty ||
+        MyApp.firstOpen) {
       Provider.of<Products>(context, listen: false)
           .fetchProductAsync()
           .then((value) {
@@ -55,20 +58,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
         Provider.of<Products>(context, listen: false)
             .setType(HomeScreen.productType.value);
+        MyApp.firstOpen = false;
       });
     }
-
-    setState(() {
-      isLoading = false;
-    });
+    if (Provider.of<Products>(context, listen: false).allProducts.isNotEmpty) {
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final allProduct =
-        Provider.of<Products>(context, listen: false).allProducts;
+    final allProduct = Provider.of<Products>(context).allProducts;
 
     Future<void> onRefreash() async {
       try {

@@ -33,25 +33,27 @@ class Products with ChangeNotifier {
     return productWtihType;
   }
 
-  void clearProducts (){
+  void clearProducts() {
     _productList.clear();
     _userFavorite.clear();
     userFavoriteId.clear();
   }
 
   Future getUserFavoriteAsync() async {
+    userFavoriteId.clear();
+    _userFavorite.clear();
     final user = await db
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    userFavoriteId.clear();
-    _userFavorite.clear();
+
     if (user.data()!.keys.contains("faivorites")) {
       for (var element in (user.data()!["faivorites"] as List)) {
         userFavoriteId.putIfAbsent(element, () => element);
         _userFavorite.putIfAbsent(element, () => _productList[element]);
       }
     }
+    notifyListeners();
   }
 
   void updateUserFavoriteForProducts(String id) {
@@ -66,6 +68,7 @@ class Products with ChangeNotifier {
   }
 
   List<Product> get getFavProducts {
+    
     return [..._userFavorite.values];
   }
 

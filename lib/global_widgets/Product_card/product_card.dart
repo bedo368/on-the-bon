@@ -16,6 +16,17 @@ class ProductCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: Center(
         child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).primaryColor.withOpacity(0.8),
+                spreadRadius: 2,
+
+                blurRadius: 20,
+                offset: const Offset(2, 4), // changes position of shadow
+              ),
+            ],
+          ),
           margin: const EdgeInsets.only(top: 20),
           width: MediaQuery.of(context).size.width >= 500
               ? 300

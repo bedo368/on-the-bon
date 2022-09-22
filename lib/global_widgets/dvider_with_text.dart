@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 class DviderWithText extends StatelessWidget {
   final String text;
   final double thickness;
+  final Color color;
   const DviderWithText({
     required this.text,
     required this.thickness,
+    required this.color,
   });
 
   @override
@@ -17,19 +19,19 @@ class DviderWithText extends StatelessWidget {
         Expanded(
             child: Divider(
           thickness: thickness,
-          color: Theme.of(context).primaryColor,
+          color: color,
         )),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
             text,
-            style: const TextStyle(fontSize: 20),
+            style:  TextStyle(fontSize: 16, color: color),
           ),
         ),
         Expanded(
             child: Divider(
           thickness: thickness,
-          color: Theme.of(context).primaryColor,
+          color: color,
         )),
       ],
     );

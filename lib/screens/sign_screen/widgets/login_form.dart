@@ -214,7 +214,7 @@ class _LoginFormState extends State<LoginForm> {
                       margin: const EdgeInsets.only(top: 20),
                       child: const DviderWithText(
                         text: "or",
-                        thickness: 1,
+                        thickness: 1, color: Colors.white,
                       )),
                   GoogleSignButton(setIsLoading: () {
                     setState(() {

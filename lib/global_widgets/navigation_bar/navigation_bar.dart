@@ -35,7 +35,7 @@ class ButtomNavigationBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
                 Icon(
-                  Icons.download,
+                  Icons.list_alt_rounded,
                   size: 25,
                   color: Colors.white,
                 ),

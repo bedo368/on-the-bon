@@ -50,8 +50,8 @@ class Orders with ChangeNotifier {
             id: element.id,
             orderType: type,
             createdAt: (element.data()["createdAt"] as Timestamp).toDate(),
-            deliverdAt: element.data()["createdAt"] != null
-                ? (element.data()["createdAt"] as Timestamp).toDate()
+            deliverdAt: element.data()["deliverdAt"] != null
+                ? (element.data()["deliverdAt"] as Timestamp).toDate()
                 : null,
             totalPrice: element.data()["totalPrice"]);
       }
@@ -71,6 +71,7 @@ class Orders with ChangeNotifier {
       final orders = await db
           .collection(orderType)
           .orderBy("createdAt", descending: false)
+          .limit(50)
           .get();
       for (var element in orders.docs) {
         final List<OrderItem> items = [];
@@ -93,10 +94,11 @@ class Orders with ChangeNotifier {
             id: element.id,
             orderType: type,
             createdAt: (element.data()["createdAt"] as Timestamp).toDate(),
-            deliverdAt: element.data()["createdAt"] != null
-                ? (element.data()["createdAt"] as Timestamp).toDate()
+            deliverdAt: element.data()["deliverdAt"] != null
+                ? (element.data()["deliverdAt"] as Timestamp).toDate()
                 : null,
             totalPrice: element.data()["totalPrice"]);
+
       }
 
       notifyListeners();
@@ -165,6 +167,11 @@ class Orders with ChangeNotifier {
           .collection(ordersTypeEnumToStringE[oldType]!)
           .doc(orderId)
           .delete();
+
+
+      
+
+      
 
       _orders.remove(orderId);
       notifyListeners();

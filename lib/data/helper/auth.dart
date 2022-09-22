@@ -43,6 +43,12 @@ class Auth {
           // handle the error here
         }
       } catch (e) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("حدث خطا ما في الاتصال من فضلك حاول مجددا")));
+
         // handle the error here
       }
     }

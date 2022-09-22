@@ -44,9 +44,12 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  static bool firstOpen = true;
 
   @override
   Widget build(BuildContext context) {
+    firstOpen = true;
+
     return MultiProvider(
       providers: [
         StreamProvider<auth.User?>.value(
@@ -74,8 +77,9 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: auth.FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            subscreibToAdmin();
-
+            if (firstOpen) {
+              subscreibToAdmin();
+            }
             if (snapshot.hasData) {
               return const HomeScreen();
             } else {

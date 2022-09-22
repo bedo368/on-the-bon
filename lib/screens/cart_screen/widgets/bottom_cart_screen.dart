@@ -31,7 +31,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
     final ValueNotifier<bool> isLoading = ValueNotifier(false);
     final cartData = Provider.of<Cart>(context);
     String phoneNumber = "";
-    String location = "";
+    String locationText = "";
     Future<void> addOrder(BuildContext context, String phone) async {
       try {
         isLoading.value = true;
@@ -39,7 +39,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
         await Provider.of<Orders>(context, listen: false).addOrder(
             orderItems: cartData.cartItems,
             phoneNumber: phone,
-            location: location,
+            location: locationText,
             totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
             userId: Provider.of<User>(context, listen: false).uid);
 
@@ -95,7 +95,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
               isLoading.value = false;
             },
             phoneNumber: phoneNumber,
-            location: location,
+            location: locationText,
             context: context,
             confirmOrder: (context) async {
               try {
@@ -115,7 +115,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
             },
             retry: retry,
             phoneNumber: phoneNumber,
-            location: location,
+            location: locationText,
             context: context,
             confirmOrder: (context) async {
               try {
@@ -193,14 +193,17 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                               ],
                             ),
                           ),
-                        if (Provider.of<User>(context ,listen: false).phoneNumber == null ||
+                        if (Provider.of<User>(context, listen: false)
+                                    .phoneNumber ==
+                                null ||
                             !CartScreenBottom.usingCurrentPhone.value)
                           ValueListenableBuilder<bool>(
                               valueListenable:
                                   CartScreenBottom.usingCurrentPhone,
                               builder: (context, value, child) {
                                 return !value ||
-                                        Provider.of<User>(context ,listen: false)
+                                        Provider.of<User>(context,
+                                                    listen: false)
                                                 .phoneNumber ==
                                             null
                                     ? Container(
@@ -210,7 +213,6 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                                           autovalidateMode: AutovalidateMode
                                               .onUserInteraction,
                                           keyboardType: TextInputType.number,
-                                          textAlign: TextAlign.end,
                                           decoration: cartInput("رقم الهاتف"),
                                           validator: ((value) {
                                             if (value!.isNotEmpty) {
@@ -235,28 +237,41 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                                       )
                                     : Container();
                               }),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          textAlign: TextAlign.right,
-                          decoration: cartInput("العنوان"),
-                          validator: ((value) {
-                            if (value!.isNotEmpty) {
-                              if (value.length <= 8) {
-                                return " من فضلك  ادخل اسم الحي بشكل صحيح";
-                              }
-                            }
-                            if (value.isEmpty) {
-                              return "من فضلك  ادخل اسم الحي";
-                            }
-                            location = value;
-                            return null;
-                          }),
-                          onSaved: (newval) {
-                            location = newval!;
-                          },
-                          onFieldSubmitted: (_) async {
-                            await submitOrder();
-                          },
+                        Row(
+                          textDirection: TextDirection.rtl,
+                        
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .75,
+                              child: TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                textAlign: TextAlign.right,
+                                decoration: cartInput("العنوان"),
+                                validator: ((value) {
+                                  if (value!.isNotEmpty) {
+                                    if (value.length <= 8) {
+                                      return " من فضلك  ادخل اسم الحي بشكل صحيح";
+                                    }
+                                  }
+                                  if (value.isEmpty) {
+                                    return "من فضلك  ادخل اسم الحي";
+                                  }
+                                  locationText = value;
+                                  return null;
+                                }),
+                                onSaved: (newval) {
+                                  locationText = newval!;
+                                },
+                                onFieldSubmitted: (_) async {
+                                  await submitOrder();
+                                },
+                              ),
+                            ),
+                            const Icon(
+                              Icons.location_pin,
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -300,10 +315,13 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
 
 InputDecoration cartInput(String label) {
   return InputDecoration(
-      contentPadding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
+    
+      contentPadding:
+          const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 20),
       fillColor: const Color.fromARGB(255, 247, 244, 244),
       filled: true,
-      labelText: label,
+      hintText: label,
+      hintTextDirection: TextDirection.rtl,
       border: const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         borderSide: BorderSide(color: Colors.white),

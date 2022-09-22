@@ -52,27 +52,29 @@ class ProdcutsFiltterByType extends StatelessWidget {
                                           as ProductsTypeEnum);
                                 }
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
-                                  color: v == productsStringToType[types[index]]
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : const Color.fromARGB(
-                                          255, 224, 223, 223),
-                                ),
-                                margin: const EdgeInsets.all(5),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 3),
-                                child: Center(
-                                  child: Text(
-                                    types[index],
-                                    style: TextStyle(
-                                        color: v ==
-                                                productsStringToType[
-                                                    types[index]]
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: 15),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 500),
+                                color: v == productsStringToType[types[index]]
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : const Color.fromARGB(255, 224, 223, 223),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 3),
+                                  child: Center(
+                                    child: Text(
+                                      types[index],
+                                      style: TextStyle(
+                                          color: v ==
+                                                  productsStringToType[
+                                                      types[index]]
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 15),
+                                    ),
                                   ),
                                 ),
                               ),

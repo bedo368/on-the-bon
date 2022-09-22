@@ -33,11 +33,19 @@ class ProductAppBar extends StatelessWidget {
           margin: const EdgeInsets.only(right: 20),
           child: Consumer<Product>(builder: (context, v, c) {
             return IconButton(
-              onPressed: () {
-                Provider.of<Product>(context, listen: false)
-                    .updateProductFavoriteState(id);
-                Provider.of<Products>(context, listen: false)
-                    .updateUserFavoriteForProducts(id);
+              onPressed: () async {
+                try {
+                  await Provider.of<Product>(context, listen: false)
+                      .updateProductFavoriteState(id);
+                  // ignore: use_build_context_synchronously
+                  Provider.of<Products>(context, listen: false)
+                      .updateUserFavoriteForProducts(id);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content:
+                          Text("ناسف لم يتم اضافه المنتج للمفضلة حاول مجددا")));
+                }
               },
               icon: Icon(
                 Icons.favorite,

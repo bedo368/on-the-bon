@@ -21,45 +21,60 @@ class ProductsFillterBySubType extends StatelessWidget {
           textDirection: TextDirection.rtl,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              reverse: true,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return ValueListenableBuilder(
-                    valueListenable: ProductsFillterBySubType.subType,
-                    builder: (context, v, c) {
-                      return GestureDetector(
-                        onTap: () {
-                          Provider.of<Products>(context, listen: false)
-                              .setSubYype(subTypes[index]);
-                          ProductsFillterBySubType.subType.value =
-                              Provider.of<Products>(context, listen: false)
-                                  .currentSubType;
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: v == subTypes[index]
-                                        ? BorderSide(
-                                            width: 1.0,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary)
-                                        : const BorderSide(
-                                            width: 0, color: Colors.white))),
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              subTypes[index],
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 20),
-                              textAlign: TextAlign.center,
-                            )),
-                      );
-                    });
-              },
-              itemCount: subTypes.length,
+            AnimatedContainer(
+              duration: Duration(seconds: 2),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                color: Theme.of(context).colorScheme.secondary,
+                child: Center(
+                  child: ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    reverse: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return ValueListenableBuilder(
+                          valueListenable: ProductsFillterBySubType.subType,
+                          builder: (context, v, c) {
+                            return GestureDetector(
+                              onTap: () {
+                                Provider.of<Products>(context, listen: false)
+                                    .setSubYype(subTypes[index]);
+                                ProductsFillterBySubType.subType.value =
+                                    Provider.of<Products>(context,
+                                            listen: false)
+                                        .currentSubType;
+                              },
+                              child: AnimatedContainer(
+                                curve: Curves.easeIn,
+                                duration: const Duration(milliseconds: 500),
+                                color: v == subTypes[index]
+                                    ? Colors.amber
+                                    : Theme.of(context).colorScheme.secondary,
+                                child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Center(
+                                      child: Text(
+                                        subTypes[index],
+                                        style: TextStyle(
+                                            color: v == subTypes[index]
+                                                ? Colors.black
+                                                : Colors.white,
+                                            fontSize: 20),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )),
+                              ),
+                            );
+                          });
+                    },
+                    itemCount: subTypes.length,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

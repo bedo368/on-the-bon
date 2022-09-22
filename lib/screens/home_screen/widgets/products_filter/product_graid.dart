@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/Product_card/product_card.dart';
