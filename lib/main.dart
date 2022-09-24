@@ -8,6 +8,7 @@ import 'package:on_the_bon/data/helper/subscribe_to_admin.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
+import 'package:on_the_bon/data/providers/user_provider.dart';
 import 'package:on_the_bon/screens/edit_product_screen/edit_product_screen.dart';
 import 'package:on_the_bon/screens/add_product_screens/add_product_screen.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
@@ -57,8 +58,9 @@ class MyApp extends StatelessWidget {
           initialData: auth.FirebaseAuth.instance.currentUser,
         ),
         ChangeNotifierProvider(create: (context) => Products()),
+        ChangeNotifierProvider(create: (context) => UserData()),
         ChangeNotifierProvider(create: (context) => Cart()),
-        ChangeNotifierProvider(create: (context) => Orders())
+        ChangeNotifierProvider(create: (context) => Orders()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -87,6 +89,10 @@ class MyApp extends StatelessWidget {
                 return const LogInScreen();
               }
               if (Provider.of<auth.User>(context).uid.isNotEmpty) {
+                if (auth.FirebaseAuth.instance.currentUser!.uid.isNotEmpty) {
+                  Provider.of<UserData>(context, listen: false)
+                      .fetchUserDataAsync();
+                }
                 return const HomeScreen();
               }
               return const LogInScreen();

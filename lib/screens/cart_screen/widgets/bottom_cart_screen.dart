@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/data/helper/auth.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
+import 'package:on_the_bon/data/providers/user_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -26,10 +26,9 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
     super.initState();
   }
 
+  final ValueNotifier<bool> isLoading = ValueNotifier(false);
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<bool> isLoading = ValueNotifier(false);
-    final cartData = Provider.of<Cart>(context);
     String phoneNumber = "";
     String locationText = "";
     Future<void> addOrder(BuildContext context, String phone) async {
@@ -37,7 +36,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
         isLoading.value = true;
 
         await Provider.of<Orders>(context, listen: false).addOrder(
-            orderItems: cartData.cartItems,
+            orderItems: Provider.of<Cart>(context, listen: false).cartItems,
             phoneNumber: phone,
             location: locationText,
             totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
@@ -56,6 +55,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text(" حدث خطا ما من فضلك حاول مجددا")));
+        isLoading.value = false;
 
         rethrow;
       }
@@ -71,11 +71,11 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
       }
       CartScreenBottom.formKey.currentState!.save();
 
-      if (Provider.of<User>(context, listen: false).phoneNumber != null &&
+      if (Provider.of<UserData>(context, listen: false).phoneNumber != null &&
           CartScreenBottom.usingCurrentPhone.value) {
         try {
-          phoneNumber =
-              Provider.of<User>(context, listen: false).phoneNumber as String;
+          phoneNumber = Provider.of<UserData>(context, listen: false)
+              .phoneNumber as String;
 
           await addOrder(context, phoneNumber);
           isLoading.value = false;
@@ -131,191 +131,182 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
       }
     }
 
-    return cartData.cartItems.isNotEmpty
-        ? Container(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            width: MediaQuery.of(context).size.width * .9,
-            child: Column(children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                color: Theme.of(context).primaryColor,
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "اجمالي الطلب : ${cartData.totalPrice.toInt()} جنيه ",
-                  textAlign: TextAlign.end,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              Form(
-                  key: CartScreenBottom.formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 40, top: 10),
-                    child: Column(
-                      children: [
-                        if (Provider.of<User>(context, listen: false)
-                                .phoneNumber !=
-                            null)
-                          Container(
-                            width: MediaQuery.of(context).size.width * .9,
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: Row(
-                              textDirection: TextDirection.rtl,
-                              children: [
-                                const Text(" : رقم الهاتف الحالي  "),
-                                Text(
-                                  Provider.of<User>(context, listen: false)
-                                      .phoneNumber
-                                      .toString(),
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.end,
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      setState(() {});
-                                      CartScreenBottom.usingCurrentPhone.value =
-                                          !CartScreenBottom
-                                              .usingCurrentPhone.value;
-                                    },
-                                    child: ValueListenableBuilder<bool>(
-                                        valueListenable:
-                                            CartScreenBottom.usingCurrentPhone,
-                                        builder: (context, value, child) {
-                                          return Text(value
-                                              ? "تغير الهاتف"
-                                              : "استخدام الرقم");
-                                        }))
-                              ],
-                            ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      width: MediaQuery.of(context).size.width * .9,
+      child: Column(children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          color: Theme.of(context).primaryColor,
+          width: MediaQuery.of(context).size.width,
+          child: Text(
+            "اجمالي الطلب : ${Provider.of<Cart>(context, listen: false).totalPrice.toInt()} جنيه ",
+            textAlign: TextAlign.end,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Form(
+            key: CartScreenBottom.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 40, top: 10),
+              child: Column(
+                children: [
+                  if (Provider.of<UserData>(context, listen: false)
+                          .phoneNumber !=
+                      null)
+                    Container(
+                      width: MediaQuery.of(context).size.width * .9,
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        textDirection: TextDirection.rtl,
+                        children: [
+                          const Text(" : رقم الهاتف الحالي  "),
+                          Text(
+                            Provider.of<UserData>(context, listen: false)
+                                .phoneNumber
+                                .toString(),
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.end,
                           ),
-                        if (Provider.of<User>(context, listen: false)
-                                    .phoneNumber ==
-                                null ||
-                            !CartScreenBottom.usingCurrentPhone.value)
-                          ValueListenableBuilder<bool>(
-                              valueListenable:
-                                  CartScreenBottom.usingCurrentPhone,
-                              builder: (context, value, child) {
-                                return !value ||
-                                        Provider.of<User>(context,
-                                                    listen: false)
-                                                .phoneNumber ==
-                                            null
-                                    ? Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: TextFormField(
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          keyboardType: TextInputType.number,
-                                          decoration: cartInput("رقم الهاتف"),
-                                          validator: ((value) {
-                                            if (value!.isNotEmpty) {
-                                              if (value.length != 11) {
-                                                return "من فضلك  ادخل رقم هاتف صحيح";
-                                              } else if (int.tryParse(value) ==
-                                                  null) {
-                                                return "من فضلك  ادخل رقم هاتف صحيح";
-                                              }
-                                            }
-                                            if (value.isEmpty) {
-                                              return "من فضلك ادخل رقم هاتفك";
-                                            }
-                                            phoneNumber = value;
-                                            return null;
-                                          }),
-                                          onSaved: (newval) {
-                                            phoneNumber = newval!;
-                                          },
-                                          textInputAction: TextInputAction.next,
-                                        ),
-                                      )
-                                    : Container();
-                              }),
-                        Row(
-                          textDirection: TextDirection.rtl,
-                        
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * .75,
-                              child: TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textAlign: TextAlign.right,
-                                decoration: cartInput("العنوان"),
-                                validator: ((value) {
-                                  if (value!.isNotEmpty) {
-                                    if (value.length <= 8) {
-                                      return " من فضلك  ادخل اسم الحي بشكل صحيح";
-                                    }
-                                  }
-                                  if (value.isEmpty) {
-                                    return "من فضلك  ادخل اسم الحي";
-                                  }
-                                  locationText = value;
-                                  return null;
-                                }),
-                                onSaved: (newval) {
-                                  locationText = newval!;
-                                },
-                                onFieldSubmitted: (_) async {
-                                  await submitOrder();
-                                },
-                              ),
-                            ),
-                            const Icon(
-                              Icons.location_pin,
-                            ),
-                          ],
+                          TextButton(
+                              onPressed: () {
+                                setState(() {});
+                                CartScreenBottom.usingCurrentPhone.value =
+                                    !CartScreenBottom.usingCurrentPhone.value;
+                              },
+                              child: ValueListenableBuilder<bool>(
+                                  valueListenable:
+                                      CartScreenBottom.usingCurrentPhone,
+                                  builder: (context, value, child) {
+                                    return Text(value
+                                        ? "تغير الهاتف"
+                                        : "استخدام الرقم");
+                                  }))
+                        ],
+                      ),
+                    ),
+                  if (Provider.of<UserData>(context, listen: false)
+                              .phoneNumber ==
+                          null ||
+                      !CartScreenBottom.usingCurrentPhone.value)
+                    ValueListenableBuilder<bool>(
+                        valueListenable: CartScreenBottom.usingCurrentPhone,
+                        builder: (context, value, child) {
+                          return !value ||
+                                  Provider.of<UserData>(context, listen: false)
+                                          .phoneNumber ==
+                                      null
+                              ? Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: TextFormField(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    keyboardType: TextInputType.number,
+                                    decoration: cartInput("رقم الهاتف"),
+                                    validator: ((value) {
+                                      if (value!.isNotEmpty) {
+                                        if (value.length != 11) {
+                                          return "من فضلك  ادخل رقم هاتف صحيح";
+                                        } else if (int.tryParse(value) ==
+                                            null) {
+                                          return "من فضلك  ادخل رقم هاتف صحيح";
+                                        }
+                                      }
+                                      if (value.isEmpty) {
+                                        return "من فضلك ادخل رقم هاتفك";
+                                      }
+                                      phoneNumber = value;
+                                      return null;
+                                    }),
+                                    onSaved: (newval) {
+                                      phoneNumber = newval!;
+                                    },
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                )
+                              : Container();
+                        }),
+                  Row(
+                    textDirection: TextDirection.rtl,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * .75,
+                        child: TextFormField(
+                          initialValue:
+                              Provider.of<UserData>(context, listen: false)
+                                      .location ??
+                                  "",
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          textAlign: TextAlign.right,
+                          decoration: cartInput("العنوان"),
+                          validator: ((value) {
+                            if (value!.isNotEmpty) {
+                              if (value.length <= 8) {
+                                return " من فضلك  ادخل اسم الحي بشكل صحيح";
+                              }
+                            }
+                            if (value.isEmpty) {
+                              return "من فضلك  ادخل اسم الحي";
+                            }
+                            locationText = value;
+                            return null;
+                          }),
+                          onSaved: (newval) {
+                            locationText = newval!;
+                          },
+                          onFieldSubmitted: (_) async {
+                            await submitOrder();
+                          },
                         ),
-                      ],
-                    ),
-                  )),
-              ValueListenableBuilder<bool>(
-                valueListenable: isLoading,
-                builder: (context, value, child) {
-                  return SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: value
-                          ? null
-                          : () async {
-                              await submitOrder();
-                            },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          padding: const EdgeInsets.symmetric(vertical: 5)),
-                      child: value
-                          ? const Center(
-                              child: SpinKitPulse(
-                                color: Colors.green,
-                                size: 30,
-                              ),
-                            )
-                          : const Text("تأكيد الطلب"),
-                    ),
-                  );
-                },
-              )
-            ]),
-          )
-        : const IconGif(
-            width: 150,
-            content: "العربه فارغه قم بملئها من فضلك",
-            iconPath: "assets/images/emptycart.gif");
+                      ),
+                      const Icon(
+                        Icons.location_pin,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )),
+        ValueListenableBuilder<bool>(
+          valueListenable: isLoading,
+          builder: (context, value, child) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: value
+                    ? null
+                    : () async {
+                        await submitOrder();
+                      },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    padding: const EdgeInsets.symmetric(vertical: 5)),
+                child: value
+                    ? const Center(
+                        child: SpinKitPulse(
+                          color: Colors.green,
+                          size: 30,
+                        ),
+                      )
+                    : const Text("تأكيد الطلب"),
+              ),
+            );
+          },
+        )
+      ]),
+    );
   }
 }
 
 InputDecoration cartInput(String label) {
   return InputDecoration(
-    
       contentPadding:
           const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 20),
       fillColor: const Color.fromARGB(255, 247, 244, 244),

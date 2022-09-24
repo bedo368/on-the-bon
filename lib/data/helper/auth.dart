@@ -33,7 +33,8 @@ class Auth {
             "email": user.user!.email,
             "phoneNumber": user.user!.phoneNumber,
             "photoURL": user.user!.photoURL,
-            "creationTime": user.user!.metadata.creationTime
+            "creationTime": user.user!.metadata.creationTime,
+            "isAdmin": false
           });
         }
       } on FirebaseAuthException catch (e) {
@@ -46,8 +47,8 @@ class Auth {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("حدث خطا ما في الاتصال من فضلك حاول مجددا")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("حدث خطا ما في الاتصال من فضلك حاول مجددا")));
 
         // handle the error here
       }
@@ -107,6 +108,7 @@ class Auth {
       required String location}) async {
     final auth = FirebaseAuth.instance;
     bool confirmationState = false;
+
     try {
       if (auth.currentUser!.phoneNumber == null ||
           auth.currentUser!.phoneNumber != "+2$phoneNumber") {
@@ -114,20 +116,24 @@ class Auth {
           phoneNumber: '+2$phoneNumber',
           verificationCompleted: (PhoneAuthCredential credential) async {
             try {
-              await auth.currentUser!.updatePhoneNumber(credential);
+              if (!confirmationState) {
+                await auth.currentUser!.updatePhoneNumber(credential);
+                await auth.currentUser!.unlink(PhoneAuthProvider.PROVIDER_ID);
 
-              await FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(auth.currentUser!.uid)
-                  .update({
-                "phoneNumber": phoneNumber,
-                "location": location,
-                "verfiedPhone": true
-              });
-              // ignore: use_build_context_synchronously
-              await confirmOrder(context);
-              // ignore: use_build_context_synchronously
-              // Navigator.of(context).pop();
+                await FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(auth.currentUser!.uid)
+                    .update({
+                  "phoneNumber": phoneNumber,
+                  "location": location,
+                  "verfiedPhone": true
+                });
+                // ignore: use_build_context_synchronously
+                await confirmOrder(context);
+                // ignore: use_build_context_synchronously
+                // Navigator.of(context).pop();
+
+              }
             } catch (e) {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -182,6 +188,8 @@ class Auth {
                                 try {
                                   await auth.currentUser!
                                       .updatePhoneNumber(smscidintial);
+                                  await auth.currentUser!
+                                      .unlink(PhoneAuthProvider.PROVIDER_ID);
 
                                   await FirebaseFirestore.instance
                                       .collection("users")
@@ -193,6 +201,8 @@ class Auth {
                                   });
                                   // ignore: use_build_context_synchronously
                                   await confirmOrder(context);
+                                  confirmationState = true;
+
                                   // ignore: use_build_context_synchronously
                                   // Navigator.of(context).pop();
                                 } catch (e) {
@@ -217,14 +227,13 @@ class Auth {
                               onPressed: () async {
                                 onCancel();
                               },
-                              child: const Text("اعاده الارسال")),
+                              child: const Text("الغاء")),
                         ],
                       )
                     ],
                   );
                 }));
           },
-          timeout: const Duration(minutes: 2),
           codeAutoRetrievalTimeout: (String verificationId) {},
         );
 

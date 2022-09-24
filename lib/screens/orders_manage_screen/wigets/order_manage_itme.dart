@@ -17,12 +17,12 @@ class OrderManageItem extends StatefulWidget {
 }
 
 class _OrderManageItemState extends State<OrderManageItem> {
-  late final UserInfo;
+  late final Map userInfo;
   Future getUserData(String userId) async {
     final userData =
         await FirebaseFirestore.instance.collection("users").doc(userId).get();
 
-    UserInfo = {
+    userInfo = {
       "userId": userData.id,
       "name": userData.data()!["displayName"] ?? "",
       "imageUrl": userData.data()!["photoURL"] ?? ""
@@ -51,7 +51,7 @@ class _OrderManageItemState extends State<OrderManageItem> {
             children: [
               if (userDataLoading)
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                   child: Row(
                     textDirection: TextDirection.rtl,
                     children: [
@@ -60,15 +60,15 @@ class _OrderManageItemState extends State<OrderManageItem> {
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
                             child: Image.network(
-                              UserInfo["imageUrl"],
+                              userInfo["imageUrl"],
                               fit: BoxFit.cover,
                             )),
                       ),
                       Container(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         child: Text(
-                          UserInfo["name"],
-                          style: TextStyle(color: Colors.amber),
+                          userInfo["name"],
+                          style: const TextStyle(color: Colors.amber),
                         ),
                       )
                     ],

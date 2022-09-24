@@ -51,6 +51,17 @@ class BottomCard extends StatelessWidget {
                                     imageUrl: imagUrl,
                                     type: type,
                                     size: size);
+                            ScaffoldMessenger.of(context)
+                                .hideCurrentMaterialBanner();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                    duration: Duration(milliseconds: 400),
+                                    backgroundColor: Colors.green,
+                                    content: Text(
+                                      "تم اضافة المنتج الي العربة",
+                                      style: TextStyle(color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    )));
                           },
                           icon: const Icon(
                             Icons.add_shopping_cart_rounded,

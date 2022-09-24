@@ -14,6 +14,7 @@ import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
+import 'package:on_the_bon/screens/sign_screen/widgets/sign_in_logo.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       }
     });
+
+    
 
     if (Provider.of<Products>(context, listen: false).allProducts.isEmpty ||
         MyApp.firstOpen) {
@@ -182,9 +185,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: const [
+                        SignInLogo(),
                         ProdcutsFiltterByType(),
                         ProductsFillterBySubType(),
-                        ProductTypeNotifier(),
+                        // ProductTypeNotifier(),
                         ProductGraid()
                       ],
                     ),

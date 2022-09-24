@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/bottom_cart_screen.dart';
@@ -27,19 +28,24 @@ class CartScreen extends StatelessWidget {
               textAlign: TextAlign.end,
             )),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-            margin: const EdgeInsets.only(bottom: 80),
-            width: MediaQuery.of(context).size.width,
-            child: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (cartData.cartItems.isNotEmpty) const CartGraid(),
-                const CartScreenBottom(),
-              ],
-            ))),
-      ),
+      body: cartData.cartItems.isNotEmpty
+          ? SingleChildScrollView(
+              child: Container(
+                  margin: const EdgeInsets.only(bottom: 80),
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (cartData.cartItems.isNotEmpty) const CartGraid(),
+                      const CartScreenBottom(),
+                    ],
+                  ))),
+            )
+          : const IconGif(
+              width: 150,
+              content: "العربه فارغه قم بملئها من فضلك",
+              iconPath: "assets/images/emptycart.gif"),
     );
   }
 }
