@@ -7,6 +7,7 @@ import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/data/providers/user_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:rive/rive.dart';
 
 class CartScreenBottom extends StatefulWidget {
   const CartScreenBottom({Key? key}) : super(key: key);
@@ -135,19 +136,21 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       width: MediaQuery.of(context).size.width * .9,
       child: Column(children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          color: Theme.of(context).primaryColor,
-          width: MediaQuery.of(context).size.width,
-          child: Text(
-            "اجمالي الطلب : ${Provider.of<Cart>(context, listen: false).totalPrice.toInt()} جنيه ",
-            textAlign: TextAlign.end,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
+        Consumer<Cart>(builder: (context, v, c) {
+          return Container(
+            padding: const EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
+            width: MediaQuery.of(context).size.width,
+            child: Text(
+              "اجمالي الطلب : ${v.totalPrice.toInt()} جنيه ",
+              textAlign: TextAlign.end,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
             ),
-          ),
-        ),
+          );
+        }),
         Form(
             key: CartScreenBottom.formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -265,9 +268,15 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                           },
                         ),
                       ),
-                      const Icon(
-                        Icons.location_pin,
-                      ),
+                      const Center(
+                        child: SizedBox(
+                            width: 30,
+                            height: 50,
+                            child: RiveAnimation.asset(
+                              "assets/animation/location-icon.riv",
+                              fit: BoxFit.cover,
+                            )),
+                      )
                     ],
                   ),
                 ],

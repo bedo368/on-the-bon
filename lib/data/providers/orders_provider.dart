@@ -98,7 +98,6 @@ class Orders with ChangeNotifier {
                 ? (element.data()["deliverdAt"] as Timestamp).toDate()
                 : null,
             totalPrice: element.data()["totalPrice"]);
-
       }
 
       notifyListeners();
@@ -137,6 +136,10 @@ class Orders with ChangeNotifier {
         "location": location,
         "createdAt": DateTime.now(),
       });
+      await db
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({"location": location});
     } catch (e) {
       rethrow;
     }
@@ -167,11 +170,6 @@ class Orders with ChangeNotifier {
           .collection(ordersTypeEnumToStringE[oldType]!)
           .doc(orderId)
           .delete();
-
-
-      
-
-      
 
       _orders.remove(orderId);
       notifyListeners();

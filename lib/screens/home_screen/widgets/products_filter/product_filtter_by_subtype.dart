@@ -21,9 +21,8 @@ class ProductsFillterBySubType extends StatelessWidget {
           textDirection: TextDirection.rtl,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
-              color: Theme.of(context).colorScheme.secondary,
               child: Center(
                 child: ListView.builder(
                   primary: false,
@@ -31,7 +30,7 @@ class ProductsFillterBySubType extends StatelessWidget {
                   reverse: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return ValueListenableBuilder(
+                    return ValueListenableBuilder<String>(
                         valueListenable: ProductsFillterBySubType.subType,
                         builder: (context, v, c) {
                           return GestureDetector(
@@ -39,32 +38,32 @@ class ProductsFillterBySubType extends StatelessWidget {
                               Provider.of<Products>(context, listen: false)
                                   .setSubYype(subTypes[index]);
                               ProductsFillterBySubType.subType.value =
-                                  Provider.of<Products>(context,
-                                          listen: false)
+                                  Provider.of<Products>(context, listen: false)
                                       .currentSubType;
                             },
-                            child: AnimatedContainer(
-                              curve: Curves.easeIn,
-                              duration: const Duration(milliseconds: 500),
-                              color: v == subTypes[index]
-                                  ? const Color.fromARGB(255, 2, 243, 151)
-                                  : Theme.of(context).colorScheme.secondary,
-                              child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Center(
-                                    child: Text(
-                                      subTypes[index],
-                                      style: TextStyle(
-                                          color: v == subTypes[index]
-                                              ? Colors.black
-                                              : Colors.white,
-                                          fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )),
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: AnimatedContainer(
+                                curve: Curves.easeIn,
+                                duration: const Duration(milliseconds: 500),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 1.5,
+                                            color: v == subTypes[index]
+                                                ? Theme.of(context).primaryColor
+                                                : Colors.white))),
+                                child: Center(
+                                  child: Text(
+                                    subTypes[index],
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
                             ),
                           );
                         });

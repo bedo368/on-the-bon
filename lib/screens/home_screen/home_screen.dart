@@ -7,7 +7,6 @@ import 'package:on_the_bon/data/helper/auth.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/main.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
-
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_graid.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
@@ -48,8 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    
-
     if (Provider.of<Products>(context, listen: false).allProducts.isEmpty ||
         MyApp.firstOpen) {
       Provider.of<Products>(context, listen: false)
@@ -62,6 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<Products>(context, listen: false)
             .setType(HomeScreen.productType.value);
         MyApp.firstOpen = false;
+      }).onError((error, stackTrace) {
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("حدث خطا ما حاول مره اخري ")));
+        setState(() {
+          isLoading = false;
+        });
       });
     }
     if (Provider.of<Products>(context, listen: false).allProducts.isNotEmpty) {

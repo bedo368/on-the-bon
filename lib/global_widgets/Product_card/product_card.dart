@@ -1,14 +1,44 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/global_widgets/Product_card/bottom_card.dart';
 import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:rive/rive.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   const ProductCard(this.currentProduct, {Key? key}) : super(key: key);
   final Product currentProduct;
+
+  @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  SMIInput<bool>? isFavoriteInput;
+  Artboard? isFavoriteArtboard;
+  @override
+  void initState() {
+    rootBundle.load("assets/animation/heart.riv").then((value) {
+      final file = RiveFile.import(value);
+      final artBoard = file.mainArtboard;
+      var controller = StateMachineController.fromArtboard(
+        artBoard,
+        "State Machine 1",
+      );
+      if (controller != null) {
+        artBoard.addController(controller);
+        isFavoriteInput = controller.findInput("isFaivorite");
+        isFavoriteArtboard = artBoard;
+      }
+      setState(() {
+        isFavoriteInput!.value = widget.currentProduct.isFav;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +74,7 @@ class ProductCard extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context)
                         .pushNamed(ProductScreen.routeName, arguments: {
-                      "id": currentProduct.id,
+                      "id": widget.currentProduct.id,
                     });
                   },
                   child: Stack(
@@ -53,14 +83,14 @@ class ProductCard extends StatelessWidget {
                         height: 180,
                         width: MediaQuery.of(context).size.width,
                         child: Hero(
-                          tag: currentProduct.id,
+                          tag: widget.currentProduct.id,
                           child: ClipRRect(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10),
                               ),
                               child: CachedNetworkImage(
-                                imageUrl: currentProduct.imageUrl,
+                                imageUrl: widget.currentProduct.imageUrl,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) {
                                   return Image.asset(
@@ -71,53 +101,60 @@ class ProductCard extends StatelessWidget {
                               )),
                         ),
                       ),
-                      Consumer<Product>(builder: (context, v, c) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 15),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              onPressed: () async {
-                                try {
-                                  await Provider.of<Product>(context,
-                                          listen: false)
-                                      .updateProductFavoriteState(
-                                          currentProduct.id);
-                                  // ignore: use_build_context_synchronously
-                                  Provider.of<Products>(context, listen: false)
-                                      .updateUserFavoriteForProducts(
-                                          currentProduct.id);
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "ناسف لم يتم اضافه المنتج للمفضلة حاول مجددا")));
-                                }
-                              },
-                              icon: Icon(
-                                Icons.favorite,
-                                size: 40,
-                                color: currentProduct.isFav
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
+                      if (isFavoriteArtboard != null)
+                        Positioned(
+                          right: 1,
+                          top: 2,
+                          child: Consumer<Product>(builder: (context, v, c) {
+                            isFavoriteInput!.value = v.isFav;
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 15),
+                                width: 40,
+                                height: 40,
+                                child: GestureDetector(
+                                    onTap: () async {
+                                      try {
+                                        await Provider.of<Product>(context,
+                                                listen: false)
+                                            .updateProductFavoriteState(
+                                                widget.currentProduct.id);
+                                        // ignore: use_build_context_synchronously
+                                        Provider.of<Products>(context,
+                                                listen: false)
+                                            .updateUserFavoriteForProducts(
+                                                widget.currentProduct.id);
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .hideCurrentSnackBar();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "ناسف لم يتم اضافه المنتج للمفضلة حاول مجددا")));
+                                      }
+                                    },
+                                    child: Center(
+                                      child: Rive(
+                                        artboard: isFavoriteArtboard!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )),
                               ),
-                            ),
-                          ),
-                        );
-                      }),
+                            );
+                          }),
+                        ),
                     ],
                   ),
                 ),
               ),
               BottomCard(
-                id: currentProduct.id,
-                title: currentProduct.title,
-                sizePrice: currentProduct.sizePrice,
-                imagUrl: currentProduct.imageUrl,
-                type: currentProduct.type,
+                id: widget.currentProduct.id,
+                title: widget.currentProduct.title,
+                sizePrice: widget.currentProduct.sizePrice,
+                imagUrl: widget.currentProduct.imageUrl,
+                type: widget.currentProduct.type,
               ),
             ],
           ),

@@ -24,7 +24,7 @@ class ProdcutsFiltterByType extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    height: 65,
+                    height: 60,
                     padding:
                         const EdgeInsets.only(top: 10, bottom: 10),
                     child: SingleChildScrollView(
@@ -54,28 +54,33 @@ class ProdcutsFiltterByType extends StatelessWidget {
                                             as ProductsTypeEnum);
                                   }
                                 },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 500),
-                                  color: v == productsStringToType[types[index]]
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : const Color.fromARGB(255, 224, 223, 223),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                    ),
-                                    margin: const EdgeInsets.all(5),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 3),
-                                    child: Center(
-                                      child: Text(
-                                        types[index],
-                                        style: TextStyle(
-                                            color: v ==
-                                                    productsStringToType[
-                                                        types[index]]
-                                                ? Colors.white
-                                                : Colors.black,
-                                            fontSize: 15),
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: AnimatedContainer(
+                                      duration: const Duration(milliseconds: 500),
+                                      color: v == productsStringToType[types[index]]
+                                          ? Theme.of(context).colorScheme.secondary
+                                          : const Color.fromARGB(255, 224, 223, 223),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(40),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 25),
+                                        child: Center(
+                                          child: Text(
+                                            types[index],
+                                            style: TextStyle(
+                                                color: v ==
+                                                        productsStringToType[
+                                                            types[index]]
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                fontSize: 15),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
