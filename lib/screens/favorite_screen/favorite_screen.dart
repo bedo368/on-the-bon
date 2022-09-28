@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
-import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
+import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/screens/favorite_screen/fav_graid.dart';
 import 'package:provider/provider.dart';
 

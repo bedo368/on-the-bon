@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
+import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/data/helper/auth.dart';
@@ -8,7 +8,7 @@ import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/main.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
-import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_graid.dart';
+import 'package:on_the_bon/screens/home_screen/widgets/product_graid.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';

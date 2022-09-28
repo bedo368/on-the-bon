@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
-import 'package:on_the_bon/global_widgets/navigation_bar/navigation_bar.dart';
+import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/bottom_cart_screen.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/cart_graid/cart_graid.dart';

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
+import 'package:on_the_bon/global_widgets/animated_widgets/animated_cart.dart';
 import 'package:provider/provider.dart';
 
-class BottomCard extends StatelessWidget {
+class BottomCard extends StatefulWidget {
   const BottomCard({
     Key? key,
     required this.sizePrice,
@@ -18,9 +19,14 @@ class BottomCard extends StatelessWidget {
   final String imagUrl;
 
   @override
+  State<BottomCard> createState() => _BottomCardState();
+}
+
+class _BottomCardState extends State<BottomCard> {
+  @override
   Widget build(BuildContext context) {
-    String size = sizePrice.keys.first;
-    double price = sizePrice[size] as double;
+    String size = widget.sizePrice.keys.first;
+    double price = widget.sizePrice[size] as double;
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -41,33 +47,22 @@ class BottomCard extends StatelessWidget {
                   children: [
                     Container(
                       margin: const EdgeInsets.only(left: 15),
-                      child: IconButton(
-                          onPressed: () {
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: AnimatedCart(
+                          presssed: () {
                             Provider.of<Cart>(context, listen: false)
                                 .addItemToCartWithQuntity(
-                                    title: title,
-                                    id: id,
+                                    title: widget.title,
+                                    id: widget.id,
                                     price: price,
-                                    imageUrl: imagUrl,
-                                    type: type,
+                                    imageUrl: widget.imagUrl,
+                                    type: widget.type,
                                     size: size);
-                            ScaffoldMessenger.of(context)
-                                .hideCurrentMaterialBanner();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    duration: Duration(milliseconds: 400),
-                                    backgroundColor: Colors.green,
-                                    content: Text(
-                                      "تم اضافة المنتج الي العربة",
-                                      style: TextStyle(color: Colors.white),
-                                      textAlign: TextAlign.center,
-                                    )));
                           },
-                          icon: const Icon(
-                            Icons.add_shopping_cart_rounded,
-                            color: Colors.white,
-                            size: 35,
-                          )),
+                        ),
+                      ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(right: 10),
@@ -76,7 +71,7 @@ class BottomCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            title,
+                            widget.title,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(

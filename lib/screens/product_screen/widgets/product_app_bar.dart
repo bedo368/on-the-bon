@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/data/providers/product.dart';
+import 'package:on_the_bon/global_widgets/animated_widgets/animated_heart.dart';
 import 'package:provider/provider.dart';
-import 'package:rive/rive.dart';
 
 class ProductAppBar extends StatefulWidget {
   const ProductAppBar({
@@ -24,29 +23,6 @@ class ProductAppBar extends StatefulWidget {
 }
 
 class _ProductAppBarState extends State<ProductAppBar> {
-  SMIInput<bool>? isFavoriteInput;
-  Artboard? isFavoriteArtboard;
-  @override
-  void initState() {
-    rootBundle.load("assets/animation/heart.riv").then((value) {
-      final file = RiveFile.import(value);
-      final artBoard = file.mainArtboard;
-      var controller = StateMachineController.fromArtboard(
-        artBoard,
-        "State Machine 1",
-      );
-      if (controller != null) {
-        artBoard.addController(controller);
-        isFavoriteInput = controller.findInput("isFaivorite");
-        isFavoriteArtboard = artBoard;
-      }
-      setState(() {
-        isFavoriteInput!.value = widget.isFav;
-      });
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -59,44 +35,35 @@ class _ProductAppBarState extends State<ProductAppBar> {
             color: Theme.of(context).primaryColor,
           )),
       actions: [
-        if (isFavoriteArtboard != null)
-          Positioned(
-            right: 1,
-            top: 15,
-            child: Consumer<Product>(builder: (context, v, c) {
-              isFavoriteInput!.value = v.isFav;
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                  width: 45,
-                  height: 35,
-                  child: GestureDetector(
-                      onTap: () async {
-                        try {
-                          await Provider.of<Product>(context, listen: false)
-                              .updateProductFavoriteState(widget.id);
-                          // ignore: use_build_context_synchronously
-                          Provider.of<Products>(context, listen: false)
-                              .updateUserFavoriteForProducts(widget.id);
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                              content: Text(
-                                  "ناسف لم يتم اضافه المنتج للمفضلة حاول مجددا")));
-                        }
-                      },
-                      child: Center(
-                        child: Rive(
-                          artboard: isFavoriteArtboard!,
-                          fit: BoxFit.cover,
-                        ),
-                      )),
-                ),
-              );
-            }),
-          )
+        Consumer<Product>(builder: (context, v, c) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              width: 45,
+              height: 35,
+              child: GestureDetector(
+                  onTap: () async {
+                    try {
+                      await Provider.of<Product>(context, listen: false)
+                          .updateProductFavoriteState(widget.id);
+                      // ignore: use_build_context_synchronously
+                      Provider.of<Products>(context, listen: false)
+                          .updateUserFavoriteForProducts(widget.id);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              "ناسف لم يتم اضافه المنتج للمفضلة حاول مجددا")));
+                    }
+                  },
+                  child: Center(
+                      child: AnimatedHeart(
+                    isFav: v.isFav,
+                  ))),
+            ),
+          );
+        })
       ],
       backgroundColor: const Color.fromRGBO(249, 242, 246, 1),
       expandedHeight: 300,

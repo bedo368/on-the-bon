@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
+import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_type_element.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
-import 'package:provider/provider.dart';
 
-class ProdcutsFiltterByType extends StatelessWidget {
+class ProdcutsFiltterByType extends StatefulWidget {
   const ProdcutsFiltterByType({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<ProdcutsFiltterByType> createState() => _ProdcutsFiltterByTypeState();
+}
+
+class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
+  void reRinder() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final List<String> types = productsStringToType.keys.toList();
-    return ValueListenableBuilder(
+    return ValueListenableBuilder<ProductsTypeEnum>(
         valueListenable: HomeScreen.productType,
         builder: (context, v, c) {
-          return Container(
+          return SizedBox(
             width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(top: 10),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    height: 60,
-                    padding:
-                        const EdgeInsets.only(top: 10, bottom: 10),
+                    height: 110,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       reverse: true,
@@ -39,52 +44,10 @@ class ProdcutsFiltterByType extends StatelessWidget {
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  final productData = Provider.of<Products>(
-                                      context,
-                                      listen: false);
-                                  if (HomeScreen.productType.value !=
-                                      productsStringToType[types[index]]) {
-                                    HomeScreen.productType.value =
-                                        productsStringToType[types[index]]
-                                            as ProductsTypeEnum;
-                                    productData.setType(
-                                        productsStringToType[types[index]]
-                                            as ProductsTypeEnum);
-                                  }
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 500),
-                                      color: v == productsStringToType[types[index]]
-                                          ? Theme.of(context).colorScheme.secondary
-                                          : const Color.fromARGB(255, 224, 223, 223),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(40),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 25),
-                                        child: Center(
-                                          child: Text(
-                                            types[index],
-                                            style: TextStyle(
-                                                color: v ==
-                                                        productsStringToType[
-                                                            types[index]]
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontSize: 15),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              return TypeElement(
+                                index: index,
+                                v: v,
+                                reRinder: reRinder,
                               );
                             },
                             itemCount: productsStringToType.length,
