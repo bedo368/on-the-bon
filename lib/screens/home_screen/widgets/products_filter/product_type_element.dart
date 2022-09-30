@@ -45,13 +45,14 @@ class _TypeElementState extends State<TypeElement> {
                   productsStringToType[types[widget.index]] as ProductsTypeEnum;
               productData.setType(productsStringToType[types[widget.index]]
                   as ProductsTypeEnum);
-              widget.reRinder();
-              setState(() {
-                isSelectedInput!.value = HomeScreen.productType.value ==
-                        productsStringToType[types[widget.index]]
-                    ? true
-                    : false;
-              });
+              if (isSelectedInput != null) {
+                setState(() {
+                  isSelectedInput!.value = HomeScreen.productType.value ==
+                          productsStringToType[types[widget.index]]
+                      ? true
+                      : false;
+                });
+              }
             }
           },
           child: Align(

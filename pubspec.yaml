@@ -77,7 +77,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     #   - images/a_dot_burr.jpeg
-    - assets/images/login_background1.jpg
+    - assets/images/login_background.jpg
     - assets/images/product_placeholder.png
     - assets/images/search.gif
     - assets/images/emptycart.gif
@@ -86,6 +86,7 @@ flutter:
     - assets/animation/heart.riv
     - assets/animation/cart.riv
     - assets/animation/flooating_sky.riv
+    - assets/animation/logo_animation.riv
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

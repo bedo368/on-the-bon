@@ -13,9 +13,9 @@ import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
-import 'package:on_the_bon/screens/sign_screen/widgets/sign_in_logo.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
+import 'package:rive/rive.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -61,8 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
         MyApp.firstOpen = false;
       }).onError((error, stackTrace) {
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("حدث خطا ما حاول مره اخري ")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("حدث خطا ما حاول مره اخري ")));
         setState(() {
           isLoading = false;
         });
@@ -188,12 +188,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   onRefresh: onRefreash,
                   child: SingleChildScrollView(
                     child: Column(
-                      children: const [
-                        SignInLogo(),
-                        ProdcutsFiltterByType(),
-                        ProductsFillterBySubType(),
+                      children: [
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            width: MediaQuery.of(context).size.width * .9,
+                            height: MediaQuery.of(context).size.width * .3,
+                            child: const RiveAnimation.asset(
+                              "assets/animation/logo_animation.riv",
+                              animations: ["begain"],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const ProdcutsFiltterByType(),
+                        const ProductsFillterBySubType(),
                         // ProductTypeNotifier(),
-                        ProductGraid()
+                        const ProductGraid()
                       ],
                     ),
                   ),

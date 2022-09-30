@@ -12,6 +12,7 @@ class ProductSize extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sizesLiest = sizePrice.keys.toList();
+    selectedSize.value = sizePrice.keys.first;
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width,

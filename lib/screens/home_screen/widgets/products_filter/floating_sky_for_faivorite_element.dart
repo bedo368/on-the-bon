@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,7 +17,7 @@ class Floatingsky extends StatefulWidget {
 
 class _FloatingskyState extends State<Floatingsky> {
   SMIInput<bool>? isSelectedInput;
-  Artboard? isSelectedArtboard;
+  Artboard? floatingSkyArtboard;
   final List<String> types = productsStringToType.keys.toList();
 
   @override
@@ -32,7 +34,7 @@ class _FloatingskyState extends State<Floatingsky> {
       if (isSelectedController != null) {
         artBoard.addController(isSelectedController);
         isSelectedInput = isSelectedController.findInput("selected");
-        isSelectedArtboard = artBoard;
+        floatingSkyArtboard = artBoard;
       }
 
       setState(() {
@@ -49,10 +51,11 @@ class _FloatingskyState extends State<Floatingsky> {
   Widget build(BuildContext context) {
     SMITrigger? isClickedTriger;
     SMIInput<bool>? isSleepy;
+    SMIInput<bool>? isDark;
 
     void getSleepy() {
       void getUp() {
-        Future.delayed(const Duration(seconds: 30)).then((value) {
+        Future.delayed(Duration(seconds: Random().nextInt(50))).then((value) {
           if (isSelectedInput!.value != false) {
             isSleepy!.value = true;
             getSleepy();
@@ -60,7 +63,7 @@ class _FloatingskyState extends State<Floatingsky> {
         });
       }
 
-      Future.delayed(const Duration(seconds: 8)).then((value) {
+      Future.delayed(Duration(seconds: Random().nextInt(20))).then((value) {
         if (isSelectedInput!.value != false) {
           isSleepy!.value = false;
         }
@@ -69,51 +72,74 @@ class _FloatingskyState extends State<Floatingsky> {
       });
     }
 
+    getDark() {
+      void getlight() {
+        Future.delayed(Duration(seconds: Random().nextInt(60))).then((value) {
+          if (isDark!.value != true) {
+            isDark!.value = true;
+            getDark();
+          }
+        });
+      }
+
+      Future.delayed(Duration(seconds: Random().nextInt(30))).then((value) {
+        if (isDark!.value != false) {
+          isDark!.value = false;
+        }
+      }).then((value) {
+        getlight();
+      });
+    }
+
     void addAndRemoveBlankingController() {
-      if (isSelectedArtboard != null &&
+      if (floatingSkyArtboard != null &&
           HomeScreen.productType.value ==
               productsStringToType[types[widget.index]]) {
         var blanking = StateMachineController.fromArtboard(
-          isSelectedArtboard!,
+          floatingSkyArtboard!,
           "blanking",
         );
         isSleepy = blanking!.findInput("isIdle");
 
         isClickedTriger = blanking.findSMI("Click");
-        isSelectedArtboard!.addController(blanking);
+        isDark = blanking.findSMI("isDark");
+        floatingSkyArtboard!.addController(blanking);
+        getDark();
         getSleepy();
       }
-      if (isSelectedArtboard != null &&
+      if (floatingSkyArtboard != null &&
           HomeScreen.productType.value !=
               productsStringToType[types[widget.index]]) {
         var blanking = StateMachineController.fromArtboard(
-          isSelectedArtboard!,
+          floatingSkyArtboard!,
           "blanking",
         );
 
         isClickedTriger = null;
-        isSelectedArtboard!.removeController(blanking!);
+        floatingSkyArtboard!.removeController(blanking!);
       }
     }
 
-    if (isSelectedArtboard != null) {
+    if (floatingSkyArtboard != null) {
       isSelectedInput!.value = HomeScreen.productType.value ==
               productsStringToType[types[widget.index]]
           ? true
           : false;
       addAndRemoveBlankingController();
     }
-    return isSelectedArtboard != null
+    return floatingSkyArtboard != null
         ? GestureDetector(
             onTap: () {
               if (isSelectedInput!.value != false) {
                 setState(() {
-                  isClickedTriger!.fire();
+                  if (isClickedTriger != null) {
+                    isClickedTriger!.fire();
+                  }
                 });
               }
             },
             child: Rive(
-              artboard: isSelectedArtboard!,
+              artboard: floatingSkyArtboard!,
               fit: BoxFit.cover,
             ),
           )

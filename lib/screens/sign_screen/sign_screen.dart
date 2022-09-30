@@ -16,7 +16,7 @@ class LogInScreen extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-        image: AssetImage("assets/images/login_background1.jpg"),
+        image: AssetImage("assets/images/login_background.jpg"),
         fit: BoxFit.fitHeight,
       )),
       child: Scaffold(

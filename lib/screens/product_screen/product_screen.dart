@@ -16,8 +16,8 @@ class ProductScreen extends StatelessWidget {
     String id = (ModalRoute.of(context)!.settings.arguments
         as Map<String, String>)['id'] as String;
 
-    final Product product = Provider.of<Products>(context, listen: false)
-        .fetchProductByTypeAndId(id: id);
+    final Product product =
+        Provider.of<Products>(context, listen: false).fetchProductById(id: id);
 
     return SafeArea(
       child: Scaffold(

@@ -31,8 +31,8 @@ class EditProductFrom extends StatelessWidget {
       "image": File(""),
     };
 
-    final Product currentPeoduct = Provider.of<Products>(context, listen: false)
-        .fetchProductByTypeAndId(id: id);
+    final Product currentPeoduct =
+        Provider.of<Products>(context, listen: false).fetchProductById(id: id);
 
     final List<ProductSizeEnum> sizeListEnum =
         productSizeStringtoEnum.keys.toList();

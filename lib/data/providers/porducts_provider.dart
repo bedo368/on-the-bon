@@ -68,7 +68,6 @@ class Products with ChangeNotifier {
   }
 
   List<Product> get getFavProducts {
-    
     return [..._userFavorite.values];
   }
 
@@ -113,7 +112,7 @@ class Products with ChangeNotifier {
     return types[_currentType]!.values.toList();
   }
 
-  Product fetchProductByTypeAndId({required String id}) {
+  Product fetchProductById({required String id}) {
     return _productList[id]!;
   }
 

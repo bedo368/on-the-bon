@@ -34,7 +34,9 @@ class ProductScreenDetail extends StatelessWidget {
               discription: product.discription,
             ),
             const CustomDivder(),
-            const ProductQuntity(),
+            ProductQuntity(
+              id: product.id,
+            ),
             const CustomDivder(),
             if (product.sizePrice.length > 1)
               ProductSize(
