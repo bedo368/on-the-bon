@@ -209,35 +209,42 @@ class Products with ChangeNotifier {
   }
 
   Future fetchProductAsync() async {
-    _productList.clear();
-    final productsList = await db.collection("products").get();
+    try {
+      _productList.clear();
+      final productsList = await db.collection("products").get();
+      await getUserFavoriteAsync();
 
-    productsList.docs.toList().forEach(
-      (element) {
-        final Map<String, double> sizePrice = {...element.data()["sizePrice"]};
+      productsList.docs.toList().forEach(
+        (element) {
+          final Map<String, double> sizePrice = {
+            ...element.data()["sizePrice"]
+          };
 
-        final product = Product(
-            id: element.id,
-            title: element.data()["title"],
-            discription: element.data()["discription"],
-            sizePrice: sizePrice,
-            type: element.data()["type"],
-            subType: element.data()["subType"],
-            imageUrl: element.data()["imageUrl"],
-            isFav: userFavoriteId.containsKey(element.id) ? true : false);
-        if (product.isFav) {
-          _userFavorite.putIfAbsent(element.id, () => product);
-        }
+          final product = Product(
+              id: element.id,
+              title: element.data()["title"],
+              discription: element.data()["discription"],
+              sizePrice: sizePrice,
+              type: element.data()["type"],
+              subType: element.data()["subType"],
+              imageUrl: element.data()["imageUrl"],
+              isFav: userFavoriteId.containsKey(element.id) ? true : false);
+          if (product.isFav) {
+            _userFavorite.putIfAbsent(element.id, () => product);
+          }
 
-        types.putIfAbsent(product.type, () => {});
+          types.putIfAbsent(product.type, () => {});
 
-        types[product.type]!
-            .putIfAbsent(product.subType, () => product.subType);
+          types[product.type]!
+              .putIfAbsent(product.subType, () => product.subType);
 
-        _productList.putIfAbsent(product.id, () => product);
-      },
-    );
-    notifyListeners();
+          _productList.putIfAbsent(product.id, () => product);
+        },
+      );
+      notifyListeners();
+    } catch (e) {
+      return;
+    }
   }
 
   Future deleteProductById(Product product) async {
