@@ -82,11 +82,10 @@ class Cart with ChangeNotifier {
   }
 
   void removeItem(id) {
-    if (_items.containsKey(id)) {
-      _itemsCount -= _items[id]!.quantity;
+    _itemsCount -= _items[id]!.quantity;
 
-      _items.remove(id);
-    }
+    _items.remove(id);
+
     notifyListeners();
   }
 

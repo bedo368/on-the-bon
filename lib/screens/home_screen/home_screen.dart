@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
-import 'package:on_the_bon/global_widgets/product_search_delgate.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
-import 'package:on_the_bon/data/helper/auth.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/main.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/product_graid.dart';
-import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
-import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
-import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
-import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
@@ -27,7 +22,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   bool isLoading = true;
 
   @override
@@ -79,7 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final allProduct = Provider.of<Products>(context).allProducts;
+    final allProduct = Provider.of<Products>(
+      context,
+    ).allProducts;
 
     Future<void> onRefreash() async {
       try {
@@ -116,65 +113,25 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
+      onEndDrawerChanged: (isOpened) {},
+      drawer: null,
       extendBody: true,
       bottomNavigationBar: ButtomNavigationBar(
         routeName: HomeScreen.routeName,
       ),
-      drawer: Drawer(
-        child: Container(
-          margin: const EdgeInsets.only(top: 40),
-          child: Column(
-            children: [
-              ListTile(
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(ProductManageScreen.routeName);
-                  },
-                  leading: const Text("Mange Product")),
-              ListTile(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(OrdersScreen.routeName);
-                  },
-                  leading: const Text("my orders")),
-              ListTile(
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(OrderManageScreen.routeName);
-                  },
-                  leading: const Text("manage orders")),
-              ListTile(
-                  onTap: () async {
-                    Provider.of<Products>(context, listen: false)
-                        .clearProducts();
-                    await Auth.signOut();
-                  },
-                  leading: const Text("log out")),
-            ],
-          ),
-        ),
-      ),
+      endDrawer: const MainDrawer(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
-          "On The Bon",
-          style: TextStyle(fontFamily: "RockSalt"),
+        title: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: const Text(
+            "On The Bon",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontFamily: "RockSalt"),
+          ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                showSearch(
-                    context: context,
-                    delegate: MySearchDelegate(
-                        Provider.of<Products>(context, listen: false)
-                            .allProducts, (context, id, type) {
-                      Navigator.of(context).pushReplacementNamed(
-                          ProductScreen.routeName,
-                          arguments: {"id": id, "type": type});
-                    }));
-              },
-              icon: const Icon(Icons.search)),
-        ],
       ),
       body: isLoading
           ? const Center(
@@ -196,13 +153,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: MediaQuery.of(context).size.width * .3,
                             child: const RiveAnimation.asset(
                               "assets/animation/logo_animation.riv",
-                              animations: ["begain"],
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
                         const ProdcutsFiltterByType(),
                         const ProductsFillterBySubType(),
+
                         // ProductTypeNotifier(),
                         const ProductGraid()
                       ],
@@ -219,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-    );
+    ));
   }
 }
 

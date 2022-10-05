@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/data/providers/cart_provider.dart';
-import 'package:on_the_bon/data/providers/porducts_provider.dart';
-import 'package:on_the_bon/global_widgets/animated_widgets/animated_cart.dart';
-import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_size.dart';
-import 'package:provider/provider.dart';
 
 class ProductQuntity extends StatelessWidget {
   const ProductQuntity({
@@ -16,7 +11,7 @@ class ProductQuntity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * .9,
+      width: MediaQuery.of(context).size.width * .8,
       child: Row(
         textDirection: TextDirection.rtl,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -73,30 +68,30 @@ class ProductQuntity extends StatelessWidget {
                 color: Colors.white,
                 size: 30,
               )),
-          Container(
-            margin: const EdgeInsets.only(left: 15),
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: AnimatedCart(
-                presssed: () {
-                  final product = Provider.of<Products>(context, listen: false)
-                      .fetchProductById(id: id);
-                  Provider.of<Cart>(context, listen: false)
-                      .addItemToCartWithQuntity(
-                          title: product.title,
-                          id: product.id,
-                          price: product
-                              .sizePrice[ProductSize.selectedSize.value]!,
-                          imageUrl: product.imageUrl,
-                          type: product.type,
-                          quntity: quetity.value,
-                          size: ProductSize.selectedSize.value);
-                  quetity.value = 0;
-                },
-              ),
-            ),
-          )
+          // Container(
+          //   margin: const EdgeInsets.only(left: 15),
+          //   child: SizedBox(
+          //     width: 50,
+          //     height: 50,
+          //     child: AnimatedCart(
+          //       presssed: () {
+          //         final product = Provider.of<Products>(context, listen: false)
+          //             .fetchProductById(id: id);
+          //         Provider.of<Cart>(context, listen: false)
+          //             .addItemToCartWithQuntity(
+          //                 title: product.title,
+          //                 id: product.id,
+          //                 price: product
+          //                     .sizePrice[ProductSize.selectedSize.value]!,
+          //                 imageUrl: product.imageUrl,
+          //                 type: product.type,
+          //                 quntity: quetity.value,
+          //                 size: ProductSize.selectedSize.value);
+          //         quetity.value = 0;
+          //       },
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );

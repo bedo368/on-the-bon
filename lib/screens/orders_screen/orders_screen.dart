@@ -115,7 +115,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           margin: const EdgeInsets.only(top: 40),
                           child: ordersData.orders.isNotEmpty
                               ? ListView.builder(
-                                reverse: true,
+                                  reverse: true,
                                   primary: false,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {

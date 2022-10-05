@@ -24,5 +24,6 @@ class UserData with ChangeNotifier {
     phoneNumber = userData.data()!["phoneNumber"];
     location = userData.data()!["location"];
     isAdmin = userData.data()!["isAdmin"];
+    notifyListeners();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
@@ -21,7 +23,8 @@ class ProductScreenDetail extends StatelessWidget {
         delegate: SliverChildListDelegate([
       Container(
         padding: const EdgeInsets.only(bottom: 100),
-        height: MediaQuery.of(context).size.height * .7,
+        height: min(MediaQuery.of(context).size.height * .7,
+            MediaQuery.of(context).size.height * 1.3),
         width: MediaQuery.of(context).size.width,
         color: Theme.of(context).primaryColor,
         child: Column(
@@ -46,30 +49,77 @@ class ProductScreenDetail extends StatelessWidget {
             ProductPrice(
               price: product.sizePrice,
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              width: MediaQuery.of(context).size.width * .8,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {
-                  Provider.of<Cart>(context, listen: false)
-                      .addItemToCartWithQuntity(
-                          title: product.title,
-                          id: product.id,
-                          price: product
-                                  .sizePrice[ProductSize.selectedSize.value] ??
-                              product.sizePrice.values.first,
-                          imageUrl: product.imageUrl,
-                          type: product.type,
-                          size: ProductSize.selectedSize.value,
-                          quntity: ProductQuntity.quetity.value);
-                  Navigator.of(context)
-                      .pushReplacementNamed(CartScreen.routeName);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(top: 20),
+                width: MediaQuery.of(context).size.width * .8,
+                height: 45,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Provider.of<Cart>(context, listen: false)
+                        .addItemToCartWithQuntity(
+                            title: product.title,
+                            id: product.id,
+                            price: product
+                                    .sizePrice[ProductSize.selectedSize.value] ??
+                                product.sizePrice.values.first,
+                            imageUrl: product.imageUrl,
+                            type: product.type,
+                            size: ProductSize.selectedSize.value,
+                            quntity: ProductQuntity.quetity.value);
+            
+                    ProductQuntity.quetity.value = 0;
+            
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text(
+                              "تمت اضافة المنتج الي العربه",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.green),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                CartScreen.routeName);
+                                      },
+                                      child: const Text(
+                                        "الذهاب الي العربه",
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                      )),
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text(
+                                        "متابعة التسوق",
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                      ))
+                                ],
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                  ),
+                  child: const Text("اطلب الأن" , style: TextStyle(fontWeight: FontWeight.bold),),
                 ),
-                child: const Text("اطلب الأن"),
               ),
             )
           ],

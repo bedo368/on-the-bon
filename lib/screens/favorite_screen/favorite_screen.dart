@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
@@ -31,8 +30,7 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Product> allFavProducts =
-        Provider.of<Products>(context).getFavProducts;
+    final productData = Provider.of<Products>(context);
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
@@ -40,13 +38,14 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
           width: MediaQuery.of(context).size.width,
           child: const Text(
             "منتجاتي المفضلة",
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.center,
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
-      bottomNavigationBar:
-          ButtomNavigationBar(routeName: FaivoriteScreen.routeName),
+      bottomNavigationBar: ButtomNavigationBar(
+        routeName: FaivoriteScreen.routeName,
+      ),
       body: isLoading
           ? const Center(
               child: IconGif(
@@ -54,7 +53,8 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
               content: "",
               iconPath: "assets/images/search.gif",
             ))
-          : allFavProducts.isNotEmpty
+          : productData.getFavProducts.isNotEmpty &&
+                  productData.allProducts.isNotEmpty
               ? const SingleChildScrollView(
                   child: ProductGraid(),
                 )

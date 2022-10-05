@@ -7,6 +7,11 @@ import 'package:on_the_bon/global_widgets/dvider_with_text.dart';
 class OrderItem extends StatelessWidget {
   const OrderItem({Key? key, required this.order}) : super(key: key);
   final Order order;
+  
+  get timeDetailcreate => intl.DateFormat("a").format(order.createdAt);
+  
+  get timeDetailForconfirm => intl.DateFormat("a").format(order.deliverdAt!);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -120,7 +125,7 @@ class OrderItem extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 10),
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  "وقت الانشاء :    ${intl.DateFormat('MM/dd    الوقت hh:mm').format(order.createdAt)}   ",
+                  "وقت الانشاء :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailcreate == "AM" ? "صباحا" : "مسائا"}').format(order.createdAt)}   ",
                   style: const TextStyle(color: Colors.white, fontSize: 15),
                   textAlign: TextAlign.end,
                 ),
@@ -130,7 +135,7 @@ class OrderItem extends StatelessWidget {
                   margin: const EdgeInsets.only(right: 10),
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    "وقت التاكيد :    ${intl.DateFormat('MM/dd    الوقت hh:mm').format(order.deliverdAt!)}   ",
+                    "وقت التاكيد :    ${intl.DateFormat('MM/dd    الوقت h:mm ${ timeDetailForconfirm == "AM" ? "صباحا" : "مسائا"} ').format(order.deliverdAt!)}   ",
                     style: const TextStyle(color: Colors.white, fontSize: 15),
                     textAlign: TextAlign.end,
                   ),

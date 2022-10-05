@@ -60,6 +60,25 @@ class CartItemWidget extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    IconButton(
+                        onPressed: () async {
+                          await showConfirmDialog(
+                              confirmText: "حذف",
+                              cancelText: "الغاء",
+                              context: context,
+                              title: 'حذف من عربة التسوق',
+                              content: 'هل تريد حذف المنتج من العربه ',
+                              onConfirm: () {
+                                Provider.of<Cart>(context, listen: false)
+                                    .removeItem(cartItemId);
+                              },
+                              onCancel: () {});
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 30,
+                        )),
                     GestureDetector(
                       onTap: () async {
                         if (cartItem.quantity <= 1) {
@@ -120,13 +139,13 @@ class CartItemWidget extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
             Container(
-              color: Colors.white,
+              height: 100,
               width: 120,
-              height: 90,
+              color: Colors.white,
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(5),

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_the_bon/data/helper/subscribe_to_admin.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
@@ -50,6 +51,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     firstOpen = true;
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
     return MultiProvider(
       providers: [

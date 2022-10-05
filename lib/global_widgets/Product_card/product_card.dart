@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/global_widgets/Product_card/bottom_card.dart';
 import 'package:on_the_bon/data/providers/product.dart';
@@ -16,6 +17,8 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  double op = .8;
+  bool isHovering = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -91,6 +94,32 @@ class _ProductCardState extends State<ProductCard> {
                               child: GestureDetector(
                                   onTap: () async {
                                     try {
+                                      final connection =
+                                          await InternetConnectionChecker
+                                                  .createInstance()
+                                              .hasConnection;
+                                      if (!connection) {
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .hideCurrentSnackBar();
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                backgroundColor: Colors.red,
+                                                dismissDirection:
+                                                    DismissDirection
+                                                        .startToEnd,
+                                                duration:
+                                                    Duration(seconds: 2),
+                                                content: Text(
+                                                  "هناك خطأ في الاتصال ",
+                                                  textAlign:
+                                                      TextAlign.center,
+                                                )));
+
+                                        return;
+                                      }
+                                      // ignore: use_build_context_synchronously
                                       await Provider.of<Product>(context,
                                               listen: false)
                                           .updateProductFavoriteState(
