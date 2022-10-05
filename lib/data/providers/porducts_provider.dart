@@ -39,23 +39,6 @@ class Products with ChangeNotifier {
     userFavoriteId.clear();
   }
 
-  Future getUserFavoriteAsync() async {
-    userFavoriteId.clear();
-    _userFavorite.clear();
-    final user = await db
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-
-    if (user.data()!.keys.contains("faivorites")) {
-      for (var element in (user.data()!["faivorites"] as List)) {
-        userFavoriteId.putIfAbsent(element, () => element);
-        _userFavorite.putIfAbsent(element, () => _productList[element]);
-      }
-    }
-    notifyListeners();
-  }
-
   void updateUserFavoriteForProducts(String id) {
     if (userFavoriteId.containsKey(id)) {
       userFavoriteId.remove(id);
@@ -68,7 +51,10 @@ class Products with ChangeNotifier {
   }
 
   List<Product> get getFavProducts {
-    return [..._userFavorite.values];
+    if (_userFavorite.values.isNotEmpty && _productList.isNotEmpty) {
+      return [..._userFavorite.values];
+    }
+    return [];
   }
 
   void setType(ProductsTypeEnum type) {
@@ -117,6 +103,32 @@ class Products with ChangeNotifier {
   }
 
   // applay opreation on database
+  Future getUserFavoriteAsync() async {
+    Future<void> isProductLoded() async {
+      await Future.delayed(const Duration(seconds: 1));
+      if (_productList.isEmpty) {
+        await isProductLoded();
+      }
+      return;
+    }
+
+    userFavoriteId.clear();
+    _userFavorite.clear();
+    final user = await db
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    await isProductLoded();
+
+    if (user.data()!.keys.contains("faivorites")) {
+      for (var element in (user.data()!["faivorites"] as List)) {
+        userFavoriteId.putIfAbsent(element, () => element);
+        _userFavorite.putIfAbsent(element, () => _productList[element]);
+      }
+    }
+    notifyListeners();
+  }
 
   Future createNewProduct(Product newProduct, File image) async {
     try {
@@ -199,7 +211,6 @@ class Products with ChangeNotifier {
   Future fetchProductAsync() async {
     _productList.clear();
     final productsList = await db.collection("products").get();
-    await getUserFavoriteAsync();
 
     productsList.docs.toList().forEach(
       (element) {

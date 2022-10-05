@@ -7,25 +7,27 @@ class EditProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(right: 10),
-            child: const Text(
-              "اضافة منتج",
-              textAlign: TextAlign.end,
-            ),
-          )),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Column(
-              children: const [
-                EditProductFrom(),
-              ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            title: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.only(right: 10),
+              child: const Text(
+                "اضافة منتج",
+                textAlign: TextAlign.end,
+              ),
+            )),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                children: const [
+                  EditProductFrom(),
+                ],
+              ),
             ),
           ),
         ),

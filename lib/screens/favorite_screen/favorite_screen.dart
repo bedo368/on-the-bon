@@ -31,48 +31,50 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<Products>(context);
-    return Scaffold(
-      extendBody: true,
-      appBar: AppBar(
-        title: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: const Text(
-            "منتجاتي المفضلة",
-            textAlign: TextAlign.center,
+    return SafeArea(
+      child: Scaffold(
+        extendBody: true,
+        appBar: AppBar(
+          title: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: const Text(
+              "منتجاتي المفضلة",
+              textAlign: TextAlign.center,
+            ),
           ),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
         ),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-      ),
-      bottomNavigationBar: ButtomNavigationBar(
-        routeName: FaivoriteScreen.routeName,
-      ),
-      body: isLoading
-          ? const Center(
-              child: IconGif(
-              width: 90,
-              content: "",
-              iconPath: "assets/images/search.gif",
-            ))
-          : productData.getFavProducts.isNotEmpty &&
-                  productData.allProducts.isNotEmpty
-              ? const SingleChildScrollView(
-                  child: ProductGraid(),
-                )
-              : RefreshIndicator(
-                  onRefresh: () async {},
-                  child: SingleChildScrollView(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * .5,
-                      child: const Center(
-                        child: Text(
-                          " 😉 المفضله فارغه ضيف منتج وتعالا  ",
-                          style: TextStyle(fontSize: 22),
-                          textAlign: TextAlign.center,
+        bottomNavigationBar: ButtomNavigationBar(
+          routeName: FaivoriteScreen.routeName,
+        ),
+        body: isLoading
+            ? const Center(
+                child: IconGif(
+                width: 90,
+                content: "",
+                iconPath: "assets/images/search.gif",
+              ))
+            : productData.getFavProducts.isNotEmpty &&
+                    productData.allProducts.isNotEmpty
+                ? const SingleChildScrollView(
+                    child: ProductGraid(),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () async {},
+                    child: SingleChildScrollView(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * .5,
+                        child: const Center(
+                          child: Text(
+                            " 😉 المفضله فارغه ضيف منتج وتعالا  ",
+                            style: TextStyle(fontSize: 22),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+      ),
     );
   }
 }

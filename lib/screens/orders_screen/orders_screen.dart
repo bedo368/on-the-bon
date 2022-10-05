@@ -80,68 +80,70 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     final ordersData = Provider.of<Orders>(context);
-    return Scaffold(
-      extendBody: true,
-      bottomNavigationBar: ButtomNavigationBar(
-        routeName: OrdersScreen.routeName,
-      ),
-      drawer: const Drawer(),
-      appBar: AppBar(
-        title: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: const Text(
-            "قائمه طلباتي",
-            textAlign: TextAlign.end,
-          ),
+    return SafeArea(
+      child: Scaffold(
+        extendBody: true,
+        bottomNavigationBar: ButtomNavigationBar(
+          routeName: OrdersScreen.routeName,
         ),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-      ),
-      body: isLoading
-          ? const Center(
-              child: IconGif(
-              iconPath: "assets/images/search.gif",
-              content: "",
-              width: 100,
-            ))
-          : connectionStateDisabled == false
-              ? SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      OrdersButton(
-                        fetchOrderFunction: fetchOrders,
-                      ),
-                      Container(
-                          width: MediaQuery.of(context).size.width * .9,
-                          margin: const EdgeInsets.only(top: 40),
-                          child: ordersData.orders.isNotEmpty
-                              ? ListView.builder(
-                                  reverse: true,
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return OrderItem(
-                                      order: ordersData.orders[index],
-                                    );
-                                  },
-                                  itemCount: ordersData.orders.length,
-                                )
-                              : const IconGif(
-                                  iconPath: "assets/images/emptycart.gif",
-                                  content: "عذرا ليس لديك طلبات حاليا",
-                                  width: 150,
-                                ))
-                    ],
+        drawer: const Drawer(),
+        appBar: AppBar(
+          title: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: const Text(
+              "قائمه طلباتي",
+              textAlign: TextAlign.end,
+            ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+        ),
+        body: isLoading
+            ? const Center(
+                child: IconGif(
+                iconPath: "assets/images/search.gif",
+                content: "",
+                width: 100,
+              ))
+            : connectionStateDisabled == false
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        OrdersButton(
+                          fetchOrderFunction: fetchOrders,
+                        ),
+                        Container(
+                            width: MediaQuery.of(context).size.width * .9,
+                            margin: const EdgeInsets.only(top: 40),
+                            child: ordersData.orders.isNotEmpty
+                                ? ListView.builder(
+                                    reverse: true,
+                                    primary: false,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return OrderItem(
+                                        order: ordersData.orders[index],
+                                      );
+                                    },
+                                    itemCount: ordersData.orders.length,
+                                  )
+                                : const IconGif(
+                                    iconPath: "assets/images/emptycart.gif",
+                                    content: "عذرا ليس لديك طلبات حاليا",
+                                    width: 150,
+                                  ))
+                      ],
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: fetchOrders,
+                    child: const SingleChildScrollView(
+                        child: IconGif(
+                      iconPath: "assets/images/connection-error.gif",
+                      content: " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
+                      width: 150,
+                    )),
                   ),
-                )
-              : RefreshIndicator(
-                  onRefresh: fetchOrders,
-                  child: const SingleChildScrollView(
-                      child: IconGif(
-                    iconPath: "assets/images/connection-error.gif",
-                    content: " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
-                    width: 150,
-                  )),
-                ),
+      ),
     );
   }
 }

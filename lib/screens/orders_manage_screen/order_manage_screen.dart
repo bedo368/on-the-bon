@@ -57,38 +57,40 @@ class _OrderManageScreenState extends State<OrderManageScreen> {
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            OrdersButton(
-              fetchOrderFunction: fetchOrders,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * .9,
-              margin: const EdgeInsets.only(top: 40),
-              child: ValueListenableBuilder<bool>(
-                  valueListenable: OrderManageScreen.isLoading,
-                  builder: (context, value, c) {
-                    return value
-                        ? const Center(
-                            child: SpinKitPouringHourGlassRefined(
-                              color: Colors.green,
-                            ),
-                          )
-                        : ListView.builder(
-                            reverse: true,
-                            primary: false,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return OrderManageItem(
-                                order: ordersData.orders[index],
-                              );
-                            },
-                            itemCount: ordersData.orders.length,
-                          );
-                  }),
-            )
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              OrdersButton(
+                fetchOrderFunction: fetchOrders,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * .9,
+                margin: const EdgeInsets.only(top: 40),
+                child: ValueListenableBuilder<bool>(
+                    valueListenable: OrderManageScreen.isLoading,
+                    builder: (context, value, c) {
+                      return value
+                          ? const Center(
+                              child: SpinKitPouringHourGlassRefined(
+                                color: Colors.green,
+                              ),
+                            )
+                          : ListView.builder(
+                              reverse: true,
+                              primary: false,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return OrderManageItem(
+                                  order: ordersData.orders[index],
+                                );
+                              },
+                              itemCount: ordersData.orders.length,
+                            );
+                    }),
+              )
+            ],
+          ),
         ),
       ),
     );
