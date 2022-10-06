@@ -18,7 +18,6 @@ class ProductsFillterBySubType extends StatelessWidget {
         margin: const EdgeInsets.only(top: 10),
         height: 40,
         child: Row(
-          textDirection: TextDirection.rtl,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
@@ -27,7 +26,6 @@ class ProductsFillterBySubType extends StatelessWidget {
                 child: ListView.builder(
                   primary: false,
                   shrinkWrap: true,
-                  reverse: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return ValueListenableBuilder<String>(

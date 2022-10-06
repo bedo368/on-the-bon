@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -160,77 +162,91 @@ class Auth {
             await showDialog(
                 context: context,
                 builder: ((context) {
-                  return AlertDialog(
-                    title: const Text(" ادخل كود التاكيد من فضلك"),
-                    content: SizedBox(
-                      height: 100,
-                      child: Column(
-                        children: [
-                          Text(" $phoneNumber :  وصلك كود علي رقم  "),
-                          TextField(
-                            controller: textController,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                  return BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                    child: AlertDialog(
+                      title: const Text(" ادخل كود التاكيد من فضلك"),
+                      content: SizedBox(
+                        height: 130,
+                        child: Column(
+                          children: [
+                            Text("وصلك كود علي رقم : $phoneNumber "),
+                            TextField(
+                              controller: textController,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                hintText: "ادخل الكود هنا",
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                      actions: [
+                        Row(
+                          textDirection: TextDirection.ltr,
+                          children: [
+                            TextButton(
+                                onPressed: () async {
+                                  final smscidintial =
+                                      PhoneAuthProvider.credential(
+                                          verificationId: verificationId,
+                                          smsCode: textController.text);
+
+                                  try {
+                                    await auth.currentUser!
+                                        .updatePhoneNumber(smscidintial);
+                                    await auth.currentUser!
+                                        .unlink(PhoneAuthProvider.PROVIDER_ID);
+
+                                    await FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(auth.currentUser!.uid)
+                                        .update({
+                                      "phoneNumber": phoneNumber,
+                                      "location": location,
+                                      "verfiedPhone": true
+                                    });
+                                    // ignore: use_build_context_synchronously
+                                    await confirmOrder(context);
+                                    confirmationState = true;
+
+                                    // ignore: use_build_context_synchronously
+                                    // Navigator.of(context).pop();
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentMaterialBanner();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "عذرا هناك خطا ما : قد يكون الهاتف مسجل من قبل ")));
+                                    Navigator.of(context).pop();
+
+                                    rethrow;
+                                  }
+                                },
+                                child: const Text(
+                                  "تاكيد",
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                            TextButton(
+                                onPressed: () async {
+                                  onCancel();
+                                },
+                                child: const Text(
+                                  "الغاء",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                                )),
+                          ],
+                        )
+                      ],
                     ),
-                    actions: [
-                      Row(
-                        children: [
-                          TextButton(
-                              onPressed: () async {
-                                final smscidintial =
-                                    PhoneAuthProvider.credential(
-                                        verificationId: verificationId,
-                                        smsCode: textController.text);
-
-                                try {
-                                  await auth.currentUser!
-                                      .updatePhoneNumber(smscidintial);
-                                  await auth.currentUser!
-                                      .unlink(PhoneAuthProvider.PROVIDER_ID);
-
-                                  await FirebaseFirestore.instance
-                                      .collection("users")
-                                      .doc(auth.currentUser!.uid)
-                                      .update({
-                                    "phoneNumber": phoneNumber,
-                                    "location": location,
-                                    "verfiedPhone": true
-                                  });
-                                  // ignore: use_build_context_synchronously
-                                  await confirmOrder(context);
-                                  confirmationState = true;
-
-                                  // ignore: use_build_context_synchronously
-                                  // Navigator.of(context).pop();
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentMaterialBanner();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "عذرا هناك خطا ما : قد يكون الهاتف مسجل من قبل ")));
-                                  Navigator.of(context).pop();
-
-                                  rethrow;
-                                }
-                              },
-                              child: const Text("تاكيد")),
-                          TextButton(
-                              onPressed: () async {
-                                retry!();
-                              },
-                              child: const Text("اعاده الارسال")),
-                          TextButton(
-                              onPressed: () async {
-                                onCancel();
-                              },
-                              child: const Text("الغاء")),
-                        ],
-                      )
-                    ],
                   );
                 }));
           },

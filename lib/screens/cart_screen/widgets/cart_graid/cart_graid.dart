@@ -18,11 +18,11 @@ class CartGraid extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(top: 40),
+            
             width: MediaQuery.of(context).size.width,
             child: const Text(
               "قائمة المشتريات",
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.end,
+              style: TextStyle(fontSize: 25 , fontWeight: FontWeight.bold),
             ),
           ),
           ListView.builder(

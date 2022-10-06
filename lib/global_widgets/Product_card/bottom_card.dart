@@ -46,6 +46,23 @@ class _BottomCardState extends State<BottomCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          
+                          Text(
+                            widget.title,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          Text(
+                            "السعر : $price",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
                       margin: const EdgeInsets.only(left: 15),
                       child: SizedBox(
                         width: 50,
@@ -62,23 +79,6 @@ class _BottomCardState extends State<BottomCard> {
                                     size: size);
                           },
                         ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            widget.title,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          Text(
-                            "السعر : $price",
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ],
                       ),
                     ),
                   ],

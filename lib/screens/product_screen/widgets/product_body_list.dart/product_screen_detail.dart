@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
@@ -61,64 +62,73 @@ class ProductScreenDetail extends StatelessWidget {
                         .addItemToCartWithQuntity(
                             title: product.title,
                             id: product.id,
-                            price: product
-                                    .sizePrice[ProductSize.selectedSize.value] ??
+                            price: product.sizePrice[
+                                    ProductSize.selectedSize.value] ??
                                 product.sizePrice.values.first,
                             imageUrl: product.imageUrl,
                             type: product.type,
                             size: ProductSize.selectedSize.value,
                             quntity: ProductQuntity.quetity.value);
-            
+
                     ProductQuntity.quetity.value = 0;
-            
+
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return AlertDialog(
-                            title: const Text(
-                              "تمت اضافة المنتج الي العربه",
-                              textAlign: TextAlign.center,
-                            ),
-                            actions: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.green),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                CartScreen.routeName);
-                                      },
-                                      child: const Text(
-                                        "الذهاب الي العربه",
-                                        style: TextStyle(
-                                            fontSize: 12, color: Colors.white),
-                                      )),
-                                  ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .secondary),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text(
-                                        "متابعة التسوق",
-                                        style: TextStyle(
-                                            fontSize: 12, color: Colors.white),
-                                      ))
-                                ],
+                          return BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                            child: AlertDialog(
+                              title: const Text(
+                                "تمت اضافة المنتج الي العربه",
+                                textAlign: TextAlign.center,
                               ),
-                            ],
+                              actions: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pushReplacementNamed(
+                                                  CartScreen.routeName);
+                                        },
+                                        child: const Text(
+                                          "الذهاب الي العربه",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        )),
+                                    ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          "متابعة التسوق",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        ))
+                                  ],
+                                ),
+                              ],
+                            ),
                           );
                         });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                   ),
-                  child: const Text("اطلب الأن" , style: TextStyle(fontWeight: FontWeight.bold),),
+                  child: const Text(
+                    "اطلب الأن",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             )

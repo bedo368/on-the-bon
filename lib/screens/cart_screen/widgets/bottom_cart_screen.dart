@@ -145,7 +145,6 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
             width: MediaQuery.of(context).size.width,
             child: Text(
               "اجمالي الطلب : ${v.totalPrice.toInt()} جنيه ",
-              textAlign: TextAlign.end,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -167,9 +166,8 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                       width: MediaQuery.of(context).size.width * .9,
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: Row(
-                        textDirection: TextDirection.rtl,
                         children: [
-                          const Text(" : رقم الهاتف الحالي  "),
+                          const Text("رقم الهاتف الحالي : "),
                           Text(
                             Provider.of<UserData>(context, listen: false)
                                 .phoneNumber

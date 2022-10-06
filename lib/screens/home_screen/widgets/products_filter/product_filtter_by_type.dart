@@ -32,10 +32,10 @@ class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
                       scrollDirection: Axis.horizontal,
                       
                       child: Row(
-                        textDirection: TextDirection.rtl,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ListView.builder(
+                            reverse: true,
                             primary: false,
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,

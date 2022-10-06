@@ -69,19 +69,26 @@ class _ProductAppBarState extends State<ProductAppBar> {
       expandedHeight: 300,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        title: Align(
-          alignment: Alignment.bottomRight,
-          child: Container(
-            color: const Color.fromARGB(104, 255, 255, 255),
-            padding: const EdgeInsets.only(left: 15, right: 2),
-            margin: const EdgeInsets.only(right: 10),
-            child: Text(
-              widget.title,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
+        titlePadding: const EdgeInsets.only(right: 10 ,  bottom: 10),
+        title: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Stack(
+            children: [
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  color: const Color.fromARGB(104, 255, 255, 255),
+                  padding: const EdgeInsets.only(left: 15, right: 2),
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
               ),
-              textAlign: TextAlign.end,
-            ),
+            ],
           ),
         ),
         background: SizedBox(

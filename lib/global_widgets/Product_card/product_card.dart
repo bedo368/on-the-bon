@@ -28,11 +28,20 @@ class _ProductCardState extends State<ProductCard> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).primaryColor.withOpacity(0.8),
-                spreadRadius: 2,
+                
+                color: Theme.of(context).primaryColor.withOpacity(0.4),
+                spreadRadius: .2,
+                
 
-                blurRadius: 20,
-                offset: const Offset(2, 4), // changes position of shadow
+                blurRadius: 10,
+                offset: const Offset(1, 1), // changes position of shadow
+              ),
+               BoxShadow(
+                color: Theme.of(context).primaryColor.withOpacity(0.4),
+                spreadRadius: .2,
+
+                blurRadius: 10,
+                offset: const Offset(-.1, 1), // changes position of shadow
               ),
             ],
           ),

@@ -25,123 +25,8 @@ class CartItemWidget extends StatelessWidget {
       child: Card(
         color: Theme.of(context).primaryColor,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10, top: 3),
-                  child: Text(
-                    cartItem.title,
-                    style: const TextStyle(color: Colors.white),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "${cartItem.size} /",
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    const Text(
-                      "جنيه ",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      child: Text(
-                        "${cartItem.price}",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () async {
-                          await showConfirmDialog(
-                              confirmText: "حذف",
-                              cancelText: "الغاء",
-                              context: context,
-                              title: 'حذف من عربة التسوق',
-                              content: 'هل تريد حذف المنتج من العربه ',
-                              onConfirm: () {
-                                Provider.of<Cart>(context, listen: false)
-                                    .removeItem(cartItemId);
-                              },
-                              onCancel: () {});
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                          size: 30,
-                        )),
-                    GestureDetector(
-                      onTap: () async {
-                        if (cartItem.quantity <= 1) {
-                          await showConfirmDialog(
-                              confirmText: "حذف",
-                              cancelText: "الغاء",
-                              context: context,
-                              title: 'حذف من عربة التسوق',
-                              content: 'هل تريد حذف المنتج من العربه ',
-                              onConfirm: () {
-                                cartData.decreaseItemBy1(cartItemId);
-                              },
-                              onCancel: () {});
-                          return;
-                        }
-                        cartData.decreaseItemBy1(cartItemId);
-                      },
-                      child: Container(
-                        height: 25,
-                        width: 30,
-                        decoration: const BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                bottomLeft: Radius.circular(3))),
-                        child: const Center(
-                            child: Icon(
-                          Icons.remove,
-                          color: Colors.white,
-                        )),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      height: 25,
-                      width: 35,
-                      child: Center(
-                          child: Text(cartItem.quantity.toInt().toString())),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        cartData.increaseItemBy1(cartItemId);
-                      },
-                      child: Container(
-                        width: 30,
-                        height: 25,
-                        margin: const EdgeInsets.only(right: 10),
-                        decoration: const BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(3),
-                                bottomRight: Radius.circular(3))),
-                        child: const Center(
-                            child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        )),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
             Container(
               height: 100,
               width: 120,
@@ -160,6 +45,125 @@ class CartItemWidget extends StatelessWidget {
                     );
                   },
                 ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        cartItem.title,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            cartItem.size,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            child: Text(
+                              "${cartItem.price}",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          const Text(
+                            "جنيه ",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          cartData.increaseItemBy1(cartItemId);
+                        },
+                        child: Container(
+                          width: 30,
+                          height: 25,
+                          decoration: const BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(3),
+                                  bottomRight: Radius.circular(3))),
+                          child: const Center(
+                              child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          )),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.white,
+                        height: 25,
+                        width: 35,
+                        child: Center(
+                            child: Text(cartItem.quantity.toInt().toString())),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          if (cartItem.quantity <= 1) {
+                            await showConfirmDialog(
+                                confirmText: "حذف",
+                                cancelText: "الغاء",
+                                context: context,
+                                title: 'حذف من عربة التسوق',
+                                content: 'هل تريد حذف المنتج من العربه ',
+                                onConfirm: () {
+                                  cartData.decreaseItemBy1(cartItemId);
+                                },
+                                onCancel: () {});
+                            return;
+                          }
+                          cartData.decreaseItemBy1(cartItemId);
+                        },
+                        child: Container(
+                          height: 25,
+                          width: 30,
+                          decoration: const BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(3),
+                                  bottomLeft: Radius.circular(3))),
+                          child: const Center(
+                              child: Icon(
+                            Icons.remove,
+                            color: Colors.white,
+                          )),
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () async {
+                            await showConfirmDialog(
+                                confirmText: "حذف",
+                                cancelText: "الغاء",
+                                context: context,
+                                title: 'حذف من عربة التسوق',
+                                content: 'هل تريد حذف المنتج من العربه ',
+                                onConfirm: () {
+                                  Provider.of<Cart>(context, listen: false)
+                                      .removeItem(cartItemId);
+                                },
+                                onCancel: () {});
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 30,
+                          )),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],

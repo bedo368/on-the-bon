@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
                 textTheme: const TextTheme(
                     bodyText1: TextStyle(fontSize: 22, color: Colors.white)),
                 scaffoldBackgroundColor:
-                    const Color.fromARGB(255, 255, 255, 255),
+                    const Color.fromARGB(255, 252, 255, 252),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
                         textStyle: GoogleFonts.itim(fontSize: 18))),
