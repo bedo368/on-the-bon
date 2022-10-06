@@ -34,6 +34,8 @@ class ButtomNavigationBar extends StatelessWidget {
 
     return SafeArea(
       child: CurvedNavigationBar(
+        
+        
         items: [
           Center(
             child: Column(

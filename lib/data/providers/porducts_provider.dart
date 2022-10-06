@@ -107,6 +107,7 @@ class Products with ChangeNotifier {
     Future<void> isProductLoded() async {
       await Future.delayed(const Duration(seconds: 1));
       if (_productList.isEmpty) {
+        await fetchProductAsync();
         await isProductLoded();
       }
       return;
@@ -124,6 +125,7 @@ class Products with ChangeNotifier {
     if (user.data()!.keys.contains("faivorites")) {
       for (var element in (user.data()!["faivorites"] as List)) {
         userFavoriteId.putIfAbsent(element, () => element);
+        _productList[element]!.isFav = true;
         _userFavorite.putIfAbsent(element, () => _productList[element]);
       }
     }
@@ -212,7 +214,16 @@ class Products with ChangeNotifier {
     try {
       _productList.clear();
       final productsList = await db.collection("products").get();
-      await getUserFavoriteAsync();
+      final user = await db
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      if (user.data()!.keys.contains("faivorites")) {
+        for (var element in (user.data()!["faivorites"] as List)) {
+          userFavoriteId.putIfAbsent(element, () => element);
+        }
+      }
 
       productsList.docs.toList().forEach(
         (element) {

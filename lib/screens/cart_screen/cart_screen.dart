@@ -26,7 +26,7 @@ class CartScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: const Text(
                 "عربة التسوق",
-                textAlign: TextAlign.end,
+                textAlign: TextAlign.center,
               )),
         ),
         body: cartData.cartItems.isNotEmpty

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:on_the_bon/data/providers/user_provider.dart';
 import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
@@ -41,6 +42,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         return;
       }
     });
+
+    if (Provider.of<UserData>(context, listen: false).id == null) {
+      Provider.of<UserData>(context, listen: false).fetchUserDataAsync();
+    }
 
     if (Provider.of<Products>(context, listen: false).allProducts.isEmpty ||
         MyApp.firstOpen) {
@@ -115,13 +120,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     return SafeArea(
         child: Scaffold(
-      onEndDrawerChanged: (isOpened) {},
-      drawer: null,
       extendBody: true,
       bottomNavigationBar: ButtomNavigationBar(
         routeName: HomeScreen.routeName,
       ),
-      endDrawer: const MainDrawer(),
+      drawer: const MainDrawer(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: SizedBox(

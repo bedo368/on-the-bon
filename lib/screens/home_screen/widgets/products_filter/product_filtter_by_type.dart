@@ -13,10 +13,6 @@ class ProdcutsFiltterByType extends StatefulWidget {
 }
 
 class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
-  void reRinder() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ProductsTypeEnum>(
@@ -34,7 +30,7 @@ class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      reverse: true,
+                      
                       child: Row(
                         textDirection: TextDirection.rtl,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,7 +43,6 @@ class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
                               return TypeElement(
                                 index: index,
                                 v: v,
-                                reRinder: reRinder,
                               );
                             },
                             itemCount: productsStringToType.length,

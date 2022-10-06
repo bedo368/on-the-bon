@@ -14,17 +14,11 @@ exports.orederTriggerByAdmins = functions.firestore
       },
       data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
     };
-    admin.messaging().sendToTopic("Admin", payload);
+    admin.messaging().sendToTopic("Admin", payload, MessagingOptions());
   });
 
+// exports.checkIsAdmin = functions.https.onCall(async(data, contxt)=> {
 
+//   const adminRole = await admin.firestore.document(`/adims/${contxt.auth.uid}`) ;
 
-  // exports.checkIsAdmin = functions.https.onCall(async(data, contxt)=> {
-    
-
-  //   const adminRole = await admin.firestore.document(`/adims/${contxt.auth.uid}`) ; 
-
-
-    
-
-  // })
+// })

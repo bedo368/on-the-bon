@@ -11,11 +11,9 @@ class TypeElement extends StatefulWidget {
     Key? key,
     required this.index,
     required this.v,
-    required this.reRinder,
   }) : super(key: key);
 
   final int index;
-  final Function reRinder;
 
   final ProductsTypeEnum v;
 

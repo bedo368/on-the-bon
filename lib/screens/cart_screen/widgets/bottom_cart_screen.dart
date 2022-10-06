@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/data/helper/auth.dart';
@@ -23,6 +22,9 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
   @override
   void initState() {
     CartScreenBottom.usingCurrentPhone.value = true;
+    if (Provider.of<UserData>(context, listen: false).id == null) {
+      Provider.of<UserData>(context, listen: false).fetchUserDataAsync();
+    }
 
     super.initState();
   }
@@ -41,7 +43,7 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
             phoneNumber: phone,
             location: locationText,
             totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
-            userId: Provider.of<User>(context, listen: false).uid);
+            userId: Provider.of<UserData>(context, listen: false).id!);
 
         // ignore: use_build_context_synchronously
         Provider.of<Cart>(context, listen: false).clearCart();
