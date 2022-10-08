@@ -43,10 +43,17 @@ class CartScreen extends StatelessWidget {
                       ],
                     ))),
               )
-            : const IconGif(
-                width: 150,
-                content: "العربه فارغه قم بملئها من فضلك",
-                iconPath: "assets/images/emptycart.gif"),
+            : SingleChildScrollView(
+              child: Container(
+                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height ),
+                child: const Center(
+                  child: IconGif(
+                      width: 150,
+                      content: "العربه فارغه قم بملئها من فضلك",
+                      iconPath: "assets/images/emptycart.gif"),
+                ),
+              ),
+            ),
       ),
     );
   }

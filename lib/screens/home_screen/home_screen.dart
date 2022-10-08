@@ -19,6 +19,9 @@ class HomeScreen extends StatefulWidget {
   static final ValueNotifier<ProductsTypeEnum> productType =
       ValueNotifier<ProductsTypeEnum>(ProductsTypeEnum.hotDrinks);
 
+  static final ValueNotifier<bool> isProductHomeScreenGridScroll =
+      ValueNotifier<bool>(false);
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -79,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final allProduct = Provider.of<Products>(
       context,
     ).allProducts;
@@ -149,22 +153,55 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Center(
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 20),
-                            width: MediaQuery.of(context).size.width * .9,
-                            height: MediaQuery.of(context).size.width * .3,
-                            child: const RiveAnimation.asset(
-                              "assets/animation/logo_animation.riv",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const ProdcutsFiltterByType(),
-                        const ProductsFillterBySubType(),
+                        ValueListenableBuilder<bool>(
+                            valueListenable:
+                                HomeScreen.isProductHomeScreenGridScroll,
+                            builder: (context, v, c) {
+                              return AnimatedOpacity(
+                                duration: Duration(milliseconds: 200),
+                                opacity: v ? 0 : 1,
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  width: size.width,
+                                  height: v ? 0 : 280,
+                                  child: FittedBox(
+                                    fit: BoxFit.fill,
+                                    alignment: Alignment.topCenter,
+                                    child: Column(
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 20),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .9,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .3,
+                                            child: const RiveAnimation.asset(
+                                              "assets/animation/logo_animation.riv",
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        const ProdcutsFiltterByType(),
+                                        Container(
+                                            margin: const EdgeInsets.only(
+                                                bottom: 10),
+                                            child:
+                                                const ProductsFillterBySubType()),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
 
                         // ProductTypeNotifier(),
-                        const ProductGraid()
+                        const ProductGraid(),
                       ],
                     ),
                   ),

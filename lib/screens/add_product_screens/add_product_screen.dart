@@ -12,13 +12,8 @@ class AddProductScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
             backgroundColor: Theme.of(context).primaryColor,
-            title: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.only(right: 10),
-              child: const Text(
-                "اضافة منتج",
-                textAlign: TextAlign.end,
-              ),
+            title: const Text(
+              "اضافة منتج",
             )),
         body: SingleChildScrollView(
           child: Center(

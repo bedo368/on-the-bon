@@ -13,16 +13,15 @@ class PrdocutDiscription extends StatelessWidget {
       width: MediaQuery.of(context).size.width * .8,
       margin: const EdgeInsets.only(top: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            ": الوصف",
+            "الوصف :",
             style: TextStyle(color: Colors.white, fontSize: 22),
           ),
           Text(
             discription,
             style: const TextStyle(color: Colors.white, fontSize: 15),
-            textAlign: TextAlign.end,
           ),
         ],
       ),

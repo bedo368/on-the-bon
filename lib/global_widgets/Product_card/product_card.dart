@@ -30,17 +30,17 @@ class _ProductCardState extends State<ProductCard> {
               BoxShadow(
                 
                 color: Theme.of(context).primaryColor.withOpacity(0.4),
-                spreadRadius: .2,
+                spreadRadius: .02,
                 
 
-                blurRadius: 10,
+                blurRadius: 5,
                 offset: const Offset(1, 1), // changes position of shadow
               ),
                BoxShadow(
                 color: Theme.of(context).primaryColor.withOpacity(0.4),
-                spreadRadius: .2,
+                spreadRadius: .02,
 
-                blurRadius: 10,
+                blurRadius: 5,
                 offset: const Offset(-.1, 1), // changes position of shadow
               ),
             ],
@@ -52,6 +52,7 @@ class _ProductCardState extends State<ProductCard> {
           child: Column(
             children: [
               Card(
+                elevation: 20,
                 margin: const EdgeInsets.only(top: 0),
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(

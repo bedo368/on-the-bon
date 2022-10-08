@@ -88,12 +88,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
         ),
         drawer: const Drawer(),
         appBar: AppBar(
-          title: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: const Text(
-              "قائمه طلباتي",
-              textAlign: TextAlign.end,
-            ),
+          title: const Text(
+            "قائمه طلباتي",
           ),
           backgroundColor: Theme.of(context).colorScheme.secondary,
         ),

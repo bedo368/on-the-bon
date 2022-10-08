@@ -17,7 +17,7 @@ class ProductQuntity extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text(
-            ": الكمية ",
+            "الكمية",
             style: TextStyle(color: Colors.white, fontSize: 22),
             textAlign: TextAlign.end,
           ),

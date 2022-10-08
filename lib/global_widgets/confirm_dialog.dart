@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 Future<void> showConfirmDialog({
@@ -13,36 +15,46 @@ Future<void> showConfirmDialog({
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context1) {
-      return AlertDialog(
-        title: Text(
-          title,
-          textAlign: TextAlign.end,
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Text(
-                content,
+      return BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+        child: AlertDialog(
+          title: Text(
+            title,
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  content,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                cancelText,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w200, color: Colors.grey),
               ),
-            ],
-          ),
+              onPressed: () {
+                onCancel();
+                Navigator.of(context1).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                confirmText,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.blue),
+              ),
+              onPressed: () {
+                onConfirm();
+                Navigator.of(context1).pop();
+              },
+            ),
+          ],
         ),
-        actions: <Widget>[
-          TextButton(
-            child: Text(confirmText),
-            onPressed: () {
-              onConfirm();
-              Navigator.of(context1).pop();
-            },
-          ),
-          TextButton(
-            child: Text(cancelText),
-            onPressed: () {
-              onCancel();
-              Navigator.of(context1).pop();
-            },
-          ),
-        ],
       );
     },
   );

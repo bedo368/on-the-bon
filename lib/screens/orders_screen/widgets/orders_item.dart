@@ -28,7 +28,6 @@ class OrderItem extends StatelessWidget {
                   child: const Text(
                     "قائمه المشتريات",
                     style: TextStyle(fontSize: 20, color: Colors.amber),
-                    textAlign: TextAlign.end,
                   )),
               ListView.builder(
                 primary: false,
@@ -38,8 +37,6 @@ class OrderItem extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.only(right: 5),
                       child: Row(
-                        textDirection: TextDirection.rtl,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             order.ordersItems[index].title,
@@ -109,7 +106,6 @@ class OrderItem extends StatelessWidget {
                 child: Text(
                   "العنوان  : ${order.location}",
                   style: const TextStyle(color: Colors.white, fontSize: 15),
-                  textAlign: TextAlign.end,
                 ),
               ),
               Container(
@@ -118,7 +114,6 @@ class OrderItem extends StatelessWidget {
                 child: Text(
                   "رقم الهاتف  : ${order.phoneNumber}",
                   style: const TextStyle(color: Colors.white, fontSize: 15),
-                  textAlign: TextAlign.end,
                 ),
               ),
               Container(
@@ -127,7 +122,6 @@ class OrderItem extends StatelessWidget {
                 child: Text(
                   "وقت الانشاء :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailcreate == "AM" ? "صباحا" : "مسائا"}').format(order.createdAt)}   ",
                   style: const TextStyle(color: Colors.white, fontSize: 15),
-                  textAlign: TextAlign.end,
                 ),
               ),
               if (order.deliverdAt != null)
@@ -137,7 +131,6 @@ class OrderItem extends StatelessWidget {
                   child: Text(
                     "وقت التاكيد :    ${intl.DateFormat('MM/dd    الوقت h:mm ${ timeDetailForconfirm == "AM" ? "صباحا" : "مسائا"} ').format(order.deliverdAt!)}   ",
                     style: const TextStyle(color: Colors.white, fontSize: 15),
-                    textAlign: TextAlign.end,
                   ),
                 ),
               Container(
@@ -146,7 +139,6 @@ class OrderItem extends StatelessWidget {
                 child: Text(
                   "الاجمالي :    ${order.totalPrice} جنيها   +   خدمة التوصيل",
                   style: const TextStyle(color: Colors.white, fontSize: 15),
-                  textAlign: TextAlign.end,
                 ),
               ),
               Container(
@@ -155,7 +147,6 @@ class OrderItem extends StatelessWidget {
                 child: const Text(
                   "من فضلك لو في اي تأخير في التواصل مع حضرتك ممكن تكلمنا علي الرقم دا 01020766083",
                   style: TextStyle(color: Colors.amber, fontSize: 12),
-                  textAlign: TextAlign.end,
                 ),
               ),
             ],

@@ -34,8 +34,6 @@ class ButtomNavigationBar extends StatelessWidget {
 
     return SafeArea(
       child: CurvedNavigationBar(
-        
-        
         items: [
           Center(
             child: Column(
@@ -112,6 +110,7 @@ class ButtomNavigationBar extends StatelessWidget {
 
             if (route == FaivoriteScreen.routeName) {
               if (routeName != HomeScreen.routeName) {
+                
                 Navigator.of(context)
                     .pushReplacement(SlidePageToLeft(const HomeScreen()));
               }
@@ -147,8 +146,7 @@ class ButtomNavigationBar extends StatelessWidget {
                 delegate: MySearchDelegate(
                     Provider.of<Products>(context, listen: false).allProducts,
                     (context, id, type) {
-                  Navigator.of(context).pushReplacementNamed(
-                      ProductScreen.routeName,
+                  Navigator.of(context).pushNamed(ProductScreen.routeName,
                       arguments: {"id": id, "type": type});
                 }));
           } else if (index == 3) {

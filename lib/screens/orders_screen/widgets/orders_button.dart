@@ -19,7 +19,6 @@ class OrdersButton extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        reverse: true,
         child: AnimatedContainer(
           duration: const Duration(seconds: 3),
           child: SizedBox(
@@ -32,7 +31,6 @@ class OrdersButton extends StatelessWidget {
                 ListView.builder(
                   primary: false,
                   shrinkWrap: true,
-                  reverse: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: ((context, index) {
                     return ValueListenableBuilder(

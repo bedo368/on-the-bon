@@ -2,6 +2,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -83,6 +84,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => Orders()),
       ],
       child: MaterialApp(
+        scrollBehavior: const CupertinoScrollBehavior(),
         localizationsDelegates: const [
           GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -91,7 +93,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: const [
           Locale('ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales
         ],
-        locale: const Locale("fa", "IR"),
+        locale: const Locale('ar', 'AE'),
         title: 'Flutter Demo',
         theme: ThemeData(
                 textTheme: const TextTheme(

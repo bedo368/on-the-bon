@@ -168,7 +168,6 @@ class AddProductForm extends StatelessWidget {
                     onSaved: (value) {
                       formData["title"] = value!.trim();
                     },
-                    textAlign: TextAlign.end,
                     decoration: formInputDecortion("اسم المنتج", context),
                   )),
               Container(
@@ -187,7 +186,6 @@ class AddProductForm extends StatelessWidget {
                     onSaved: (value) {
                       formData["discription"] = value!.trim();
                     },
-                    textAlign: TextAlign.end,
                     decoration: formInputDecortion("الوصف", context),
                     maxLines: 2,
                     keyboardType: TextInputType.multiline,
@@ -197,15 +195,11 @@ class AddProductForm extends StatelessWidget {
                 height: 80,
                 margin: const EdgeInsets.only(top: 20),
                 child: Row(
-                  textDirection: TextDirection.rtl,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: 100,
                       margin: const EdgeInsets.only(right: 10, left: 30),
                       child: const Text(
                         "النوع",
-                        textAlign: TextAlign.end,
                       ),
                     ),
                     Expanded(
@@ -250,7 +244,6 @@ class AddProductForm extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(top: 30, bottom: 10),
                 child: Row(
-                  textDirection: TextDirection.rtl,
                   children: [
                     Container(
                         margin: const EdgeInsets.only(right: 10),
@@ -327,7 +320,6 @@ InputDecoration formInputDecortion(
       margin: const EdgeInsets.only(right: 5),
       child: Text(
         label,
-        textAlign: TextAlign.end,
       ),
     ),
     focusColor: Colors.black,

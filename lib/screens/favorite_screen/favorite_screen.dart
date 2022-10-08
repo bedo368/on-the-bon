@@ -56,9 +56,7 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
               ))
             : productData.getFavProducts.isNotEmpty &&
                     productData.allProducts.isNotEmpty
-                ? const SingleChildScrollView(
-                    child: ProductGraid(),
-                  )
+                ? const SingleChildScrollView(child: ProductGraid())
                 : RefreshIndicator(
                     onRefresh: () async {},
                     child: SingleChildScrollView(

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -23,9 +22,9 @@ class ProductScreenDetail extends StatelessWidget {
     return SliverList(
         delegate: SliverChildListDelegate([
       Container(
-        padding: const EdgeInsets.only(bottom: 100),
-        height: min(MediaQuery.of(context).size.height * .7,
-            MediaQuery.of(context).size.height * 1.3),
+        constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height * .7,
+            ),
         width: MediaQuery.of(context).size.width,
         color: Theme.of(context).primaryColor,
         child: Column(
@@ -89,6 +88,20 @@ class ProductScreenDetail extends StatelessWidget {
                                   children: [
                                     ElevatedButton(
                                         style: ElevatedButton.styleFrom(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          "متابعة التسوق",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        )),
+                                    ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.green),
                                         onPressed: () {
                                           Navigator.of(context)
@@ -101,20 +114,6 @@ class ProductScreenDetail extends StatelessWidget {
                                               fontSize: 12,
                                               color: Colors.white),
                                         )),
-                                    ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .secondary),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text(
-                                          "متابعة التسوق",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white),
-                                        ))
                                   ],
                                 ),
                               ],

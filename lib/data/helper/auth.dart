@@ -27,6 +27,7 @@ class Auth {
       try {
         final user = await auth.signInWithCredential(credential);
         if (user.additionalUserInfo!.isNewUser) {
+          
           await FirebaseFirestore.instance
               .collection("users")
               .doc(user.user!.uid)

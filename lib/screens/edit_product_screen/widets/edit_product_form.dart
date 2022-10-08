@@ -125,7 +125,6 @@ class EditProductFrom extends StatelessWidget {
                     onSaved: (newValue) {
                       formData['title'] = newValue;
                     },
-                    textAlign: TextAlign.end,
                     decoration: formInputDecortion("اسم المنتج", context),
                   )),
               Container(
@@ -145,7 +144,6 @@ class EditProductFrom extends StatelessWidget {
                       formData['discription'] = newValue;
                     },
                     scrollController: ScrollController(),
-                    textAlign: TextAlign.end,
                     decoration: formInputDecortion("الوصف", context),
                     maxLines: 2,
                     keyboardType: TextInputType.multiline,
@@ -155,7 +153,6 @@ class EditProductFrom extends StatelessWidget {
                 height: 80,
                 margin: const EdgeInsets.only(top: 20),
                 child: Row(
-                  textDirection: TextDirection.rtl,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -163,7 +160,6 @@ class EditProductFrom extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 10, left: 30),
                       child: const Text(
                         "النوع",
-                        textAlign: TextAlign.end,
                       ),
                     ),
                     Expanded(
@@ -200,13 +196,11 @@ class EditProductFrom extends StatelessWidget {
                     onSaved: (newValue) {
                       formData['subType'] = newValue;
                     },
-                    textAlign: TextAlign.end,
                     decoration: formInputDecortion("النوع الفرعي", context),
                   )),
               Container(
                 margin: const EdgeInsets.only(top: 30, bottom: 10),
                 child: Row(
-                  textDirection: TextDirection.rtl,
                   children: [
                     Container(
                         margin: const EdgeInsets.only(right: 10),
@@ -286,7 +280,6 @@ InputDecoration formInputDecortion(
       margin: const EdgeInsets.only(right: 5),
       child: Text(
         label,
-        textAlign: TextAlign.end,
       ),
     ),
     focusColor: Colors.black,
