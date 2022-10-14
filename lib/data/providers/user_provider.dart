@@ -11,6 +11,16 @@ class UserData with ChangeNotifier {
   bool? isAdmin;
   String? photoUrl;
 
+  void clearData() {
+    id = null;
+    displayName = null;
+    email = null;
+    phoneNumber = null;
+    isAdmin = null;
+    photoUrl = null;
+    location = null;
+  }
+
   Future fetchUserDataAsync() async {
     final userData = await FirebaseFirestore.instance
         .collection("users")

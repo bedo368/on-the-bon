@@ -96,10 +96,11 @@ class MyApp extends StatelessWidget {
         locale: const Locale('ar', 'AE'),
         title: 'Flutter Demo',
         theme: ThemeData(
+                appBarTheme: AppBarTheme(
+                    backgroundColor: Theme.of(context).primaryColor),
                 textTheme: const TextTheme(
                     bodyText1: TextStyle(fontSize: 22, color: Colors.white)),
-                scaffoldBackgroundColor:
-                    const Color.fromARGB(255, 252, 255, 252),
+                scaffoldBackgroundColor: const Color.fromARGB(255, 230, 255, 247),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
                         textStyle: GoogleFonts.itim(fontSize: 18))),

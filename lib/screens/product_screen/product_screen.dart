@@ -21,6 +21,7 @@ class ProductScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
         body: ChangeNotifierProvider.value(
           value: product,
           child: CustomScrollView(

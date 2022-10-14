@@ -30,18 +30,18 @@ class _ProductCardState extends State<ProductCard> {
               BoxShadow(
                 
                 color: Theme.of(context).primaryColor.withOpacity(0.4),
-                spreadRadius: .02,
+                spreadRadius: 1,
                 
 
-                blurRadius: 5,
-                offset: const Offset(1, 1), // changes position of shadow
+                blurRadius: 16,
+                offset: const Offset(12, 12), // changes position of shadow
               ),
-               BoxShadow(
-                color: Theme.of(context).primaryColor.withOpacity(0.4),
-                spreadRadius: .02,
+               const BoxShadow(
+                color: Colors.white,
+                spreadRadius: 1,
 
-                blurRadius: 5,
-                offset: const Offset(-.1, 1), // changes position of shadow
+                blurRadius: 16,
+                offset: Offset(-12, -12), // changes position of shadow
               ),
             ],
           ),

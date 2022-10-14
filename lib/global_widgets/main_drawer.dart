@@ -97,7 +97,7 @@ class _MainDrawerState extends State<MainDrawer> {
             ListTile(
                 onTap: () async {
                   Provider.of<Products>(context, listen: false).clearProducts();
-                  await Auth.signOut();
+                  await Auth.signOut(context);
                 },
                 title: Text(
                   "تسجيل الخروج",

@@ -15,11 +15,13 @@ class ProdcutsFiltterByType extends StatefulWidget {
 class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return ValueListenableBuilder<ProductsTypeEnum>(
         valueListenable: HomeScreen.productType,
         builder: (context, v, c) {
           return SizedBox(
-            width: MediaQuery.of(context).size.width,
+            width: mediaQuery.size.width,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +32,6 @@ class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [

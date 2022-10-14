@@ -30,55 +30,60 @@ class _TypeElementState extends State<TypeElement> {
   @override
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      textDirection: TextDirection.rtl,
-      alignment: AlignmentDirectional.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            final productData = Provider.of<Products>(context, listen: false);
-            if (HomeScreen.productType.value !=
-                productsStringToType[types[widget.index]]) {
-              HomeScreen.productType.value =
-                  productsStringToType[types[widget.index]] as ProductsTypeEnum;
-              productData.setType(productsStringToType[types[widget.index]]
-                  as ProductsTypeEnum);
-              if (isSelectedInput != null) {
-                setState(() {
-                  isSelectedInput!.value = HomeScreen.productType.value ==
-                          productsStringToType[types[widget.index]]
-                      ? true
-                      : false;
-                });
+    return Container(
+      
+      padding: const EdgeInsets.only(bottom: 3),
+      child: Stack(
+        textDirection: TextDirection.rtl,
+        alignment: AlignmentDirectional.center,
+        children: [
+          GestureDetector(
+            onTap: () {
+              final productData = Provider.of<Products>(context, listen: false);
+              if (HomeScreen.productType.value !=
+                  productsStringToType[types[widget.index]]) {
+                HomeScreen.productType.value =
+                    productsStringToType[types[widget.index]] as ProductsTypeEnum;
+                productData.setType(productsStringToType[types[widget.index]]
+                    as ProductsTypeEnum);
+                if (isSelectedInput != null) {
+                  setState(() {
+                    isSelectedInput!.value = HomeScreen.productType.value ==
+                            productsStringToType[types[widget.index]]
+                        ? true
+                        : false;
+                  });
+                }
               }
-            }
-          },
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 40,
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(40),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  color: widget.v == productsStringToType[types[widget.index]]
-                      ? Theme.of(context).colorScheme.secondary
-                      : const Color.fromARGB(255, 224, 223, 223),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Center(
-                      child: Text(
-                        types[widget.index],
-                        style: TextStyle(
-                            color: widget.v ==
-                                    productsStringToType[types[widget.index]]
-                                ? Colors.white
-                                : Colors.black,
-                            fontSize: 15),
+            },
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                
+                height: 40,
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 500),
+                    color: widget.v == productsStringToType[types[widget.index]]
+                        ? Theme.of(context).colorScheme.secondary
+                        : const Color.fromARGB(255, 224, 223, 223),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Center(
+                        child: Text(
+                          types[widget.index],
+                          style: TextStyle(
+                              color: widget.v ==
+                                      productsStringToType[types[widget.index]]
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 15),
+                        ),
                       ),
                     ),
                   ),
@@ -86,15 +91,15 @@ class _TypeElementState extends State<TypeElement> {
               ),
             ),
           ),
-        ),
-        GestureDetector(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-                width: 50, height: 50, child: Floatingsky(index: widget.index)),
+          GestureDetector(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                  width: 50, height: 50, child: Floatingsky(index: widget.index)),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

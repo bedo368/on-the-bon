@@ -9,6 +9,7 @@ class ProductsFillterBySubType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final subTypes = Provider.of<Products>(context).getSupTypes;
+    final mediaQuery = MediaQuery.of(context);
     subType.value =
         Provider.of<Products>(context, listen: false).currentSubType;
     return SingleChildScrollView(
@@ -21,7 +22,7 @@ class ProductsFillterBySubType extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: mediaQuery.size.width,
               child: Center(
                 child: ListView.builder(
                   primary: false,

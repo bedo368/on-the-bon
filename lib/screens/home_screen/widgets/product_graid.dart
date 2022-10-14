@@ -17,8 +17,6 @@ class _ProductGraidState extends State<ProductGraid> {
   double topContainer = 0;
   @override
   void initState() {
-    // TODO: implement initState
-
     gridController.addListener(() {
       double value = gridController.offset / 310;
       HomeScreen.isProductHomeScreenGridScroll.value =
@@ -44,10 +42,10 @@ class _ProductGraidState extends State<ProductGraid> {
             duration: const Duration(milliseconds: 200),
             switchInCurve: Curves.easeIn,
             child: Container(
-              constraints: BoxConstraints(
-                  minHeight: 500,
-                  maxHeight: MediaQuery.of(context).size.height),
-              key: ValueKey(productList.first.imageUrl),
+              // constraints: BoxConstraints(
+              //     minHeight: 500,
+              //     maxHeight: mediaQuery.size.height),
+              key: ValueKey(productList.first.id),
               child: productList.isEmpty
                   ? const Center(
                       child: Text("عذرا المنتجات غير متاحه الان"),
@@ -69,10 +67,6 @@ class _ProductGraidState extends State<ProductGraid> {
                           } else if (scale > 1) {
                             scale = 1;
                             opacity = 1;
-                          }
-
-                          if (index == topContainer.toInt() + 1) {
-                            scale = 1.05;
                           }
                         }
 

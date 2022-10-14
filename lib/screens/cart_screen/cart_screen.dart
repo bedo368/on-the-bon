@@ -14,46 +14,49 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartData = Provider.of<Cart>(context);
 
-    return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        bottomNavigationBar: ButtomNavigationBar(
-          routeName: CartScreen.routeName,
-        ),
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const Text(
-                "عربة التسوق",
-                textAlign: TextAlign.center,
-              )),
-        ),
-        body: cartData.cartItems.isNotEmpty
-            ? SingleChildScrollView(
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          extendBody: true,
+          bottomNavigationBar: ButtomNavigationBar(
+            routeName: CartScreen.routeName,
+          ),
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            title: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: const Text(
+                  "عربة التسوق",
+                  textAlign: TextAlign.center,
+                )),
+          ),
+          body: cartData.cartItems.isNotEmpty
+              ? SingleChildScrollView(
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 80),
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (cartData.cartItems.isNotEmpty) const CartGraid(),
+                          const CartScreenBottom(),
+                        ],
+                      ))),
+                )
+              : SingleChildScrollView(
                 child: Container(
-                    margin: const EdgeInsets.only(bottom: 80),
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if (cartData.cartItems.isNotEmpty) const CartGraid(),
-                        const CartScreenBottom(),
-                      ],
-                    ))),
-              )
-            : SingleChildScrollView(
-              child: Container(
-                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height ),
-                child: const Center(
-                  child: IconGif(
-                      width: 150,
-                      content: "العربه فارغه قم بملئها من فضلك",
-                      iconPath: "assets/images/emptycart.gif"),
+                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height ),
+                  child: const Center(
+                    child: IconGif(
+                        width: 150,
+                        content: "العربه فارغه قم بملئها من فضلك",
+                        iconPath: "assets/images/emptycart.gif"),
+                  ),
                 ),
               ),
-            ),
+        ),
       ),
     );
   }

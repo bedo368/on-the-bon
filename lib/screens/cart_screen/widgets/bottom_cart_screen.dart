@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/data/helper/auth.dart';
@@ -292,7 +294,42 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                 onPressed: value
                     ? null
                     : () async {
-                        await submitOrder();
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return BackdropFilter(
+                                filter:
+                                    ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                child: AlertDialog(
+                                  title: const Text("تاكيد الطلب "),
+                                  content: Text(
+                                      "هل تريد تأكيد الطلب سيتم التواصل معك علي رقم $phoneNumber للتاكيد علي العنوان وطريقه الاستلام"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          "الغاء",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w200,
+                                              color: Colors.grey),
+                                        )),
+                                    TextButton(
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                          await submitOrder();
+                                        },
+                                        child: const Text(
+                                          "تاكيد",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
+                                        )),
+                                  ],
+                                ),
+                              );
+                            });
                       },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -320,8 +357,7 @@ InputDecoration cartInput(String label) {
           const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 20),
       fillColor: const Color.fromARGB(255, 247, 244, 244),
       filled: true,
-      hintText: label,
-      hintTextDirection: TextDirection.rtl,
+      labelText: label,
       border: const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         borderSide: BorderSide(color: Colors.white),

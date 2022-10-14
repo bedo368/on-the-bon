@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
+import 'package:on_the_bon/data/providers/user_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
+import 'package:on_the_bon/screens/edit_product_screen/edit_product_screen.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_size.dart';
 import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/screens/product_screen/widgets/product_body_list.dart/product_sceen_detail_widgets/product_discription.dart';
@@ -21,12 +23,8 @@ class ProductScreenDetail extends StatelessWidget {
     ProductSize.selectedSize.value = product.sizePrice.keys.first;
     return SliverList(
         delegate: SliverChildListDelegate([
-      Container(
-        constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height * .7,
-            ),
+      SizedBox(
         width: MediaQuery.of(context).size.width,
-        color: Theme.of(context).primaryColor,
         child: Column(
           children: [
             ProductType(
@@ -130,7 +128,15 @@ class ProductScreenDetail extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
+            if (Provider.of<UserData>(context, listen: false).isAdmin == true)
+              TextButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(EditProductScreen.routeName,
+                        arguments: {"id": product.id});
+                  },
+                  icon: const Icon(Icons.edit),
+                  label: const Text("تعديل المنتج"))
           ],
         ),
       )

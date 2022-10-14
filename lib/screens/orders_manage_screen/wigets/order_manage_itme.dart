@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:on_the_bon/data/models/order.dart';
 import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 
-import 'package:on_the_bon/data/models/order.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
+import 'package:on_the_bon/global_widgets/dvider_with_text.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 
@@ -39,19 +41,33 @@ class _OrderManageItemState extends State<OrderManageItem> {
     super.initState();
   }
 
+  get timeDetailcreate => intl.DateFormat("a").format(widget.order.createdAt);
+
+  get timeDetailForconfirm =>
+      intl.DateFormat("a").format(widget.order.deliverdAt!);
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Card(
-        color: Theme.of(context).colorScheme.secondary,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(.5),
+              offset: const Offset(3, 3),
+              blurRadius: 5)
+        ],
+        color: Colors.white,
+      ),
+      margin: const EdgeInsets.only(bottom: 30),
+      child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
           child: Column(
             children: [
               if (userDataLoading)
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                   child: Row(
                     textDirection: TextDirection.rtl,
                     children: [
@@ -74,62 +90,102 @@ class _OrderManageItemState extends State<OrderManageItem> {
                     ],
                   ),
                 ),
+              Container(
+                  margin: const EdgeInsets.only(top: 5, right: 14),
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    "رقم الطلب : ${widget.order.id}",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontSize: 15,
+                    ),
+                  )),
+              Container(
+                  margin: const EdgeInsets.only(top: 5, right: 14),
+                  width: MediaQuery.of(context).size.width,
+                  child: const Text(
+                    "قائمه المشتريات",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  )),
               ListView.builder(
                 primary: false,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return Center(
                     child: Container(
-                      margin: const EdgeInsets.only(right: 5),
-                      child: Row(
-                        textDirection: TextDirection.rtl,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.order.ordersItems[index].title,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          const Text(
-                            " / ",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            widget.order.ordersItems[index].size,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          const Text(
-                            " : ",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            widget.order.ordersItems[index].price
-                                .toInt()
-                                .toString(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          const Text(
-                            " * ",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            widget.order.ordersItems[index].quantity
-                                .toInt()
-                                .toString(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          const Text(
-                            " = ",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            "${widget.order.ordersItems[index].quantity.toInt() * widget.order.ordersItems[index].price.toInt()}",
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          const Text(
-                            "جنيه ",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                      margin: const EdgeInsets.only(right: 2, bottom: 15),
+                      child: Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(.5),
+                              offset: const Offset(3, 3),
+                              blurRadius: 5)
+                        ], color: Colors.white),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    height: 70,
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl: widget
+                                          .order.ordersItems[index].imageUrl,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    color: Theme.of(context).primaryColor,
+                                    child: Text(
+                                      widget.order.ordersItems[index].title,
+                                      style: const TextStyle(
+                                          fontSize: 15, color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(right: 15),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "السعر : ${widget.order.ordersItems[index].price}"),
+                                  Text(
+                                      "الكميه : ${widget.order.ordersItems[index].quantity}"),
+                                  Text(
+                                      "الحجم : ${widget.order.ordersItems[index].size}")
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(right: 15, left: 5),
+                              width: 1,
+                              color: Colors.black,
+                              height: 80,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(right: 15),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text("الاجمالي"),
+                                  Text(
+                                      "${widget.order.ordersItems[index].quantity * widget.order.ordersItems[index].price} جنيها "),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -137,13 +193,11 @@ class _OrderManageItemState extends State<OrderManageItem> {
                 itemCount: widget.order.ordersItems.length,
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * .6,
-                child: const Center(
-                  child: Divider(
-                    color: Colors.white,
-                    thickness: 2,
-                    height: 20,
-                  ),
+                width: MediaQuery.of(context).size.width * .8,
+                child: const DviderWithText(
+                  text: "معلومات الطلب",
+                  thickness: 2,
+                  color: Colors.black,
                 ),
               ),
               Container(
@@ -151,8 +205,7 @@ class _OrderManageItemState extends State<OrderManageItem> {
                 width: MediaQuery.of(context).size.width,
                 child: Text(
                   "العنوان  : ${widget.order.location}",
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.end,
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
               Container(
@@ -160,17 +213,15 @@ class _OrderManageItemState extends State<OrderManageItem> {
                 width: MediaQuery.of(context).size.width,
                 child: Text(
                   "رقم الهاتف  : ${widget.order.phoneNumber}",
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.end,
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(right: 10),
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  "وقت الانشاء :    ${intl.DateFormat('MM/dd    الوقت hh:mm').format(widget.order.createdAt)}   ",
-                  style: const TextStyle(color: Colors.white, fontSize: 15),
-                  textAlign: TextAlign.end,
+                  "وقت الانشاء :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailcreate == "AM" ? "صباحا" : "مسائا"}').format(widget.order.createdAt)}   ",
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
               if (widget.order.deliverdAt != null)
@@ -178,9 +229,8 @@ class _OrderManageItemState extends State<OrderManageItem> {
                   margin: const EdgeInsets.only(right: 10),
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    "وقت التاكيد :    ${intl.DateFormat('MM/dd    الوقت hh:mm').format(widget.order.deliverdAt!)}   ",
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
-                    textAlign: TextAlign.end,
+                    "وقت التاكيد :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailForconfirm == "AM" ? "صباحا" : "مسائا"} ').format(widget.order.deliverdAt!)}   ",
+                    style: const TextStyle(fontSize: 15),
                   ),
                 ),
               Container(
@@ -188,13 +238,17 @@ class _OrderManageItemState extends State<OrderManageItem> {
                 width: MediaQuery.of(context).size.width,
                 child: Text(
                   "الاجمالي :    ${widget.order.totalPrice} جنيها   +   خدمة التوصيل",
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w800),
                 ),
               ),
+             
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green),
                       onPressed: () async {
                         showConfirmDialog(
                             content:
@@ -214,9 +268,11 @@ class _OrderManageItemState extends State<OrderManageItem> {
                       },
                       child: const Text(
                         "طلب ناجح",
-                        style: TextStyle(color: Colors.amber),
+                        style: TextStyle(color: Colors.white),
                       )),
-                  TextButton(
+                  ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     onPressed: () async {
                       showConfirmDialog(
                           content:
@@ -236,7 +292,7 @@ class _OrderManageItemState extends State<OrderManageItem> {
                     },
                     child: const Text(
                       "طلب مرفوض",
-                      style: TextStyle(color: Colors.amber),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

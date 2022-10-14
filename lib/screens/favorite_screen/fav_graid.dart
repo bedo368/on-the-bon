@@ -17,8 +17,6 @@ class _ProductGraidState extends State<ProductGraid> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
     gridController.addListener(() {
       double value = gridController.offset / 310;
 
@@ -37,7 +35,7 @@ class _ProductGraidState extends State<ProductGraid> {
 
         return Column(
           children: [
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height,
               child: ListView.builder(
                 controller: gridController,
@@ -49,8 +47,8 @@ class _ProductGraidState extends State<ProductGraid> {
                   double opacity = 1;
 
                   if (topContainer > .5) {
-                    scale = index + 1.3 - topContainer;
-                    opacity = index + 1.3 - topContainer;
+                    scale = index + 1.35 - topContainer;
+                    opacity = index + 1.35 - topContainer;
 
                     if (scale < 0) {
                       scale = 0;
@@ -58,10 +56,6 @@ class _ProductGraidState extends State<ProductGraid> {
                     } else if (scale > 1) {
                       scale = 1;
                       opacity = 1;
-                    }
-
-                    if (index == topContainer.toInt() + 1) {
-                      scale = 1.05;
                     }
                   }
                   return Container(

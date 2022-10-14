@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:on_the_bon/data/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class Auth {
   static signInWithGoogle(BuildContext context) async {
@@ -27,7 +29,6 @@ class Auth {
       try {
         final user = await auth.signInWithCredential(credential);
         if (user.additionalUserInfo!.isNewUser) {
-          
           await FirebaseFirestore.instance
               .collection("users")
               .doc(user.user!.uid)
@@ -297,10 +298,12 @@ class Auth {
   //   await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   // }
 
-  static signOut() async {
+  static signOut(BuildContext context) async {
+    Provider.of<UserData>(context, listen: false).clearData();
     await FirebaseAuth.instance.signOut();
     final fcm = FirebaseMessaging.instance;
     await fcm.getToken();
-    fcm.unsubscribeFromTopic("Admin");
+    await fcm.unsubscribeFromTopic("Admin");
+    // ignore: use_build_context_synchronously
   }
 }

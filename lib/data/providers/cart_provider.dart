@@ -29,7 +29,7 @@ class Cart with ChangeNotifier {
     required String type,
     required String size,
     double quntity = 1,
-  }) {
+  }) async {
     String itemkey = "";
     _items.forEach(
       (key, value) {

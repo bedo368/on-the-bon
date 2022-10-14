@@ -76,6 +76,8 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
+  
+
   String get getCurrentType {
     return _currentType;
   }
@@ -185,7 +187,7 @@ class Products with ChangeNotifier {
         url = await ref.getDownloadURL();
       }
 
-      await db.collection("products").doc(product.id).set({
+      await db.collection("products").doc(product.id).update({
         "title": product.title,
         "discription": product.discription,
         "type": product.type,
@@ -204,6 +206,21 @@ class Products with ChangeNotifier {
         imageUrl: url,
       );
       types[product.type]!.putIfAbsent(product.subType, () => product.subType);
+
+      // int numOfSubtype = 0;
+      // for (Product p in _productList.values) {
+      //   if (p.type == previousType) {
+      //     if (p.subType == previousSubType) {
+      //       numOfSubtype += 1;
+      //     }
+      //   }
+      // }
+      // if (numOfSubtype == 0) {
+      //   if (types[previousType]!.containsKey(previousSubType)) {
+      //     types[previousType]!.remove(previousSubType);
+      //   }
+      // }
+
       notifyListeners();
     } catch (e) {
       rethrow;

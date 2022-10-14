@@ -79,6 +79,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     final ordersData = Provider.of<Orders>(context);
     return SafeArea(
       child: Scaffold(
@@ -91,7 +92,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           title: const Text(
             "قائمه طلباتي",
           ),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: isLoading
             ? const Center(
@@ -108,7 +109,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           fetchOrderFunction: fetchOrders,
                         ),
                         Container(
-                            width: MediaQuery.of(context).size.width * .9,
+                            width: mediaQuery.size.width * .9,
                             margin: const EdgeInsets.only(top: 40),
                             child: ordersData.orders.isNotEmpty
                                 ? ListView.builder(
