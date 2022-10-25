@@ -48,6 +48,13 @@ class _FloatingskyState extends State<Floatingsky> {
   }
 
   @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     SMITrigger? isClickedTriger;
     SMIInput<bool>? isSleepy;

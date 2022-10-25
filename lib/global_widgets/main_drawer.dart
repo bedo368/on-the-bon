@@ -6,6 +6,7 @@ import 'package:on_the_bon/data/providers/user_provider.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
+import 'package:on_the_bon/screens/send_notification_screen/send_notification_screen.dart';
 import 'package:provider/provider.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -94,6 +95,17 @@ class _MainDrawerState extends State<MainDrawer> {
                   textAlign: TextAlign.end,
                   style: TextStyle(color: Theme.of(context).primaryColor),
                 )),
+            if (userData.isAdmin == true)
+              ListTile(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(SendNotificationScreen.routeName);
+                  },
+                  title: Text(
+                    "ارسال اشعار",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  )),
             ListTile(
                 onTap: () async {
                   Provider.of<Products>(context, listen: false).clearProducts();

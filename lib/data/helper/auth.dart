@@ -28,7 +28,22 @@ class Auth {
 
       try {
         final user = await auth.signInWithCredential(credential);
+
+        
+        if (!user.additionalUserInfo!.isNewUser) {
+          final fcm = FirebaseMessaging.instance;
+          final deviceNotificationId = await fcm.getToken();
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.user!.uid)
+              .update({
+            "deviceNotificationId": deviceNotificationId,
+          });
+        }
+
         if (user.additionalUserInfo!.isNewUser) {
+          final fcm = FirebaseMessaging.instance;
+          final deviceNotificationId = await fcm.getToken();
           await FirebaseFirestore.instance
               .collection("users")
               .doc(user.user!.uid)
@@ -38,6 +53,7 @@ class Auth {
             "phoneNumber": user.user!.phoneNumber,
             "photoURL": user.user!.photoURL,
             "creationTime": user.user!.metadata.creationTime,
+            "deviceNotificationId": deviceNotificationId,
             "isAdmin": false
           });
         }

@@ -29,6 +29,13 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
   }
 
   @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final productData = Provider.of<Products>(context);
     return SafeArea(

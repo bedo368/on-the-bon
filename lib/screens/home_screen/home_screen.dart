@@ -9,6 +9,7 @@ import 'package:on_the_bon/main.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/product_graid.dart';
+import 'package:on_the_bon/service/manage_notification.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
@@ -31,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    NotificationApi.requestPermission();
+
     setState(() {
       isLoading = true;
     });
@@ -78,6 +81,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
 
     super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override
@@ -166,7 +176,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     duration: const Duration(milliseconds: 200),
                                     opacity: v ? 0 : 1,
                                     child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 200),
+                                      duration:
+                                          const Duration(milliseconds: 200),
                                       width: size.width,
                                       height: v ? 0 : 280,
                                       child: FittedBox(
@@ -186,7 +197,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                         .size
                                                         .width *
                                                     .3,
-                                                child: const RiveAnimation.asset(
+                                                child:
+                                                    const RiveAnimation.asset(
                                                   "assets/animation/logo_animation.riv",
                                                   fit: BoxFit.cover,
                                                 ),
@@ -204,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     ),
                                   );
                                 }),
-    
+
                             // ProductTypeNotifier(),
                             const Flexible(child: ProductGraid()),
                           ],
@@ -217,7 +229,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: const SingleChildScrollView(
                       child: IconGif(
                         width: 150,
-                        content: " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
+                        content:
+                            " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
                         iconPath: "assets/images/connection-error.gif",
                       ),
                     ),

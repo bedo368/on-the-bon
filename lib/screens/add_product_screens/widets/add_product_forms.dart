@@ -312,7 +312,6 @@ InputDecoration formInputDecortion(
   return InputDecoration(
     contentPadding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
     fillColor: const Color.fromARGB(255, 247, 243, 243),
-    floatingLabelAlignment: FloatingLabelAlignment.center,
     labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
     filled: true,
     label: Container(

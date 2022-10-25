@@ -14,7 +14,7 @@ class Products with ChangeNotifier {
   String _currentType = "";
   String _currentSubType = "";
   final userFavoriteId = {};
-  final _userFavorite = {};
+  final Map<String, Product> _userFavorite = {};
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   List<Product> get allProducts {
@@ -44,15 +44,20 @@ class Products with ChangeNotifier {
       userFavoriteId.remove(id);
       _userFavorite.remove(id);
     } else if (!userFavoriteId.containsKey(id)) {
-      userFavoriteId.putIfAbsent(id, () => _productList[id]);
-      _userFavorite.putIfAbsent(id, () => _productList[id]);
+      if (_productList.containsKey(id)) {
+        userFavoriteId.putIfAbsent(id, () => _productList[id]);
+
+        _userFavorite.putIfAbsent(id, () => _productList[id]!);
+      }
     }
     notifyListeners();
   }
 
   List<Product> get getFavProducts {
     if (_userFavorite.values.isNotEmpty && _productList.isNotEmpty) {
-      return [..._userFavorite.values];
+      return [
+        ..._userFavorite.values.where((e) => _productList.containsKey(e.id))
+      ];
     }
     return [];
   }
@@ -75,8 +80,6 @@ class Products with ChangeNotifier {
     _currentSubType = types[_currentType]!.values.first;
     notifyListeners();
   }
-
-  
 
   String get getCurrentType {
     return _currentType;
@@ -127,8 +130,10 @@ class Products with ChangeNotifier {
     if (user.data()!.keys.contains("faivorites")) {
       for (var element in (user.data()!["faivorites"] as List)) {
         userFavoriteId.putIfAbsent(element, () => element);
-        _productList[element]!.isFav = true;
-        _userFavorite.putIfAbsent(element, () => _productList[element]);
+        if (_productList.containsKey(element)) {
+          _productList[element]!.isFav = true;
+          _userFavorite.putIfAbsent(element, () => _productList[element]!);
+        }
       }
     }
     notifyListeners();

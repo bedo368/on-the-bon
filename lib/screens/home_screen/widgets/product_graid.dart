@@ -29,6 +29,13 @@ class _ProductGraidState extends State<ProductGraid> {
   }
 
   @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<Products>(
       builder: (context, value, c) {

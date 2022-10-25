@@ -5,10 +5,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:on_the_bon/data/helper/subscribe_to_admin.dart';
+import 'package:on_the_bon/data/helper/subscribe_to_topic.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
@@ -22,7 +21,9 @@ import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
 import 'package:on_the_bon/screens/product_screen/product_screen.dart';
+import 'package:on_the_bon/screens/send_notification_screen/send_notification_screen.dart';
 import 'package:on_the_bon/screens/sign_screen/sign_screen.dart';
+import 'package:on_the_bon/service/manage_notification.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -31,30 +32,11 @@ void main() async {
   await Firebase.initializeApp();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'high_importance_channel', // id
-      'High Importance Notifications', // title
+  await messaging.getInitialMessage();
 
-      importance: Importance.max,
-      sound: RawResourceAndroidNotificationSound("notification"));
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  await NotificationApi.setUpMainNotificationChannel();
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  await messaging.requestPermission(
-    alert: true,
-    announcement: true,
-    badge: true,
-    carPlay: true,
-    criticalAlert: true,
-    provisional: true,
-    sound: true,
-  );
-
+  await NotificationApi.requestPermission();
   await FirebaseAppCheck.instance.activate();
 
   runApp(const MyApp());
@@ -100,7 +82,8 @@ class MyApp extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor),
                 textTheme: const TextTheme(
                     bodyText1: TextStyle(fontSize: 22, color: Colors.white)),
-                scaffoldBackgroundColor: const Color.fromARGB(255, 230, 255, 247),
+                scaffoldBackgroundColor:
+                    const Color.fromARGB(255, 230, 255, 247),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
                         textStyle: GoogleFonts.itim(fontSize: 18))),
@@ -112,7 +95,9 @@ class MyApp extends StatelessWidget {
           stream: auth.FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (firstOpen) {
-              subscreibToAdmin();
+              SubscribeToNotificationTopic.subscreibToAdmin();
+              SubscribeToNotificationTopic.subscreibToUsers();
+
             }
             if (snapshot.hasData) {
               return const HomeScreen();
@@ -141,6 +126,8 @@ class MyApp extends StatelessWidget {
           ProductManageScreen.routeName: (context) =>
               const ProductManageScreen(),
           FaivoriteScreen.routeName: (context) => const FaivoriteScreen(),
+          SendNotificationScreen.routeName: (context) => const SendNotificationScreen(),
+
         },
       ),
     );
