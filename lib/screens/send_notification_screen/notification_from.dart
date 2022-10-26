@@ -3,34 +3,74 @@ import 'package:on_the_bon/global_widgets/image_picker.dart';
 import 'package:on_the_bon/screens/add_product_screens/widets/add_product_forms.dart';
 import 'package:on_the_bon/service/manage_notification.dart';
 
-class NotificationForm extends StatelessWidget {
+class NotificationForm extends StatefulWidget {
   const NotificationForm({
     Key? key,
   }) : super(key: key);
 
   static GlobalKey<FormState> formKey = GlobalKey();
+
+  @override
+  State<NotificationForm> createState() => _NotificationFormState();
+}
+
+class _NotificationFormState extends State<NotificationForm> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> formData = {};
     Future<void> formSubmit() async {
-      formKey.currentState!.save();
+      NotificationForm.formKey.currentState!.save();
 
-      if (!formKey.currentState!.validate()) {
+      if (!NotificationForm.formKey.currentState!.validate()) {
         return;
       }
       try {
-        await NotificationApi.sendNotification(
-            title: formData["title"],
-            content: formData["content"],
-            image: formData["image"]);
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text("ارسال اشعار"),
+                  content: const Text(
+                      "هل انت متاكد من ارسال الاشعار ارسال الكثير من الاشعارت للعميل قد يؤدي الي تجربه سيئه مما قد يسبب مسح التطبيث"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("الغاء")),
+                    TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await NotificationApi.sendNotification(
+                              title: formData["title"],
+                              content: formData["content"],
+                              image: formData["image"]);
+                          setState(() {
+                            isLoading = false;
+                          });
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("تم ارسال الاشعار")));
+                        },
+                        child: const Text("متاكد")),
+                  ],
+                ));
       } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
         rethrow;
       }
     }
 
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      key: formKey,
+      key: NotificationForm.formKey,
       child: Column(
         children: [
           Container(
@@ -74,9 +114,12 @@ class NotificationForm extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsets.only(top: 40),
-            child: ImagePickerWedgit((pickedImagefn) {
-              formData["image"] = pickedImagefn;
-            }),
+            child: ImagePickerWedgit(
+              imageQulity: 30,
+              (pickedImagefn) {
+                formData["image"] = pickedImagefn;
+              },
+            ),
           ),
           Container(
             width: MediaQuery.of(context).size.width * .8,
@@ -87,7 +130,9 @@ class NotificationForm extends StatelessWidget {
                 backgroundColor: Colors.green,
               ),
               onPressed: formSubmit,
-              child: const Text("ارسال اشعار"),
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text("ارسال اشعار"),
             ),
           )
         ],

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerWedgit extends StatefulWidget {
@@ -8,28 +9,40 @@ class ImagePickerWedgit extends StatefulWidget {
     this.pickedImagefn, {
     Key? key,
     this.imageUrl,
+    required this.imageQulity,
   }) : super(key: key);
 
   final void Function(File pickedImage) pickedImagefn;
   final String? imageUrl;
   static File? imageHolder;
+  final int imageQulity;
 
   @override
   State<ImagePickerWedgit> createState() => _ImagePickerWedgitState();
 }
 
 class _ImagePickerWedgitState extends State<ImagePickerWedgit> {
-  dynamic _pickedImage;
+  late File _pickedImage = File("");
   void _pickImage() async {
     // ignore: invalid_use_of_visible_for_testing_member
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage!.path.isNotEmpty) {
-      setState(() {
-        _pickedImage = File(pickedImage.path);
-      });
-      widget.pickedImagefn(_pickedImage);
+    var pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery, imageQuality: widget.imageQulity);
+    if (pickedImage == null) {
+      return;
     }
+    var cropedIamge =
+        await ImageCropper.platform.cropImage(sourcePath: pickedImage.path);
+    if (cropedIamge == null) {
+      return;
+    }
+
+    setState(() {
+      _pickedImage = File(cropedIamge.path);
+    });
+
+
+    
+    widget.pickedImagefn(_pickedImage);
   }
 
   @override
@@ -54,8 +67,7 @@ class _ImagePickerWedgitState extends State<ImagePickerWedgit> {
         Column(
           children: [
             CircleAvatar(
-              backgroundImage:
-                  _pickedImage != null ? FileImage(_pickedImage) : null,
+              backgroundImage: FileImage(_pickedImage),
               radius: 20,
               backgroundColor: Colors.black,
             ),

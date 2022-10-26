@@ -207,6 +207,7 @@ class EditProductFrom extends StatelessWidget {
                         child: const Text("الصوره")),
                     Expanded(
                       child: ImagePickerWedgit(
+                        imageQulity: 100,
                         (pickedImage) {
                           ImagePickerWedgit.imageHolder = pickedImage;
 

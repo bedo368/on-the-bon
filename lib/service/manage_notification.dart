@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -50,11 +52,12 @@ class NotificationApi {
       await ref.putFile(image);
     }
 
-    final url =  image == null ? "" : await ref.getDownloadURL();
-    await FirebaseFirestore.instance
-        .collection("notifications")
-        .add({"title": title, "content": content, "imageUrl": url});
-
-    
+    final url = image == null ? "" : await ref.getDownloadURL();
+    await FirebaseFirestore.instance.collection("notifications").add({
+      "title": title,
+      "content": content,
+      "imageUrl": url,
+      "adminId": FirebaseAuth.instance.currentUser!.uid
+    });
   }
 }
