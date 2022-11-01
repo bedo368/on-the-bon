@@ -48,6 +48,7 @@ class _OrderManageItemState extends State<OrderManageItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width * .9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
         boxShadow: [
@@ -59,224 +60,197 @@ class _OrderManageItemState extends State<OrderManageItem> {
         color: Colors.white,
       ),
       margin: const EdgeInsets.only(bottom: 30),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-          child: Column(
-            children: [
-              if (userDataLoading)
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                  child: Row(
-                    textDirection: TextDirection.rtl,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: Image.network(
-                              userInfo["imageUrl"],
-                              fit: BoxFit.cover,
-                            )),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+        child: Column(
+          children: [
+            if (userDataLoading)
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                child: Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                            userInfo["imageUrl"],
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: Text(
+                        userInfo["name"],
+                        style: const TextStyle(color: Colors.amber),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: Text(
-                          userInfo["name"],
-                          style: const TextStyle(color: Colors.amber),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              Container(
-                  margin: const EdgeInsets.only(top: 5, right: 14),
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    "رقم الطلب : ${widget.order.id}",
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
-                  )),
-              Container(
-                  margin: const EdgeInsets.only(top: 5, right: 14),
-                  width: MediaQuery.of(context).size.width,
-                  child: const Text(
-                    "قائمه المشتريات",
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  )),
-              ListView.builder(
-                primary: false,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 2, bottom: 15),
-                      child: Container(
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(.5),
-                              offset: const Offset(3, 3),
-                              blurRadius: 5)
-                        ], color: Colors.white),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    height: 70,
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: widget
-                                          .order.ordersItems[index].imageUrl,
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    color: Theme.of(context).primaryColor,
-                                    child: Text(
-                                      widget.order.ordersItems[index].title,
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.white),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(right: 15),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      "السعر : ${widget.order.ordersItems[index].price}"),
-                                  Text(
-                                      "الكميه : ${widget.order.ordersItems[index].quantity}"),
-                                  Text(
-                                      "الحجم : ${widget.order.ordersItems[index].size}")
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(right: 15, left: 5),
-                              width: 1,
-                              color: Colors.black,
-                              height: 80,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(right: 15),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text("الاجمالي"),
-                                  Text(
-                                      "${widget.order.ordersItems[index].quantity * widget.order.ordersItems[index].price} جنيها "),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                itemCount: widget.order.ordersItems.length,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .8,
-                child: const DviderWithText(
-                  text: "معلومات الطلب",
-                  thickness: 2,
-                  color: Colors.black,
+                    )
+                  ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(right: 10),
+            Container(
+                margin: const EdgeInsets.only(top: 5, right: 14),
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  "العنوان  : ${widget.order.location}",
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "رقم الهاتف  : ${widget.order.phoneNumber}",
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "وقت الانشاء :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailcreate == "AM" ? "صباحا" : "مسائا"}').format(widget.order.createdAt)}   ",
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ),
-              if (widget.order.deliverdAt != null)
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    "وقت التاكيد :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailForconfirm == "AM" ? "صباحا" : "مسائا"} ').format(widget.order.deliverdAt!)}   ",
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                ),
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "الاجمالي :    ${widget.order.totalPrice} جنيها   +   خدمة التوصيل",
+                  "رقم الطلب : ${widget.order.id}",
+                  textAlign: TextAlign.start,
                   style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w800),
+                    fontSize: 15,
+                  ),
+                )),
+            Container(
+                margin: const EdgeInsets.only(top: 5, right: 14),
+                width: MediaQuery.of(context).size.width,
+                child: const Text(
+                  "قائمه المشتريات",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                )),
+            ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 2, bottom: 15),
+                    child: Container(
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(.5),
+                            offset: const Offset(3, 3),
+                            blurRadius: 5)
+                      ], color: Colors.white),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: 100,
+                                  height: 70,
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: widget
+                                        .order.ordersItems[index].imageUrl,
+                                  ),
+                                ),
+                                Container(
+                                  width: 100,
+                                  color: Theme.of(context).primaryColor,
+                                  child: Text(
+                                    widget.order.ordersItems[index].title,
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(right: 15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "السعر : ${widget.order.ordersItems[index].price}"),
+                                Text(
+                                    "الكميه : ${widget.order.ordersItems[index].quantity}"),
+                                Text(
+                                    "الحجم : ${widget.order.ordersItems[index].size}")
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(right: 15, left: 5),
+                            width: 1,
+                            color: Colors.black,
+                            height: 80,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(right: 15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text("الاجمالي"),
+                                Text(
+                                    "${widget.order.ordersItems[index].quantity * widget.order.ordersItems[index].price} جنيها "),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              itemCount: widget.order.ordersItems.length,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .8,
+              child: const DviderWithText(
+                text: "معلومات الطلب",
+                thickness: 2,
+                color: Colors.black,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                "العنوان  : ${widget.order.location}",
+                style: const TextStyle(fontSize: 15),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                "رقم الهاتف  : ${widget.order.phoneNumber}",
+                style: const TextStyle(fontSize: 15),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                "وقت الانشاء :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailcreate == "AM" ? "صباحا" : "مسائا"}').format(widget.order.createdAt)}   ",
+                style: const TextStyle(fontSize: 15),
+              ),
+            ),
+            if (widget.order.deliverdAt != null)
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  "وقت التاكيد :    ${intl.DateFormat('MM/dd    الوقت h:mm ${timeDetailForconfirm == "AM" ? "صباحا" : "مسائا"} ').format(widget.order.deliverdAt!)}   ",
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
-             
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green),
-                      onPressed: () async {
-                        showConfirmDialog(
-                            content:
-                                " هل انت متاكد اضافه الطلب الي الطلبات الناجحه",
-                            title: "تاكيد اضافه الطلب",
-                            confirmText: "تاكيد",
-                            cancelText: "الغاء",
-                            context: context,
-                            onConfirm: () async {
-                              await Provider.of<Orders>(context, listen: false)
-                                  .cahngeOrderType(
-                                      newtype: OrderTypeEnum.successfulOrder,
-                                      orderId: widget.order.id,
-                                      oldType: widget.order.orderType);
-                            },
-                            onCancel: () {});
-                      },
-                      child: const Text(
-                        "طلب ناجح",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                  ElevatedButton(
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                "الاجمالي :    ${widget.order.totalPrice} جنيها   +   خدمة التوصيل",
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
                     style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                        ElevatedButton.styleFrom(backgroundColor: Colors.green),
                     onPressed: () async {
                       showConfirmDialog(
                           content:
-                              " هل انت متاكد اضافه الطلب الي الطلبات المرفوضه",
+                              " هل انت متاكد اضافه الطلب الي الطلبات الناجحه",
                           title: "تاكيد اضافه الطلب",
                           confirmText: "تاكيد",
                           cancelText: "الغاء",
@@ -284,21 +258,43 @@ class _OrderManageItemState extends State<OrderManageItem> {
                           onConfirm: () async {
                             await Provider.of<Orders>(context, listen: false)
                                 .cahngeOrderType(
-                                    newtype: OrderTypeEnum.rejectedOrder,
+                                    newtype: OrderTypeEnum.successfulOrder,
                                     orderId: widget.order.id,
                                     oldType: widget.order.orderType);
                           },
                           onCancel: () {});
                     },
                     child: const Text(
-                      "طلب مرفوض",
+                      "طلب ناجح",
                       style: TextStyle(color: Colors.white),
-                    ),
+                    )),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () async {
+                    showConfirmDialog(
+                        content:
+                            " هل انت متاكد اضافه الطلب الي الطلبات المرفوضه",
+                        title: "تاكيد اضافه الطلب",
+                        confirmText: "تاكيد",
+                        cancelText: "الغاء",
+                        context: context,
+                        onConfirm: () async {
+                          await Provider.of<Orders>(context, listen: false)
+                              .cahngeOrderType(
+                                  newtype: OrderTypeEnum.rejectedOrder,
+                                  orderId: widget.order.id,
+                                  oldType: widget.order.orderType);
+                        },
+                        onCancel: () {});
+                  },
+                  child: const Text(
+                    "طلب مرفوض",
+                    style: TextStyle(color: Colors.white),
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

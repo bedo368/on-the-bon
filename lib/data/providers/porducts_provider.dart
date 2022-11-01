@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:on_the_bon/data/providers/product.dart';
-import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:on_the_bon/type_enum/types.dart';
 
 class Products with ChangeNotifier {
@@ -23,6 +22,7 @@ class Products with ChangeNotifier {
 
   List<Product> get getProductWithType {
     final List<Product> productWtihType = [];
+
     _productList.forEach((key, value) {
       if (value.type == _currentType) {
         if (value.subType == _currentSubType) {
@@ -62,23 +62,14 @@ class Products with ChangeNotifier {
     return [];
   }
 
-  void setType(ProductsTypeEnum type) {
-    if (type == ProductsTypeEnum.food) {
-      _currentType = "مأكولات";
-    } else if (type == ProductsTypeEnum.hotDrinks) {
-      _currentType = "مشروبات ساخنة";
-    } else if (type == ProductsTypeEnum.coldDrinks) {
-      _currentType = "مشروبات باردة";
-      notifyListeners();
-    }
-    if (!types.containsKey(productsTypeToString[type])) {
-      _currentType = productsTypeToString[type]!;
-      _currentSubType = "";
-      notifyListeners();
-      return;
-    }
-    _currentSubType = types[_currentType]!.values.first;
+  void setType(String type) {
+    _currentType = type;
+    _currentSubType = types[type]!.values.first;
+
     notifyListeners();
+
+   
+    
   }
 
   String get getCurrentType {
@@ -95,8 +86,12 @@ class Products with ChangeNotifier {
   }
 
   List<String> get getSupTypes {
+    if (_currentType == "") {
+      _currentType = types.keys.first;
+    }
     if (!types.containsKey(_currentType)) {
-      _currentSubType = "";
+      _currentSubType = types[_currentType]!.values.first;
+
       notifyListeners();
       return [];
     }

@@ -47,16 +47,7 @@ class _OrderManageScreenState extends State<OrderManageScreen> {
     final ordersData = Provider.of<Orders>(context);
     return Scaffold(
       drawer: const Drawer(),
-      appBar: AppBar(
-        title: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: const Text(
-            "قائمه طلباتي",
-            textAlign: TextAlign.end,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-      ),
+      
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

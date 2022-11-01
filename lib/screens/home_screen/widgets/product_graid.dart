@@ -2,43 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/Product_card/product_card.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
-import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 
-class ProductGraid extends StatefulWidget {
-  const ProductGraid({Key? key}) : super(key: key);
-
-  @override
-  State<ProductGraid> createState() => _ProductGraidState();
-}
-
-class _ProductGraidState extends State<ProductGraid> {
-  final ScrollController gridController = ScrollController();
-  double topContainer = 0;
-  @override
-  void initState() {
-    gridController.addListener(() {
-      double value = gridController.offset / 310;
-      HomeScreen.isProductHomeScreenGridScroll.value =
-          gridController.offset > 50;
-      setState(() {
-        topContainer = value;
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
+class ProductGraid extends StatelessWidget {
+  const ProductGraid({Key? key, required this.onScroll}) : super(key: key);
+  final Function(double) onScroll;
 
   @override
   Widget build(BuildContext context) {
+    final gridController = ScrollController();
+
     return Consumer<Products>(
       builder: (context, value, c) {
+        gridController.addListener(() {
+          onScroll(gridController.offset);
+        });
         final productList = value.getProductWithType;
 
         return AnimatedSwitcher(
@@ -59,41 +37,16 @@ class _ProductGraidState extends State<ProductGraid> {
                     )
                   : ListView.builder(
                       controller: gridController,
-                      // shrinkWrap: true,
+                     
                       itemBuilder: (context, index) {
-                        double scale = 1;
-                        double opacity = 1;
-
-                        if (topContainer > .5) {
-                          scale = index + 1.3 - topContainer;
-                          opacity = index + 1.3 - topContainer;
-
-                          if (scale < 0) {
-                            scale = 0;
-                            opacity = 0;
-                          } else if (scale > 1) {
-                            scale = 1;
-                            opacity = 1;
-                          }
-                        }
-
                         return Container(
                           margin: EdgeInsets.only(
-                              bottom:
-                                  index == productList.length - 1 ? 130 : 0),
-                          child: Opacity(
-                            opacity: opacity,
-                            child: Transform(
-                              alignment: Alignment.bottomCenter,
-                              transform: Matrix4.identity()
-                                ..scale(scale, scale),
-                              child: ChangeNotifierProvider.value(
-                                value: productList[index],
-                                child: ProductCard(
-                                  productList[index],
-                                  key: ValueKey(productList.first.id),
-                                ),
-                              ),
+                              bottom: index == productList.length - 1 ? 200 : 0),
+                          child: ChangeNotifierProvider.value(
+                            value: productList[index],
+                            child: ProductCard(
+                              productList[index],
+                              key: ValueKey(productList.first.id),
                             ),
                           ),
                         );

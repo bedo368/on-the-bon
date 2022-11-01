@@ -31,18 +31,28 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  await messaging.getInitialMessage();
+  NotificationApi.requestPermission();
 
-  await NotificationApi.setUpMainNotificationChannel();
+  NotificationApi.setUpMainNotificationChannel();
+  
+  
 
-  await NotificationApi.requestPermission();
+  FirebaseMessaging.onBackgroundMessage(
+      NotificationApi.handeleBackgroundNotification);
+  FirebaseMessaging.onMessage
+      .listen(NotificationApi.handeleForgroundNotification);
+  FirebaseMessaging.onMessageOpenedApp
+      .listen(NotificationApi.onNotificationOpenAPP);
+
   await FirebaseAppCheck.instance.activate();
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
   const MyApp({Key? key}) : super(key: key);
   static bool firstOpen = true;
 
@@ -66,6 +76,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => Orders()),
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         scrollBehavior: const CupertinoScrollBehavior(),
         localizationsDelegates: const [
           GlobalCupertinoLocalizations.delegate,
@@ -83,7 +94,7 @@ class MyApp extends StatelessWidget {
                 textTheme: const TextTheme(
                     bodyText1: TextStyle(fontSize: 22, color: Colors.white)),
                 scaffoldBackgroundColor:
-                    const Color.fromARGB(255, 230, 255, 247),
+                    const Color.fromARGB(255, 255, 255, 255),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
                         textStyle: GoogleFonts.itim(fontSize: 18))),
@@ -97,7 +108,6 @@ class MyApp extends StatelessWidget {
             if (firstOpen) {
               SubscribeToNotificationTopic.subscreibToAdmin();
               SubscribeToNotificationTopic.subscreibToUsers();
-
             }
             if (snapshot.hasData) {
               return const HomeScreen();
@@ -126,8 +136,8 @@ class MyApp extends StatelessWidget {
           ProductManageScreen.routeName: (context) =>
               const ProductManageScreen(),
           FaivoriteScreen.routeName: (context) => const FaivoriteScreen(),
-          SendNotificationScreen.routeName: (context) => const SendNotificationScreen(),
-
+          SendNotificationScreen.routeName: (context) =>
+              const SendNotificationScreen(),
         },
       ),
     );

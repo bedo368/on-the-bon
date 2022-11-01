@@ -2,32 +2,36 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:on_the_bon/main.dart';
+import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
 
 class NotificationApi {
-  final flutterNotificationPlugin = FlutterLocalNotificationsPlugin();
   static Future<void> requestPermission() async {
     await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: true,
-      badge: true,
-      carPlay: true,
-      criticalAlert: true,
-      provisional: true,
-      sound: true,
-    );
+        alert: true,
+        badge: true,
+        announcement: true,
+        carPlay: true,
+        criticalAlert: true,
+        provisional: true,
+        sound: true);
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+            alert: true, sound: true, badge: true);
   }
 
   static Future<void> setUpMainNotificationChannel() async {
-    // final androidINitiazize =
-    //     const AndroidInitializationSettings('@mipamp/ic_launcher');
+    final flutterNotificationPlugin = FlutterLocalNotificationsPlugin();
 
-    // final initializetionSettings =
-    //     InitializationSettings(android: androidINitiazize);
-    // flutterNotificationPlugin.initialize(initializetionSettings);
+    const androidINitiazize =
+        AndroidInitializationSettings('@mipamp/ic_launcher');
+
+    const initializetionSettings =
+        InitializationSettings(android: androidINitiazize);
+    flutterNotificationPlugin.initialize(initializetionSettings);
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
         'main_notification_channel', // id
         'main chennel', // title
@@ -59,5 +63,55 @@ class NotificationApi {
       "imageUrl": url,
       "adminId": FirebaseAuth.instance.currentUser!.uid
     });
+  }
+
+  static Future<void> handeleBackgroundNotification(
+      RemoteMessage message) async {}
+
+  static Future<void> handeleForgroundNotification(
+      RemoteMessage message) async {
+    final flutterNotificationPlugin = FlutterLocalNotificationsPlugin();
+
+    var initializationSettingsAndroid = const AndroidInitializationSettings(
+        'mipmap/ic_launcher'); // <- default icon name is @mipmap/ic_launcher
+
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    flutterNotificationPlugin.initialize(
+      initializationSettings,
+    );
+
+    RemoteNotification? notification = message.notification;
+    if (notification != null) {
+      flutterNotificationPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'main_notification_channel',
+              'main chennel',
+            ),
+          ));
+    }
+  }
+
+  static Future<void> onNotificationOpenAPP(RemoteMessage message) async {
+    if (message.notification == null) {
+      final message = await FirebaseMessaging.instance.getInitialMessage();
+
+      if (message == null) {
+        return;
+      }
+
+      if (message.data["type"] == "new Order") {
+        MyApp.navigatorKey.currentState!.pushNamed(OrderManageScreen.routeName);
+      }
+
+      return;
+    }
+    if (message.data["type"] == "new Order") {
+      MyApp.navigatorKey.currentState!.pushNamed(OrderManageScreen.routeName);
+    }
   }
 }

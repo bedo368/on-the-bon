@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/global_widgets/animated_widgets/animated_cart.dart';
+import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:provider/provider.dart';
 
 class BottomCard extends StatefulWidget {
@@ -50,7 +53,6 @@ class _BottomCardState extends State<BottomCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          
                           Text(
                             widget.title,
                             style: Theme.of(context).textTheme.bodyText1,
@@ -77,6 +79,58 @@ class _BottomCardState extends State<BottomCard> {
                                     imageUrl: widget.imagUrl,
                                     type: widget.type,
                                     size: size);
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 5.0, sigmaY: 5.0),
+                                    child: AlertDialog(
+                                      title: const Text(
+                                        "تمت اضافة المنتج الي العربه",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      actions: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text(
+                                                  "متابعة التسوق",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.white),
+                                                )),
+                                            ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.green),
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pushReplacementNamed(
+                                                          CartScreen.routeName);
+                                                },
+                                                child: const Text(
+                                                  "الذهاب الي العربه",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.white),
+                                                )),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
                           },
                         ),
                       ),

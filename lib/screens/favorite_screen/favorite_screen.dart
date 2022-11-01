@@ -42,6 +42,7 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
       child: Scaffold(
         extendBody: true,
         appBar: AppBar(
+          shadowColor: Theme.of(context).primaryColor,
           title: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: const Text(

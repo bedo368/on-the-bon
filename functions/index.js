@@ -12,9 +12,9 @@ exports.orederTriggerByAdmins = functions.firestore
         title: "طلب جديد",
         body: " هناك طلب جديد قم بالتحقق ",
       },
-      data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
+      data: { type: "new Order" },
     };
-    admin.messaging().sendToTopic("Admin", payload, MessagingOptions());
+    admin.messaging().sendToTopic("Admin", payload);
   });
 
 exports.sendNotification = functions.firestore
@@ -26,8 +26,9 @@ exports.sendNotification = functions.firestore
         body: snapshot.data().content,
         image: snapshot.data().imageUrl,
       },
-      // data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
+      data: { type: "users Notification" },
     };
+
     admin.messaging().sendToTopic("users", payload);
   });
 

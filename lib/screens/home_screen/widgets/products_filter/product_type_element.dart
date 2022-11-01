@@ -9,13 +9,11 @@ import 'package:rive/rive.dart';
 class TypeElement extends StatefulWidget {
   const TypeElement({
     Key? key,
-    required this.index,
-    required this.v,
+    required this.typeName,
   }) : super(key: key);
 
-  final int index;
 
-  final ProductsTypeEnum v;
+  final String typeName;
 
   @override
   State<TypeElement> createState() => _TypeElementState();
@@ -31,7 +29,6 @@ class _TypeElementState extends State<TypeElement> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       padding: const EdgeInsets.only(bottom: 3),
       child: Stack(
         textDirection: TextDirection.rtl,
@@ -39,19 +36,17 @@ class _TypeElementState extends State<TypeElement> {
         children: [
           GestureDetector(
             onTap: () {
+             
               final productData = Provider.of<Products>(context, listen: false);
-              if (HomeScreen.productType.value !=
-                  productsStringToType[types[widget.index]]) {
-                HomeScreen.productType.value =
-                    productsStringToType[types[widget.index]] as ProductsTypeEnum;
-                productData.setType(productsStringToType[types[widget.index]]
-                    as ProductsTypeEnum);
+              if (HomeScreen.productType.value != widget.typeName) {
+                HomeScreen.productType.value = widget.typeName;
+                productData.setType(widget.typeName);
                 if (isSelectedInput != null) {
                   setState(() {
-                    isSelectedInput!.value = HomeScreen.productType.value ==
-                            productsStringToType[types[widget.index]]
-                        ? true
-                        : false;
+                    isSelectedInput!.value =
+                        HomeScreen.productType.value == widget.typeName
+                            ? true
+                            : false;
                   });
                 }
               }
@@ -59,14 +54,13 @@ class _TypeElementState extends State<TypeElement> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                
                 height: 40,
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(40),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 500),
-                    color: widget.v == productsStringToType[types[widget.index]]
+                    color: widget.typeName == HomeScreen.productType.value
                         ? Theme.of(context).colorScheme.secondary
                         : const Color.fromARGB(255, 224, 223, 223),
                     child: Container(
@@ -76,10 +70,10 @@ class _TypeElementState extends State<TypeElement> {
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: Center(
                         child: Text(
-                          types[widget.index],
+                          widget.typeName,
                           style: TextStyle(
-                              color: widget.v ==
-                                      productsStringToType[types[widget.index]]
+                              color: widget.typeName ==
+                                      HomeScreen.productType.value
                                   ? Colors.white
                                   : Colors.black,
                               fontSize: 15),
@@ -95,7 +89,11 @@ class _TypeElementState extends State<TypeElement> {
             child: Align(
               alignment: Alignment.topCenter,
               child: SizedBox(
-                  width: 50, height: 50, child: Floatingsky(index: widget.index)),
+                  width: 50,
+                  height: 50,
+                  child: Floatingsky(
+                    typeName: widget.typeName,
+                  )),
             ),
           ),
         ],

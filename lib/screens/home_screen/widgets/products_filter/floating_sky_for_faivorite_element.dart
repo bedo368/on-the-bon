@@ -8,8 +8,8 @@ import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:rive/rive.dart';
 
 class Floatingsky extends StatefulWidget {
-  const Floatingsky({super.key, required this.index});
-  final int index;
+  const Floatingsky({super.key,  required this.typeName});
+  final String typeName;
 
   @override
   State<Floatingsky> createState() => _FloatingskyState();
@@ -38,10 +38,8 @@ class _FloatingskyState extends State<Floatingsky> {
       }
 
       setState(() {
-        isSelectedInput!.value = HomeScreen.productType.value ==
-                productsStringToType[types[widget.index]]
-            ? true
-            : false;
+        isSelectedInput!.value =
+            HomeScreen.productType.value == widget.typeName ? true : false;
       });
     });
     super.initState();
@@ -100,8 +98,7 @@ class _FloatingskyState extends State<Floatingsky> {
 
     void addAndRemoveBlankingController() {
       if (floatingSkyArtboard != null &&
-          HomeScreen.productType.value ==
-              productsStringToType[types[widget.index]]) {
+          HomeScreen.productType.value == widget.typeName) {
         var blanking = StateMachineController.fromArtboard(
           floatingSkyArtboard!,
           "blanking",
@@ -115,8 +112,7 @@ class _FloatingskyState extends State<Floatingsky> {
         getSleepy();
       }
       if (floatingSkyArtboard != null &&
-          HomeScreen.productType.value !=
-              productsStringToType[types[widget.index]]) {
+          HomeScreen.productType.value != widget.typeName) {
         var blanking = StateMachineController.fromArtboard(
           floatingSkyArtboard!,
           "blanking",
@@ -128,10 +124,8 @@ class _FloatingskyState extends State<Floatingsky> {
     }
 
     if (floatingSkyArtboard != null) {
-      isSelectedInput!.value = HomeScreen.productType.value ==
-              productsStringToType[types[widget.index]]
-          ? true
-          : false;
+      isSelectedInput!.value =
+          HomeScreen.productType.value == widget.typeName ? true : false;
       addAndRemoveBlankingController();
     }
     return floatingSkyArtboard != null

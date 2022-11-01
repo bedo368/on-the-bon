@@ -16,7 +16,7 @@ class OrdersButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> buttonsText = orderTypeStringToEnum.keys.toList();
     return Container(
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 30),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: AnimatedContainer(

@@ -10,18 +10,14 @@ import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_f
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/product_graid.dart';
 import 'package:on_the_bon/service/manage_notification.dart';
-import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
   static String routeName = "/";
-  static final ValueNotifier<ProductsTypeEnum> productType =
-      ValueNotifier<ProductsTypeEnum>(ProductsTypeEnum.hotDrinks);
-
-  static final ValueNotifier<bool> isProductHomeScreenGridScroll =
-      ValueNotifier<bool>(false);
+  static final ValueNotifier<String> productType =
+      ValueNotifier<String>("مشروبات ساخنة");
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -29,6 +25,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   bool isLoading = true;
+  final productGridScrollNotifier = ValueNotifier<bool>(false);
+  final productGridScrollValueNotifier = ValueNotifier<double>(0);
 
   @override
   void initState() {
@@ -74,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         });
       });
     }
+
     if (Provider.of<Products>(context, listen: false).allProducts.isNotEmpty) {
       setState(() {
         isLoading = false;
@@ -89,6 +88,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       super.setState(fn);
     }
   }
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +117,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           isLoading = true;
         });
         // ignore: use_build_context_synchronously
-        await Provider.of<Products>(context, listen: false).fetchProductAsync();
+        await Provider.of<Products>(context, listen: false)
+            .fetchProductAsync()
+            .then((value) {
+          HomeScreen.productType.value =
+              Provider.of<Products>(context, listen: false).getCurrentType;
+          ProductsFillterBySubType.subType.value =
+              Provider.of<Products>(context, listen: false).currentSubType;
+        });
 
         setState(() {
           isLoading = false;
@@ -134,108 +142,178 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
 
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Colors.white,
       child: SafeArea(
-          child: Scaffold(
-        extendBody: true,
-        bottomNavigationBar: ButtomNavigationBar(
-          routeName: HomeScreen.routeName,
-        ),
-        drawer: const MainDrawer(),
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: SizedBox(
-            width: mediaQuery.size.width,
-            child: const Text(
-              "On The Bon",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: "RockSalt"),
+        child: Scaffold(
+            key: _scaffoldKey,
+            extendBody: true,
+            bottomNavigationBar: ButtomNavigationBar(
+              routeName: HomeScreen.routeName,
             ),
-          ),
-        ),
-        body: isLoading
-            ? const Center(
-                child: IconGif(
-                width: 90,
-                content: "",
-                iconPath: "assets/images/search.gif",
-              ))
-            : allProduct.isNotEmpty
-                ? RefreshIndicator(
-                    onRefresh: onRefreash,
-                    child: SingleChildScrollView(
-                      child: SizedBox(
-                        height: mediaQuery.size.height,
-                        child: Column(
-                          children: [
-                            ValueListenableBuilder<bool>(
-                                valueListenable:
-                                    HomeScreen.isProductHomeScreenGridScroll,
-                                builder: (context, v, c) {
-                                  return AnimatedOpacity(
-                                    duration: const Duration(milliseconds: 200),
-                                    opacity: v ? 0 : 1,
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      width: size.width,
-                                      height: v ? 0 : 280,
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        alignment: Alignment.topCenter,
-                                        child: Column(
-                                          children: [
-                                            Center(
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 20),
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    .9,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    .3,
-                                                child:
-                                                    const RiveAnimation.asset(
-                                                  "assets/animation/logo_animation.riv",
-                                                  fit: BoxFit.cover,
+            drawer: const MainDrawer(),
+            body: Stack(
+              children: [
+                isLoading
+                    ? const Center(
+                        child: IconGif(
+                        width: 90,
+                        content: "",
+                        iconPath: "assets/images/search.gif",
+                      ))
+                    : allProduct.isNotEmpty
+                        ? Positioned(
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: RefreshIndicator(
+                              onRefresh: onRefreash,
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    minHeight: mediaQuery.size.height),
+                                child: Stack(
+                                  children: [
+                                    ValueListenableBuilder<bool>(
+                                        valueListenable:
+                                            productGridScrollNotifier,
+                                        builder: (context, v, c) {
+                                          return Positioned(
+                                            top: 30,
+                                            left: 0,
+                                            right: 0,
+                                            child: Container(
+                                              
+                                              child: AnimatedOpacity(
+                                                duration: const Duration(
+                                                    milliseconds: 200),
+                                                opacity: v ? 0 : 1,
+                                                child: AnimatedContainer(
+                                                  duration: const Duration(
+                                                      milliseconds: 200),
+                                                  width: size.width,
+                                                  height: v ? 0 : 130,
+                                                  child: FittedBox(
+                                                    fit: BoxFit.fill,
+                                                    alignment:
+                                                        Alignment.topCenter,
+                                                    child: Column(
+                                                      children: [
+                                                        Center(
+                                                          child: Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 20),
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                .9,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                .3,
+                                                            child:
+                                                                const RiveAnimation
+                                                                    .asset(
+                                                              "assets/animation/logo_animation.riv",
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                            const ProdcutsFiltterByType(),
-                                            Container(
-                                                margin: const EdgeInsets.only(
-                                                    bottom: 10),
-                                                child:
-                                                    const ProductsFillterBySubType()),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
+                                          );
+                                        }),
 
-                            // ProductTypeNotifier(),
-                            const Flexible(child: ProductGraid()),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                : RefreshIndicator(
-                    onRefresh: onRefreash,
-                    child: const SingleChildScrollView(
-                      child: IconGif(
-                        width: 150,
-                        content:
-                            " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
-                        iconPath: "assets/images/connection-error.gif",
-                      ),
-                    ),
-                  ),
-      )),
+                                    // ProductTypeNotifier(),
+                                    ValueListenableBuilder<double>(
+                                        valueListenable:
+                                            productGridScrollValueNotifier,
+                                        builder: (context, v, c) {
+                                          return Positioned(
+                                              top: 150 - v,
+                                              child:
+                                                  const ProdcutsFiltterByType());
+                                        }),
+                                    ValueListenableBuilder<double>(
+                                        valueListenable:
+                                            productGridScrollValueNotifier,
+                                        builder: (context, v, c) {
+                                          return Positioned(
+                                            top: 240 - v,
+                                            child:
+                                                const ProductsFillterBySubType(),
+                                          );
+                                        }),
+                                    ValueListenableBuilder<double>(
+                                        valueListenable:
+                                            productGridScrollValueNotifier,
+                                        builder: (context, v, c) {
+                                          return Positioned(
+                                              top: 310 - v,
+                                              left: 0,
+                                              right: 0,
+                                              bottom: 0,
+                                              child:
+                                                  ProductGraid(onScroll: (p) {
+                                                productGridScrollNotifier
+                                                    .value = p > 20;
+                                                if (p < 160) {
+                                                  productGridScrollValueNotifier
+                                                      .value = p;
+                                                }
+                                              }));
+                                        }),
+                                    Positioned(
+                                        right: 10,
+                                        top: 0,
+                                        child: IconButton(
+                                          icon: const Icon(
+                                            Icons.menu,
+                                            size: 40,
+                                          ),
+                                          onPressed: () {
+                                            _scaffoldKey.currentState!
+                                                .openDrawer();
+                                          },
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: onRefreash,
+                            child: const SingleChildScrollView(
+                              child: IconGif(
+                                width: 150,
+                                content:
+                                    " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
+                                iconPath: "assets/images/connection-error.gif",
+                              ),
+                            ),
+                          ),
+                // Positioned(
+                //     right: 10,
+                //     top: 0,
+                //     child: IconButton(
+                //       icon: const Icon(
+                //         Icons.menu,
+                //         size: 40,
+                //       ),
+                //       onPressed: () {
+                //         _scaffoldKey.currentState!.openDrawer();
+                //       },
+                //     )),
+              ],
+            )),
+      ),
     );
   }
 }
