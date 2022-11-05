@@ -42,7 +42,7 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
       child: Scaffold(
         extendBody: true,
         appBar: AppBar(
-          shadowColor: Theme.of(context).primaryColor,
+          shadowColor: Theme.of(context).colorScheme.secondary,
           title: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: const Text(
@@ -50,7 +50,7 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         bottomNavigationBar: ButtomNavigationBar(
           routeName: FaivoriteScreen.routeName,

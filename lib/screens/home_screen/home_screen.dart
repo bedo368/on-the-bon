@@ -94,7 +94,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final size = mediaQuery.size;
     final allProduct = Provider.of<Products>(
       context,
     ).allProducts;
@@ -141,9 +140,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
     }
 
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
+    return SafeArea(
+      child: Container(
+        color: Colors.black,
         child: Scaffold(
             key: _scaffoldKey,
             extendBody: true,
@@ -153,6 +152,34 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             drawer: const MainDrawer(),
             body: Stack(
               children: [
+                ValueListenableBuilder<double>(
+                    valueListenable: productGridScrollValueNotifier,
+                    builder: (context, v, c) {
+                      return Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 130 - v,
+                          color: Theme.of(context).primaryColor,
+                          child: const FittedBox(
+                            fit: BoxFit.fill,
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              width: 280,
+                              height: 100,
+                              child: Center(
+                                child: RiveAnimation.asset(
+                                  "assets/animation/logo_animation.riv",
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                 isLoading
                     ? const Center(
                         child: IconGif(
@@ -166,125 +193,62 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             bottom: 0,
                             left: 0,
                             right: 0,
-                            child: RefreshIndicator(
-                              onRefresh: onRefreash,
-                              child: Container(
-                                constraints: BoxConstraints(
-                                    minHeight: mediaQuery.size.height),
-                                child: Stack(
-                                  children: [
-                                    ValueListenableBuilder<bool>(
-                                        valueListenable:
-                                            productGridScrollNotifier,
-                                        builder: (context, v, c) {
-                                          return Positioned(
-                                            top: 30,
+                            child: Container(
+                              constraints: BoxConstraints(
+                                  minHeight: mediaQuery.size.height),
+                              child: Stack(
+                                children: [
+                                  // ProductTypeNotifier(),
+                                  ValueListenableBuilder<double>(
+                                      valueListenable:
+                                          productGridScrollValueNotifier,
+                                      builder: (context, v, c) {
+                                        return Positioned(
+                                            top: 120 - v,
+                                            child:
+                                                const ProdcutsFiltterByType());
+                                      }),
+                                  ValueListenableBuilder<double>(
+                                      valueListenable:
+                                          productGridScrollValueNotifier,
+                                      builder: (context, v, c) {
+                                        return Positioned(
+                                          top: 210 - v,
+                                          child:
+                                              const ProductsFillterBySubType(),
+                                        );
+                                      }),
+                                  ValueListenableBuilder<double>(
+                                      valueListenable:
+                                          productGridScrollValueNotifier,
+                                      builder: (context, v, c) {
+                                        return Positioned(
+                                            top: 280 - v,
                                             left: 0,
                                             right: 0,
-                                            child: Container(
-                                              
-                                              child: AnimatedOpacity(
-                                                duration: const Duration(
-                                                    milliseconds: 200),
-                                                opacity: v ? 0 : 1,
-                                                child: AnimatedContainer(
-                                                  duration: const Duration(
-                                                      milliseconds: 200),
-                                                  width: size.width,
-                                                  height: v ? 0 : 130,
-                                                  child: FittedBox(
-                                                    fit: BoxFit.fill,
-                                                    alignment:
-                                                        Alignment.topCenter,
-                                                    child: Column(
-                                                      children: [
-                                                        Center(
-                                                          child: Container(
-                                                            margin:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 20),
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                .9,
-                                                            height: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                .3,
-                                                            child:
-                                                                const RiveAnimation
-                                                                    .asset(
-                                                              "assets/animation/logo_animation.riv",
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-
-                                    // ProductTypeNotifier(),
-                                    ValueListenableBuilder<double>(
-                                        valueListenable:
-                                            productGridScrollValueNotifier,
-                                        builder: (context, v, c) {
-                                          return Positioned(
-                                              top: 150 - v,
-                                              child:
-                                                  const ProdcutsFiltterByType());
-                                        }),
-                                    ValueListenableBuilder<double>(
-                                        valueListenable:
-                                            productGridScrollValueNotifier,
-                                        builder: (context, v, c) {
-                                          return Positioned(
-                                            top: 240 - v,
-                                            child:
-                                                const ProductsFillterBySubType(),
-                                          );
-                                        }),
-                                    ValueListenableBuilder<double>(
-                                        valueListenable:
-                                            productGridScrollValueNotifier,
-                                        builder: (context, v, c) {
-                                          return Positioned(
-                                              top: 310 - v,
-                                              left: 0,
-                                              right: 0,
-                                              bottom: 0,
-                                              child:
-                                                  ProductGraid(onScroll: (p) {
-                                                productGridScrollNotifier
-                                                    .value = p > 20;
-                                                if (p < 160) {
-                                                  productGridScrollValueNotifier
-                                                      .value = p;
-                                                }
-                                              }));
-                                        }),
-                                    Positioned(
-                                        right: 10,
-                                        top: 0,
-                                        child: IconButton(
-                                          icon: const Icon(
-                                            Icons.menu,
-                                            size: 40,
-                                          ),
-                                          onPressed: () {
-                                            _scaffoldKey.currentState!
-                                                .openDrawer();
-                                          },
-                                        )),
-                                  ],
-                                ),
+                                            bottom: 0,
+                                            child: ProductGraid(onScroll: (p) {
+                                              if (p < 60) {
+                                                productGridScrollValueNotifier
+                                                    .value = p;
+                                              }
+                                            }));
+                                      }),
+                                  Positioned(
+                                      right: 10,
+                                      top: 0,
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.menu,
+                                          size: 40,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          _scaffoldKey.currentState!
+                                              .openDrawer();
+                                        },
+                                      )),
+                                ],
                               ),
                             ),
                           )

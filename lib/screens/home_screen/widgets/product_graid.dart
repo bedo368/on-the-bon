@@ -12,11 +12,11 @@ class ProductGraid extends StatelessWidget {
   Widget build(BuildContext context) {
     final gridController = ScrollController();
 
+    gridController.addListener(() {
+      onScroll(gridController.offset);
+    });
     return Consumer<Products>(
       builder: (context, value, c) {
-        gridController.addListener(() {
-          onScroll(gridController.offset);
-        });
         final productList = value.getProductWithType;
 
         return AnimatedSwitcher(
@@ -30,18 +30,43 @@ class ProductGraid extends StatelessWidget {
               // constraints: BoxConstraints(
               //     minHeight: 500,
               //     maxHeight: mediaQuery.size.height),
-              key: ValueKey(productList.first.id),
+              key: Key(productList.isNotEmpty ? productList.first.id : ""),
               child: productList.isEmpty
                   ? const Center(
                       child: Text("عذرا المنتجات غير متاحه الان"),
                     )
                   : ListView.builder(
                       controller: gridController,
-                     
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.only(
-                              bottom: index == productList.length - 1 ? 200 : 0),
+                        return AnimatedBuilder(
+                          animation: gridController,
+                          builder: (BuildContext context, Widget? child) {
+                            final RenderBox? renderObj =
+                                context.findRenderObject() as RenderBox?;
+                            final offsetY =
+                                renderObj?.localToGlobal(Offset.zero).dy ?? 0;
+                            final deviceHight =
+                                MediaQuery.of(context).size.height;
+                            if (offsetY <= 0) {
+                              return child as Widget;
+                            }
+
+                            final hightVisible = deviceHight - offsetY;
+                            final wedgitHeight = renderObj!.hasSize
+                                ? renderObj.size.height
+                                : 302;
+                            final howMuchToShow =
+                                (hightVisible / wedgitHeight).clamp(0, 1);
+                            final scale = .75 + howMuchToShow * .25;
+                            final opacity = .25 + howMuchToShow * .75;
+                            return Transform.scale(
+                              scale: scale,
+                              child: Opacity(
+                                opacity: opacity,
+                                child: child,
+                              ),
+                            );
+                          },
                           child: ChangeNotifierProvider.value(
                             value: productList[index],
                             child: ProductCard(

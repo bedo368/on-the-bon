@@ -21,6 +21,11 @@ class _ProductCardState extends State<ProductCard> {
   bool isHovering = false;
   @override
   Widget build(BuildContext context) {
+    // final RenderBox? renderObj = context.findRenderObject() as RenderBox?;
+    // final offsetY = renderObj?.localToGlobal(Offset.zero).dy ?? 0;
+    // final deviceHight = MediaQuery.of(context).size.height;
+    // final relativePosition = offsetY / deviceHight;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: Center(
@@ -28,15 +33,13 @@ class _ProductCardState extends State<ProductCard> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                
                 color: Theme.of(context).primaryColor.withOpacity(0.4),
                 spreadRadius: 1,
-                
 
                 blurRadius: 16,
                 offset: const Offset(12, 12), // changes position of shadow
               ),
-               const BoxShadow(
+              const BoxShadow(
                 color: Colors.white,
                 spreadRadius: 1,
 
@@ -79,6 +82,7 @@ class _ProductCardState extends State<ProductCard> {
                                 topRight: Radius.circular(10),
                               ),
                               child: CachedNetworkImage(
+                                // alignment: Alignment(0, relativePosition - .5),
                                 imageUrl: widget.currentProduct.imageUrl,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) {
@@ -117,14 +121,11 @@ class _ProductCardState extends State<ProductCard> {
                                             .showSnackBar(const SnackBar(
                                                 backgroundColor: Colors.red,
                                                 dismissDirection:
-                                                    DismissDirection
-                                                        .startToEnd,
-                                                duration:
-                                                    Duration(seconds: 2),
+                                                    DismissDirection.startToEnd,
+                                                duration: Duration(seconds: 2),
                                                 content: Text(
                                                   "هناك خطأ في الاتصال ",
-                                                  textAlign:
-                                                      TextAlign.center,
+                                                  textAlign: TextAlign.center,
                                                 )));
 
                                         return;

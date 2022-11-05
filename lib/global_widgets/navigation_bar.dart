@@ -157,7 +157,7 @@ class ButtomNavigationBar extends StatelessWidget {
             }
           }
         },
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).primaryColor,
       ),
     );
   }
