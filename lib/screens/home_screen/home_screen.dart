@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/data/providers/user_provider.dart';
+import 'package:on_the_bon/global_widgets/clip_shadow.dart';
 import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
+import 'package:on_the_bon/global_widgets/stroked_text.dart';
 import 'package:on_the_bon/main.dart';
+import 'package:on_the_bon/screens/home_screen/widgets/custom_clip_path.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/product_graid.dart';
 import 'package:on_the_bon/service/manage_notification.dart';
 import 'package:provider/provider.dart';
-import 'package:rive/rive.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -140,9 +142,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
     }
 
-    return SafeArea(
-      child: Container(
-        color: Colors.black,
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: SafeArea(
         child: Scaffold(
             key: _scaffoldKey,
             extendBody: true,
@@ -157,23 +159,52 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     builder: (context, v, c) {
                       return Positioned(
                         top: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 130 - v,
-                          color: Theme.of(context).primaryColor,
-                          child: const FittedBox(
-                            fit: BoxFit.fill,
-                            alignment: Alignment.topCenter,
-                            child: SizedBox(
-                              width: 280,
-                              height: 100,
-                              child: Center(
-                                child: RiveAnimation.asset(
-                                  "assets/animation/logo_animation.riv",
-                                  fit: BoxFit.cover,
-                                ),
+                        child: ClipShadowPath(
+                          shadow: BoxShadow(
+                              blurRadius: 5,
+                              blurStyle: BlurStyle.solid,
+                              offset: const Offset(0, 5),
+                              spreadRadius: 5,
+                              color: Theme.of(context).primaryColor),
+                          clipper: WaveClip(),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 155 - v,
+                            color: Theme.of(context).primaryColor,
+                            child: Card(
+                              child: Stack(
+                                alignment: Alignment.topCenter,
+                                children: [
+                                  Positioned(
+                                    left:0,
+                                      child: Image.asset(
+                                    "assets/animation/coffee-gif.gif",
+                                    fit: BoxFit.cover,
+                                    width: 90,
+                                  )),
+                                  Positioned(
+                                    top: -10,
+                                    child: StrockedText(
+                                      "%",
+                                      fontFamily: "permanentMarker",
+                                      fontSize: 60 - v / 3,
+                                      shadow: const [],
+                                      strokeWidth: 4,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 45 - v / 4.3,
+                                    child: StrockedText(
+                                      "On The Bon",
+                                      fontFamily: "RockSalt",
+                                      fontSize: 30 - v / 5,
+                                      shadow: const [],
+                                      strokeWidth: 2,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -204,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           productGridScrollValueNotifier,
                                       builder: (context, v, c) {
                                         return Positioned(
-                                            top: 120 - v,
+                                            top: 125 - v,
                                             child:
                                                 const ProdcutsFiltterByType());
                                       }),
@@ -213,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           productGridScrollValueNotifier,
                                       builder: (context, v, c) {
                                         return Positioned(
-                                          top: 210 - v,
+                                          top: 215 - v,
                                           child:
                                               const ProductsFillterBySubType(),
                                         );
@@ -223,12 +254,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           productGridScrollValueNotifier,
                                       builder: (context, v, c) {
                                         return Positioned(
-                                            top: 280 - v,
+                                            top: 270 - v,
                                             left: 0,
                                             right: 0,
                                             bottom: 0,
                                             child: ProductGraid(onScroll: (p) {
-                                              if (p < 60) {
+                                              if (p < 60 && p > 0) {
                                                 productGridScrollValueNotifier
                                                     .value = p;
                                               }
@@ -238,10 +269,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       right: 10,
                                       top: 0,
                                       child: IconButton(
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.menu,
                                           size: 40,
-                                          color: Colors.white,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                         onPressed: () {
                                           _scaffoldKey.currentState!

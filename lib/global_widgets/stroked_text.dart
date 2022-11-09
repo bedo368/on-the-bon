@@ -15,10 +15,11 @@ class StrockedText extends StatelessWidget {
   Color color;
 
   StrockedText(
-    this.text, {Key? key, 
+    this.text, {
+    Key? key,
     required this.fontFamily,
     this.overrideSizeStroke = false,
-    this.fontSize = 20,
+    required this.fontSize,
     this.strokeWidth = 0, // stroke width default
     this.strokeColor = Colors.white,
     required this.shadow,

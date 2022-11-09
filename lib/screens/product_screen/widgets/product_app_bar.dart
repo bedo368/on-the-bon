@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/global_widgets/animated_widgets/animated_heart.dart';
+import 'package:on_the_bon/screens/home_screen/widgets/custom_clip_path.dart';
 import 'package:provider/provider.dart';
 
 class ProductAppBar extends StatefulWidget {
@@ -65,11 +66,11 @@ class _ProductAppBarState extends State<ProductAppBar> {
           );
         })
       ],
-      backgroundColor: const Color.fromRGBO(249, 242, 246, 1),
+      backgroundColor: Theme.of(context).primaryColor,
       expandedHeight: 300,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.only(right: 10 ,  bottom: 10),
+        titlePadding: const EdgeInsets.only(right: 10, bottom: 10),
         title: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Stack(
@@ -91,19 +92,22 @@ class _ProductAppBarState extends State<ProductAppBar> {
             ],
           ),
         ),
-        background: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Hero(
-            tag: widget.id,
-            child: CachedNetworkImage(
-              imageUrl: widget.imageUrl,
-              fit: BoxFit.cover,
-              placeholder: (context, url) {
-                return Image.asset(
-                  "assets/images/product_placeholder.png",
-                  fit: BoxFit.cover,
-                );
-              },
+        background: ClipPath(
+          clipper: WaveClip(),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Hero(
+              tag: widget.id,
+              child: CachedNetworkImage(
+                imageUrl: widget.imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) {
+                  return Image.asset(
+                    "assets/images/product_placeholder.png",
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
             ),
           ),
         ),

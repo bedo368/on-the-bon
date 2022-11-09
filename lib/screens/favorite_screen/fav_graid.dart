@@ -6,9 +6,6 @@ import 'package:provider/provider.dart';
 class ProductGraid extends StatelessWidget {
   const ProductGraid({Key? key}) : super(key: key);
 
-
-
-
   // @override
   // void initState() {
   //   // gridController.addListener(() {
@@ -23,7 +20,7 @@ class ProductGraid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final ScrollController gridController = ScrollController();
+    final ScrollController gridController = ScrollController();
     return Consumer<Products>(
       builder: (context, value, c) {
         final productList = value.getFavProducts;
@@ -38,7 +35,6 @@ class ProductGraid extends StatelessWidget {
                 // primary: false,
                 // physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  print("rebuiilid");
                   // double scale = 1;
                   // double opacity = 1;
 
@@ -67,12 +63,15 @@ class ProductGraid extends StatelessWidget {
                         }
 
                         final hightVisible = deviceHight - offsetY;
+
                         final wedgitHeight =
                             renderObj!.hasSize ? renderObj.size.height : 302;
                         final howMuchToShow =
                             (hightVisible / wedgitHeight).clamp(0, 1);
+
                         final scale = .75 + howMuchToShow * .25;
                         final opacity = .25 + howMuchToShow * .75;
+
                         return Transform.scale(
                           scale: scale,
                           child: Opacity(
