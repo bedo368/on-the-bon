@@ -91,6 +91,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
   }
 
+  double scrollvalue = 0;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -166,7 +168,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               offset: const Offset(0, 5),
                               spreadRadius: 5,
                               color: Theme.of(context).primaryColor),
-                          clipper: WaveClip(),
+                          clipper: WaveClip(
+                              lowPointPosition: 20, hightPointPosition: 40),
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             height: 155 - v,
@@ -176,12 +179,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 alignment: Alignment.topCenter,
                                 children: [
                                   Positioned(
-                                    left:0,
+                                      left: 0,
                                       child: Image.asset(
-                                    "assets/animation/coffee-gif.gif",
-                                    fit: BoxFit.cover,
-                                    width: 90,
-                                  )),
+                                        "assets/animation/coffee-gif.gif",
+                                        fit: BoxFit.cover,
+                                        width: 90,
+                                      )),
                                   Positioned(
                                     top: -10,
                                     child: StrockedText(
@@ -259,9 +262,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             right: 0,
                                             bottom: 0,
                                             child: ProductGraid(onScroll: (p) {
+                                              scrollvalue = p;
                                               if (p < 60 && p > 0) {
                                                 productGridScrollValueNotifier
-                                                    .value = p;
+                                                    .value = scrollvalue;
                                               }
                                             }));
                                       }),

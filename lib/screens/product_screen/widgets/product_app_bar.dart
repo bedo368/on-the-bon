@@ -93,7 +93,7 @@ class _ProductAppBarState extends State<ProductAppBar> {
           ),
         ),
         background: ClipPath(
-          clipper: WaveClip(),
+          clipper: WaveClip(lowPointPosition:10,hightPointPosition: 20 ),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Hero(

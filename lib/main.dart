@@ -34,8 +34,6 @@ void main() async {
   NotificationApi.requestPermission();
 
   NotificationApi.setUpMainNotificationChannel();
-  
-  
 
   FirebaseMessaging.onBackgroundMessage(
       NotificationApi.handeleBackgroundNotification);
@@ -59,6 +57,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     firstOpen = true;
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Color.fromRGBO(61, 26, 26, 1)));
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

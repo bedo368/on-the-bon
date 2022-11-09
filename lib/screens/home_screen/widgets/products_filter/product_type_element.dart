@@ -61,7 +61,7 @@ class _TypeElementState extends State<TypeElement> {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 500),
                     color: widget.typeName == HomeScreen.productType.value
-                        ? Theme.of(context).colorScheme.secondary
+                        ? Theme.of(context).primaryColor
                         : const Color.fromARGB(255, 224, 223, 223),
                     child: Container(
                       decoration: BoxDecoration(
