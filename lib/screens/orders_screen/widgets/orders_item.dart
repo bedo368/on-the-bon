@@ -16,7 +16,6 @@ class OrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
         boxShadow: [
@@ -76,8 +75,7 @@ class OrderItem extends StatelessWidget {
                                   height: 70,
                                   child: CachedNetworkImage(
                                     fit: BoxFit.cover,
-                                    imageUrl:
-                                        order.ordersItems[index].imageUrl,
+                                    imageUrl: order.ordersItems[index].imageUrl,
                                   ),
                                 ),
                                 Container(
@@ -103,17 +101,15 @@ class OrderItem extends StatelessWidget {
                                     "السعر : ${order.ordersItems[index].price}"),
                                 Text(
                                     "الكميه : ${order.ordersItems[index].quantity}"),
-                                Text(
-                                    "الحجم : ${order.ordersItems[index].size}")
+                                Text("الحجم : ${order.ordersItems[index].size}")
                               ],
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.only(right: 15 ,left: 5),
+                            margin: const EdgeInsets.only(right: 15, left: 5),
                             width: 1,
                             color: Colors.black,
                             height: 80,
-                            
                           ),
                           Container(
                             margin: const EdgeInsets.only(right: 15),
@@ -181,7 +177,8 @@ class OrderItem extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: Text(
                 "الاجمالي :    ${order.totalPrice} جنيها   +   خدمة التوصيل",
-                style: const TextStyle(fontSize: 15 , fontWeight: FontWeight.w800),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
               ),
             ),
             Container(

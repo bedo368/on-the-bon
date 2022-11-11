@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               lowPointPosition: 20, hightPointPosition: 40),
                           child: Container(
                             width: MediaQuery.of(context).size.width,
-                            height: 155 - v,
+                            height: 155 - v / 1,
                             color: Theme.of(context).primaryColor,
                             child: Card(
                               child: Stack(
@@ -183,25 +183,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       child: Image.asset(
                                         "assets/animation/coffee-gif.gif",
                                         fit: BoxFit.cover,
-                                        width: 90,
+                                        width: 90 - scrollvalue / 5,
                                       )),
                                   Positioned(
                                     top: -10,
-                                    child: StrockedText(
-                                      "%",
-                                      fontFamily: "permanentMarker",
-                                      fontSize: 60 - v / 3,
-                                      shadow: const [],
-                                      strokeWidth: 4,
-                                      color: Theme.of(context).primaryColor,
+                                    child: AnimatedOpacity(
+                                      duration:
+                                          const Duration(milliseconds: 100),
+                                      opacity: scrollvalue > 10 ? 0 : 1,
+                                      child: StrockedText(
+                                        "%",
+                                        fontFamily: "permanentMarker",
+                                        fontSize: 60 - v / 3,
+                                        shadow: const [],
+                                        strokeWidth: 4,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
                                   ),
                                   Positioned(
-                                    top: 45 - v / 4.3,
+                                    top: 45 - v / 4.3 - scrollvalue / 4.5,
                                     child: StrockedText(
                                       "On The Bon",
                                       fontFamily: "RockSalt",
-                                      fontSize: 30 - v / 5,
+                                      fontSize: 30 - v / 5 + scrollvalue / 10,
                                       shadow: const [],
                                       strokeWidth: 2,
                                       color: Theme.of(context).primaryColor,
@@ -238,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           productGridScrollValueNotifier,
                                       builder: (context, v, c) {
                                         return Positioned(
-                                            top: 125 - v,
+                                            top: 128 - v,
                                             child:
                                                 const ProdcutsFiltterByType());
                                       }),
@@ -263,15 +268,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             bottom: 0,
                                             child: ProductGraid(onScroll: (p) {
                                               scrollvalue = p;
-                                              if (p < 60 && p > 0) {
+                                              if (p < 80 && p > 0) {
+                                                if (p > 60 && p < scrollvalue) {
+                                                  scrollvalue += 1;
+                                                }
+                                                if (p > 60 && p > scrollvalue) {
+                                                  scrollvalue -= 1;
+                                                }
                                                 productGridScrollValueNotifier
-                                                    .value = scrollvalue;
+                                                    .value = p;
                                               }
                                             }));
                                       }),
                                   Positioned(
                                       right: 10,
-                                      top: 0,
+                                      top: 5,
                                       child: IconButton(
                                         icon: Icon(
                                           Icons.menu,

@@ -58,7 +58,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     firstOpen = true;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(61, 26, 26, 1)));
+        statusBarColor: Color.fromRGBO(61, 26, 26, 1),
+        statusBarBrightness: Brightness.dark));
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
                 appBarTheme: AppBarTheme(
+                    systemOverlayStyle: SystemUiOverlayStyle.light,
                     backgroundColor: Theme.of(context).primaryColor),
                 textTheme: const TextTheme(
                     bodyText1: TextStyle(fontSize: 22, color: Colors.white)),
