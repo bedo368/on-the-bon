@@ -56,7 +56,7 @@ class ButtomNavigationBar extends StatelessWidget {
               const Align(
                 alignment: Alignment.center,
                 child: Icon(
-                  Icons.list_alt_rounded,
+                  Icons.shopping_bag,
                   size: 33,
                   color: Colors.white,
                 ),
@@ -110,7 +110,6 @@ class ButtomNavigationBar extends StatelessWidget {
 
             if (route == FaivoriteScreen.routeName) {
               if (routeName != HomeScreen.routeName) {
-                
                 Navigator.of(context)
                     .pushReplacement(SlidePageToLeft(const HomeScreen()));
               }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
 import 'package:on_the_bon/global_widgets/clip_shadow.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
+import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/screens/favorite_screen/fav_graid.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/custom_clip_path.dart';
@@ -42,12 +43,12 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
     final productData = Provider.of<Products>(context);
     return SafeArea(
       child: Scaffold(
+          drawer: MainDrawer(),
           extendBody: true,
           bottomNavigationBar: ButtomNavigationBar(
             routeName: FaivoriteScreen.routeName,
           ),
           body: Stack(
-            
             children: [
               isLoading
                   ? const Center(

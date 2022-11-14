@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
+import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/bottom_cart_screen.dart';
@@ -18,6 +19,7 @@ class CartScreen extends StatelessWidget {
       color: Theme.of(context).primaryColor,
       child: SafeArea(
         child: Scaffold(
+          drawer: const MainDrawer(),
           extendBody: true,
           bottomNavigationBar: ButtomNavigationBar(
             routeName: CartScreen.routeName,
@@ -28,7 +30,6 @@ class CartScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: const Text(
                   "عربة التسوق",
-                  textAlign: TextAlign.center,
                 )),
           ),
           body: cartData.cartItems.isNotEmpty
@@ -46,16 +47,17 @@ class CartScreen extends StatelessWidget {
                       ))),
                 )
               : SingleChildScrollView(
-                child: Container(
-                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height ),
-                  child: const Center(
-                    child: IconGif(
-                        width: 150,
-                        content: "العربه فارغه قم بملئها من فضلك",
-                        iconPath: "assets/images/emptycart.gif"),
+                  child: Container(
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height),
+                    child: const Center(
+                      child: IconGif(
+                          width: 150,
+                          content: "العربه فارغه قم بملئها من فضلك",
+                          iconPath: "assets/images/emptycart.gif"),
+                    ),
                   ),
                 ),
-              ),
         ),
       ),
     );

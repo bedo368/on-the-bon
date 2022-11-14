@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
+import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_item.dart';
@@ -87,7 +88,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           bottomNavigationBar: ButtomNavigationBar(
             routeName: OrdersScreen.routeName,
           ),
-          drawer: const Drawer(),
+          drawer: const MainDrawer(),
           appBar: AppBar(
             title: const Text(
               "قائمه طلباتي",
