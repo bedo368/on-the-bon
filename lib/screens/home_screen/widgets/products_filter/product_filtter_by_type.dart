@@ -21,49 +21,42 @@ class _ProdcutsFiltterByTypeState extends State<ProdcutsFiltterByType> {
     return ValueListenableBuilder<String>(
         valueListenable: HomeScreen.productType,
         builder: (context, v, c) {
-          return SizedBox(
-            width: mediaQuery.size.width,
-            child: Center(
-              child: Column(
+          return SingleChildScrollView(
+            reverse: true,
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              height: 110,
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: mediaQuery.size.width,
                     height: 110,
-                    padding: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: mediaQuery.size.width,
-                          height: 110,
-                          child: ListView.builder(
-                            reverse: true,
-                            
-                            scrollDirection: Axis.horizontal,
-                            controller:
-                                ScrollController(initialScrollOffset: 1),
-                            itemBuilder: (context, index) {
-                              final List<String> types =
-                                  Provider.of<Products>(context, listen: false)
-                                      .types
-                                      .keys
-                                      .toList();
-                              return TypeElement(
-                                typeName: types[index],
-                              );
-                            },
-                            itemCount:
-                                Provider.of<Products>(context, listen: false)
-                                    .types
-                                    .keys
-                                    .length,
-                          ),
-                        )
-                      ],
+                    child: ListView.builder(
+                      // reverse: true,
+                      shrinkWrap: true,
+                      primary: false,
+                      scrollDirection: Axis.horizontal,
+                      // controller: ScrollController(),
+                      itemBuilder: (context, index) {
+                        final List<String> types =
+                            Provider.of<Products>(context, listen: false)
+                                .types
+                                .keys
+                                .toList()
+                                .reversed
+                                .toList();
+                        return TypeElement(
+                          typeName: types[index],
+                        );
+                      },
+                      itemCount: Provider.of<Products>(context, listen: false)
+                          .types
+                          .keys
+                          .length,
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

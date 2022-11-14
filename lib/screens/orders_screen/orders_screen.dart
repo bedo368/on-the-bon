@@ -94,7 +94,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
             backgroundColor: Theme.of(context).primaryColor,
           ),
-          body: Container(
+          body: SizedBox(
             height: mediaQuery.size.height,
             width: mediaQuery.size.width,
             child: Stack(

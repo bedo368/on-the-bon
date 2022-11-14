@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
-import 'package:on_the_bon/screens/home_screen/widgets/products_filter/floating_sky_for_faivorite_element.dart';
+// import 'package:on_the_bon/screens/home_screen/widgets/products_filter/floating_sky_for_faivorite_element.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
@@ -85,17 +85,17 @@ class _TypeElementState extends State<TypeElement> {
               ),
             ),
           ),
-          GestureDetector(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Floatingsky(
-                    typeName: widget.typeName,
-                  )),
-            ),
-          ),
+          // GestureDetector(
+          //   child: Align(
+          //     alignment: Alignment.topCenter,
+          //     child: SizedBox(
+          //         width: 50,
+          //         height: 50,
+          //         child: Floatingsky(
+          //           typeName: widget.typeName,
+          //         )),
+          //   ),
+          // ),
         ],
       ),
     );

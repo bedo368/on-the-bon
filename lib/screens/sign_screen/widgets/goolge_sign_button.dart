@@ -3,9 +3,8 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:on_the_bon/data/helper/auth.dart';
 
 class GoogleSignButton extends StatelessWidget {
-  const GoogleSignButton({Key? key, required this.setIsLoading})
+  const GoogleSignButton({Key? key})
       : super(key: key);
-  final void Function() setIsLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +14,9 @@ class GoogleSignButton extends StatelessWidget {
       height: 40,
       child: SignInButton(Buttons.Google, onPressed: () async {
         try {
-          setIsLoading();
           await Auth.signInWithGoogle(context);
-          setIsLoading();
         } catch (e) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          print(e);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
               "حدث خطأ ما يرجي المحاوله مره أخري",

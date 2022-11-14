@@ -52,9 +52,7 @@ class _LoginFormState extends State<LoginForm> {
                 textAlign: TextAlign.center,
               )),
         );
-
       }
-      
     } else {
       final scoffldMessanger = ScaffoldMessenger.of(context);
       try {
@@ -73,9 +71,7 @@ class _LoginFormState extends State<LoginForm> {
                 textAlign: TextAlign.center,
               )),
         );
-
       }
-
     }
     setState(() {
       isLoading = false;
@@ -214,13 +210,10 @@ class _LoginFormState extends State<LoginForm> {
                       margin: const EdgeInsets.only(top: 20),
                       child: const DviderWithText(
                         text: "or",
-                        thickness: 1, color: Colors.white,
+                        thickness: 1,
+                        color: Colors.white,
                       )),
-                  GoogleSignButton(setIsLoading: () {
-                    setState(() {
-                      isLoading = !isLoading;
-                    });
-                  }),
+                  GoogleSignButton(),
                   if (_signMethod == SignMethod.login)
                     CustomBotton(
                       content: "Sign up  With Email",

@@ -35,8 +35,8 @@ void main() async {
 
   NotificationApi.setUpMainNotificationChannel();
 
-  FirebaseMessaging.onBackgroundMessage(
-      NotificationApi.handeleBackgroundNotification);
+  // FirebaseMessaging.onBackgroundMessage(
+  //     NotificationApi.handeleBackgroundNotification);
   FirebaseMessaging.onMessage
       .listen(NotificationApi.handeleForgroundNotification);
   FirebaseMessaging.onMessageOpenedApp
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
           Locale('ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales
         ],
         locale: const Locale('ar', 'AE'),
-        title: 'Flutter Demo',
+        title: 'On the bon',
         theme: ThemeData(
                 appBarTheme: AppBarTheme(
                     systemOverlayStyle: SystemUiOverlayStyle.light,

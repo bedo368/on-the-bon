@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class CartItem with ChangeNotifier {
   final String id;
@@ -18,6 +19,15 @@ class CartItem with ChangeNotifier {
     this.quantity = 1,
     required this.size,
   });
+  factory CartItem.fromMap(Map<String, dynamic> json) => CartItem(
+        title: json['title'],
+        productId: json["productId"],
+        id: json["id"],
+        price: json["price"],
+        imageUrl: json["imageUrl"],
+        size: json["size"],
+        quantity: json["quantity"],
+      );
 
   void increaseQuntity(double q) {
     notifyListeners();

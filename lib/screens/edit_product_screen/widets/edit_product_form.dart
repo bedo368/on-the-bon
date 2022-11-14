@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_the_bon/global_widgets/confirm_dialog.dart';
 import 'package:on_the_bon/global_widgets/image_picker.dart';
 import 'package:on_the_bon/data/providers/product.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
@@ -22,7 +24,7 @@ class EditProductFrom extends StatelessWidget {
     if (ModalRoute.of(context)!.settings.arguments != null) {
       id = (ModalRoute.of(context)!.settings.arguments as dynamic)['id'] ?? "";
     }
-    final ValueNotifier<bool> isLoding = ValueNotifier<bool>(false);
+    final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
     final Map<String, dynamic> formData = {
       "title": "",
       "discription": "",
@@ -62,7 +64,7 @@ class EditProductFrom extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               )));
-          isLoding.value = false;
+          isLoading.value = false;
 
           return;
         } else if (formKey.currentState!.validate()) {
@@ -94,12 +96,12 @@ class EditProductFrom extends StatelessWidget {
               ),
             )));
 
-        isLoding.value = false;
+        isLoading.value = false;
 
         rethrow;
       }
 
-      isLoding.value = false;
+      isLoading.value = false;
     }
 
     return Form(
@@ -237,7 +239,7 @@ class EditProductFrom extends StatelessWidget {
                 itemCount: 3,
               ),
               ValueListenableBuilder<bool>(
-                valueListenable: isLoding,
+                valueListenable: isLoading,
                 builder: (context, value, child) {
                   return Container(
                       height: 44,
@@ -249,7 +251,7 @@ class EditProductFrom extends StatelessWidget {
                           onPressed: value
                               ? null
                               : () async {
-                                  isLoding.value = true;
+                                  isLoading.value = true;
                                   await _formSubmit();
                                 },
                           // ignore: unnecessary_null_comparison
@@ -259,7 +261,60 @@ class EditProductFrom extends StatelessWidget {
                                 )
                               : const Text("تعديل المنتج")));
                 },
-              )
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 20, bottom: 20),
+                width: 60,
+                height: 25,
+                child: ValueListenableBuilder<bool>(
+                    valueListenable: isLoading,
+                    builder: (context, value, child) {
+                      return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              disabledBackgroundColor: Colors.grey),
+                          onPressed: value
+                              ? null
+                              : () async {
+                                  try {
+                                    isLoading.value = true;
+                                    await showConfirmDialog(
+                                        context: context,
+                                        confirmText: "حذف",
+                                        cancelText: "الغاء",
+                                        title: "حذف المنتج",
+                                        content: "حذف المنتج من قائمه المنتجات",
+                                        onConfirm: () async {
+                                          await Provider.of<Products>(context,
+                                                  listen: false)
+                                              .deleteProductById(currentPeoduct)
+                                              .then((value) {
+                                            Navigator.of(context).pop();
+                                          });
+
+                                          isLoading.value = false;
+                                        },
+                                        onCancel: () {
+                                          isLoading.value = false;
+                                        });
+                                  } catch (e) {
+                                    rethrow;
+                                  }
+                                },
+                          child: value
+                              ? const Center(
+                                  child: SpinKitChasingDots(
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                )
+                              : const Text(
+                                  'حذف',
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.white),
+                                ));
+                    }),
+              ),
             ],
           ),
         ));

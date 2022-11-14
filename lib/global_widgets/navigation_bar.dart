@@ -56,7 +56,7 @@ class ButtomNavigationBar extends StatelessWidget {
               const Align(
                 alignment: Alignment.center,
                 child: Icon(
-                  Icons.shopping_bag,
+                  Icons.list_alt_rounded,
                   size: 33,
                   color: Colors.white,
                 ),

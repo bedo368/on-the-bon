@@ -10,24 +10,31 @@ final Map<String, OrderTypeEnum> orderTypeStringToEnum = {
   "الطلبات المروفضه": OrderTypeEnum.rejectedOrder,
 };
 
-final Map<OrderTypeEnum, String> orderTypeEnumToString= {
+final Map<OrderTypeEnum, String> orderTypeEnumToString = {
   OrderTypeEnum.orderInProgres: "الطلبات الحالية",
   OrderTypeEnum.successfulOrder: "الطلبات الناجحة",
   OrderTypeEnum.rejectedOrder: "الطلبات المروفضه",
 };
 
-enum ProductsTypeEnum { food, hotDrinks, coldDrinks }
+enum ProductsTypeEnum {
+  food,
+  hotDrinks,
+  coldDrinks,
+  sweat,
+}
 
 final Map<String, ProductsTypeEnum> productsStringToType = {
   "مأكولات": ProductsTypeEnum.food,
   "مشروبات باردة": ProductsTypeEnum.coldDrinks,
   "مشروبات ساخنة": ProductsTypeEnum.hotDrinks,
+  "الحلو": ProductsTypeEnum.sweat
 };
 
 final Map<ProductsTypeEnum, String> productsTypeToString = {
   ProductsTypeEnum.food: "مأكولات",
   ProductsTypeEnum.hotDrinks: "مشروبات ساخنة",
-  ProductsTypeEnum.coldDrinks: "مشروبات باردة"
+  ProductsTypeEnum.coldDrinks: "مشروبات باردة",
+  ProductsTypeEnum.sweat: "الحلو"
 };
 
 enum ProductSizeEnum { small, large, meduim }
@@ -35,7 +42,7 @@ enum ProductSizeEnum { small, large, meduim }
 final productSizeEnumToString = {
   "وسط": ProductSizeEnum.small,
   "كبير": ProductSizeEnum.large,
-  "صغير": ProductSizeEnum.meduim
+  "صغير": ProductSizeEnum.meduim,
 };
 
 final productSizeStringtoEnum = {

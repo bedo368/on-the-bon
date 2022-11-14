@@ -144,186 +144,175 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
     }
 
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: SafeArea(
-        child: Scaffold(
-            key: _scaffoldKey,
-            extendBody: true,
-            bottomNavigationBar: ButtomNavigationBar(
-              routeName: HomeScreen.routeName,
-            ),
-            drawer: const MainDrawer(),
-            body: Stack(
-              children: [
-                ValueListenableBuilder<double>(
-                    valueListenable: productGridScrollValueNotifier,
-                    builder: (context, v, c) {
-                      return Positioned(
-                        top: 0,
-                        child: ClipShadowPath(
-                          shadow: BoxShadow(
-                              blurRadius: 5,
-                              blurStyle: BlurStyle.solid,
-                              offset: const Offset(0, 5),
-                              spreadRadius: 5,
-                              color: Theme.of(context).primaryColor),
-                          clipper: WaveClip(
-                              lowPointPosition: 20, hightPointPosition: 40),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 155 - v / 1,
-                            color: Theme.of(context).primaryColor,
-                            child: Card(
-                              child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: [
-                                  Positioned(
-                                      left: 0,
-                                      child: Image.asset(
-                                        "assets/animation/coffee-gif.gif",
-                                        fit: BoxFit.cover,
-                                        width: 90 - scrollvalue / 5,
-                                      )),
-                                  Positioned(
-                                    top: -10,
-                                    child: AnimatedOpacity(
-                                      duration:
-                                          const Duration(milliseconds: 100),
-                                      opacity: scrollvalue > 10 ? 0 : 1,
-                                      child: StrockedText(
-                                        "%",
-                                        fontFamily: "permanentMarker",
-                                        fontSize: 60 - v / 3,
-                                        shadow: const [],
-                                        strokeWidth: 4,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 45 - v / 4.3 - scrollvalue / 4.5,
+    return SafeArea(
+      child: Scaffold(
+          key: _scaffoldKey,
+          extendBody: true,
+          bottomNavigationBar: ButtomNavigationBar(
+            routeName: HomeScreen.routeName,
+          ),
+          drawer: const MainDrawer(),
+          body: Stack(
+            children: [
+              ValueListenableBuilder<double>(
+                  valueListenable: productGridScrollValueNotifier,
+                  builder: (context, v, c) {
+                    return Positioned(
+                      top: 0,
+                      child: ClipShadowPath(
+                        shadow: BoxShadow(
+                            blurRadius: 5,
+                            blurStyle: BlurStyle.solid,
+                            offset: const Offset(0, 5),
+                            spreadRadius: 5,
+                            color: Theme.of(context).primaryColor),
+                        clipper: WaveClip(
+                            lowPointPosition: 18, hightPointPosition: 36),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 155 - v / 1,
+                          color: Theme.of(context).primaryColor,
+                          child: Card(
+                            child: Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                Positioned(
+                                    left: 0,
+                                    child: Image.asset(
+                                      "assets/animation/coffee-gif.gif",
+                                      fit: BoxFit.cover,
+                                      width: 90 - scrollvalue / 5,
+                                    )),
+                                Positioned(
+                                  top: -10,
+                                  child: AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 100),
+                                    opacity: scrollvalue > 10 ? 0 : 1,
                                     child: StrockedText(
-                                      "On The Bon",
-                                      fontFamily: "RockSalt",
-                                      fontSize: 30 - v / 5 + scrollvalue / 10,
+                                      "%",
+                                      fontFamily: "permanentMarker",
+                                      fontSize: 60 - v / 3,
                                       shadow: const [],
-                                      strokeWidth: 2,
+                                      strokeWidth: 4,
                                       color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                Positioned(
+                                  top: 45 - v / 4.3 - scrollvalue / 4.5,
+                                  child: StrockedText(
+                                    "On The Bon",
+                                    fontFamily: "RockSalt",
+                                    fontSize: 30 - v / 5 + scrollvalue / 10,
+                                    shadow: const [],
+                                    strokeWidth: 2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    }),
-                isLoading
-                    ? const Center(
-                        child: IconGif(
-                        width: 90,
-                        content: "",
-                        iconPath: "assets/images/search.gif",
-                      ))
-                    : allProduct.isNotEmpty
-                        ? Positioned(
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              constraints: BoxConstraints(
-                                  minHeight: mediaQuery.size.height),
-                              child: Stack(
-                                children: [
-                                  // ProductTypeNotifier(),
-                                  ValueListenableBuilder<double>(
-                                      valueListenable:
-                                          productGridScrollValueNotifier,
-                                      builder: (context, v, c) {
-                                        return Positioned(
-                                            top: 128 - v,
-                                            child:
-                                                const ProdcutsFiltterByType());
-                                      }),
-                                  ValueListenableBuilder<double>(
-                                      valueListenable:
-                                          productGridScrollValueNotifier,
-                                      builder: (context, v, c) {
-                                        return Positioned(
-                                          top: 215 - v,
-                                          child:
-                                              const ProductsFillterBySubType(),
-                                        );
-                                      }),
-                                  ValueListenableBuilder<double>(
-                                      valueListenable:
-                                          productGridScrollValueNotifier,
-                                      builder: (context, v, c) {
-                                        return Positioned(
-                                            top: 270 - v,
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 0,
-                                            child: ProductGraid(onScroll: (p) {
-                                              scrollvalue = p;
-                                              if (p < 80 && p > 0) {
-                                                if (p > 60 && p < scrollvalue) {
-                                                  scrollvalue += 1;
-                                                }
-                                                if (p > 60 && p > scrollvalue) {
-                                                  scrollvalue -= 1;
-                                                }
-                                                productGridScrollValueNotifier
-                                                    .value = p;
+                      ),
+                    );
+                  }),
+              isLoading
+                  ? const Center(
+                      child: IconGif(
+                      width: 90,
+                      content: "",
+                      iconPath: "assets/images/search.gif",
+                    ))
+                  : allProduct.isNotEmpty
+                      ? Positioned(
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            constraints: BoxConstraints(
+                                minHeight: mediaQuery.size.height),
+                            child: Stack(
+                              children: [
+                                // ProductTypeNotifier(),
+                                ValueListenableBuilder<double>(
+                                    valueListenable:
+                                        productGridScrollValueNotifier,
+                                    builder: (context, v, c) {
+                                      return Positioned(
+                                          top: 128 - v,
+                                          child: const ProdcutsFiltterByType());
+                                    }),
+                                ValueListenableBuilder<double>(
+                                    valueListenable:
+                                        productGridScrollValueNotifier,
+                                    builder: (context, v, c) {
+                                      return Positioned(
+                                        top: 215 - v,
+                                        child: const ProductsFillterBySubType(),
+                                      );
+                                    }),
+                                ValueListenableBuilder<double>(
+                                    valueListenable:
+                                        productGridScrollValueNotifier,
+                                    builder: (context, v, c) {
+                                      return Positioned(
+                                          top: 270 - v,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 0,
+                                          child: ProductGraid(onScroll: (p) {
+                                            scrollvalue = p;
+                                            if (p < 80 && p > 0) {
+                                              if (p > 60 && p < scrollvalue) {
+                                                scrollvalue += 1;
                                               }
-                                            }));
-                                      }),
-                                  Positioned(
-                                      right: 10,
-                                      top: 5,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.menu,
-                                          size: 40,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        onPressed: () {
-                                          _scaffoldKey.currentState!
-                                              .openDrawer();
-                                        },
-                                      )),
-                                ],
-                              ),
-                            ),
-                          )
-                        : RefreshIndicator(
-                            onRefresh: onRefreash,
-                            child: const SingleChildScrollView(
-                              child: IconGif(
-                                width: 150,
-                                content:
-                                    " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
-                                iconPath: "assets/images/connection-error.gif",
-                              ),
+                                              if (p > 60 && p > scrollvalue) {
+                                                scrollvalue -= 1;
+                                              }
+                                              productGridScrollValueNotifier
+                                                  .value = p;
+                                            }
+                                            if (p > 80) {
+                                              productGridScrollValueNotifier
+                                                  .value = 80;
+                                            }
+                                            if (p <= 0) {
+                                              productGridScrollValueNotifier
+                                                  .value = 0;
+                                            }
+                                          }));
+                                    }),
+                              ],
                             ),
                           ),
-                // Positioned(
-                //     right: 10,
-                //     top: 0,
-                //     child: IconButton(
-                //       icon: const Icon(
-                //         Icons.menu,
-                //         size: 40,
-                //       ),
-                //       onPressed: () {
-                //         _scaffoldKey.currentState!.openDrawer();
-                //       },
-                //     )),
-              ],
-            )),
-      ),
+                        )
+                      : RefreshIndicator(
+                          onRefresh: onRefreash,
+                          child: const SingleChildScrollView(
+                            child: IconGif(
+                              width: 150,
+                              content:
+                                  " خطأ في الاتصال بالانترنت من فضلك حاول مجددا ",
+                              iconPath: "assets/images/connection-error.gif",
+                            ),
+                          ),
+                        ),
+              Positioned(
+                  right: 10,
+                  top: 5,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      size: 40,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      _scaffoldKey.currentState!.openDrawer();
+                    },
+                  )),
+            ],
+          )),
     );
   }
 }

@@ -33,11 +33,7 @@ class _LoginWithGoogleFormState extends State<LoginWithGoogleForm> {
             margin: const EdgeInsets.only(top: 50),
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: GoogleSignButton(setIsLoading: () {
-                setState(() {
-                  isLoading = !isLoading;
-                });
-              }),
+              child: GoogleSignButton(),
             ),
           ),
         ),
