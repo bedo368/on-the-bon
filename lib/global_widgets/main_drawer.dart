@@ -131,8 +131,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       title: "الصفخه الرئيسيىة",
                       icon: Icons.home,
                       onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(HomeScreen.routeName);
+                        Navigator.of(context).pushNamed(HomeScreen.routeName);
                       },
                     ),
                     DrawerElement(
@@ -147,16 +146,14 @@ class _MainDrawerState extends State<MainDrawer> {
                       title: "طلباتي",
                       icon: Icons.favorite,
                       onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(OrdersScreen.routeName);
+                        Navigator.of(context).pushNamed(OrdersScreen.routeName);
                       },
                     ),
                     DrawerElement(
                       title: "العربة",
                       icon: Icons.shopping_bag,
                       onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(CartScreen.routeName);
+                        Navigator.of(context).pushNamed(CartScreen.routeName);
                       },
                     ),
                     DrawerElement(
@@ -179,27 +176,23 @@ class _MainDrawerState extends State<MainDrawer> {
                     DrawerElement(
                       title: "تواصل معنا",
                       icon: Icons.call,
-                      onTap: () async{
-                         var whatsappUrl =
-                            "tel://214324234";
+                      onTap: () async {
+                        var whatsappUrl = "tel://214324234";
                         await launchUrl(Uri.parse(whatsappUrl));
-                        
                       },
                     ),
                     DrawerElement(
                       title: "التطبيق",
                       icon: Ionicons.logo_google_playstore,
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                     ),
                     if (userData.isAdmin as bool)
                       DrawerElement(
                         title: "ادارة المنتجات",
                         icon: Icons.manage_accounts,
                         onTap: () {
-                          Navigator.of(context).pushNamed(
-                              ProductManageScreen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(ProductManageScreen.routeName);
                         },
                       ),
                     if (userData.isAdmin as bool)
@@ -207,8 +200,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         title: "ادارة الطلبات",
                         icon: Icons.manage_history,
                         onTap: () {
-                          Navigator.of(context).pushNamed(
-                              OrderManageScreen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(OrderManageScreen.routeName);
                         },
                       ),
                     if (userData.isAdmin as bool)
@@ -216,8 +209,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         title: "ارسال اشعار",
                         icon: Icons.notification_add,
                         onTap: () {
-                          Navigator.of(context).pushNamed(
-                              SendNotificationScreen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(SendNotificationScreen.routeName);
                         },
                       ),
                     DrawerElement(
@@ -236,18 +229,23 @@ class _MainDrawerState extends State<MainDrawer> {
                         await launchUrl(Uri.parse(whatsappUrl));
                       },
                     ),
+                    DrawerElement(
+                      title: "للتواصل مع المصمم",
+                      icon: Icons.whatsapp,
+                      onTap: () async {
+                        var whatsappUrl = "whatsapp://send?phone=+201012824110";
+                        await launchUrl(Uri.parse(whatsappUrl));
+                      },
+                    ),
                     Container(
                       margin: EdgeInsets.only(bottom: 10),
                       child: DrawerElement(
-                        title: "تسجيل الخروج",
+                        title: "onbr",
                         icon: Icons.logout,
                         onTap: () {
-                          Provider.of<Products>(context, listen: false)
-                              .clearProducts();
-                          Auth.signOut().then((value) {
-                            Provider.of<UserData>(context, listen: false)
-                                .clearData();
-                          });
+                          Navigator.of(context)
+                              .pushNamed("/or");
+                        
                         },
                       ),
                     ),

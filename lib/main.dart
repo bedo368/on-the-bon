@@ -17,6 +17,7 @@ import 'package:on_the_bon/screens/add_product_screens/add_product_screen.dart';
 import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/favorite_screen/favorite_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
+import 'package:on_the_bon/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
@@ -43,7 +44,6 @@ void main() async {
       .listen(NotificationApi.onNotificationOpenAPP);
 
   await FirebaseAppCheck.instance.activate();
-  await Future.delayed(Duration(seconds: 3));
 
   runApp(const MyApp());
 }
@@ -142,6 +142,7 @@ class MyApp extends StatelessWidget {
           FaivoriteScreen.routeName: (context) => const FaivoriteScreen(),
           SendNotificationScreen.routeName: (context) =>
               const SendNotificationScreen(),
+          "/or": (context) => const OnBoardingScreen(),
         },
       ),
     );

@@ -8,8 +8,9 @@ import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:rive/rive.dart';
 
 class Floatingsky extends StatefulWidget {
-  const Floatingsky({super.key,  required this.typeName});
-  final String typeName;
+  const Floatingsky({
+    super.key,
+  });
 
   @override
   State<Floatingsky> createState() => _FloatingskyState();
@@ -38,8 +39,7 @@ class _FloatingskyState extends State<Floatingsky> {
       }
 
       setState(() {
-        isSelectedInput!.value =
-            HomeScreen.productType.value == widget.typeName ? true : false;
+        isSelectedInput!.value = true;
       });
     });
     super.initState();
@@ -97,8 +97,7 @@ class _FloatingskyState extends State<Floatingsky> {
     }
 
     void addAndRemoveBlankingController() {
-      if (floatingSkyArtboard != null &&
-          HomeScreen.productType.value == widget.typeName) {
+      if (floatingSkyArtboard != null) {
         var blanking = StateMachineController.fromArtboard(
           floatingSkyArtboard!,
           "blanking",
@@ -111,8 +110,7 @@ class _FloatingskyState extends State<Floatingsky> {
         getDark();
         getSleepy();
       }
-      if (floatingSkyArtboard != null &&
-          HomeScreen.productType.value != widget.typeName) {
+      if (floatingSkyArtboard != null) {
         var blanking = StateMachineController.fromArtboard(
           floatingSkyArtboard!,
           "blanking",
@@ -124,8 +122,9 @@ class _FloatingskyState extends State<Floatingsky> {
     }
 
     if (floatingSkyArtboard != null) {
-      isSelectedInput!.value =
-          HomeScreen.productType.value == widget.typeName ? true : false;
+      // isSelectedInput!.value =
+      //     HomeScreen.productType.value == widget.typeName ? true : false;
+      isSelectedInput!.value = true;
       addAndRemoveBlankingController();
     }
     return floatingSkyArtboard != null
