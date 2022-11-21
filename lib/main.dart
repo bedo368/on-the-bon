@@ -43,6 +43,7 @@ void main() async {
       .listen(NotificationApi.onNotificationOpenAPP);
 
   await FirebaseAppCheck.instance.activate();
+  await Future.delayed(Duration(seconds: 3));
 
   runApp(const MyApp());
 }
