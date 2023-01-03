@@ -21,7 +21,7 @@ class StrockedText extends StatelessWidget {
     this.overrideSizeStroke = false,
     required this.fontSize,
     this.strokeWidth = 0, // stroke width default
-    this.strokeColor = Colors.white,
+    this.strokeColor = const Color.fromRGBO(177, 35, 35, 1),
     required this.shadow,
     this.color = Colors.black,
   }) : super(key: key) {

@@ -16,7 +16,10 @@ class ProductManageScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: const Text("Manage Products"),
+          title: const Text(
+            "اداره المنتجات",
+            style: TextStyle(color: Colors.white),
+          ),
           actions: [
             IconButton(
                 onPressed: () {

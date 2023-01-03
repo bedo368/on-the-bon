@@ -79,7 +79,7 @@ class AddProductForm extends StatelessWidget {
 
             return;
           }
-          if ((formData["image"] as File).path == "") {
+          if (formData["image"] .path == "") {
             ImagePickerWedgit.imageHolder = File("");
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -16,15 +16,14 @@ class Auth {
         await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
       try {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
         final user = await auth.signInWithCredential(credential);
 
         if (!user.additionalUserInfo!.isNewUser) {
@@ -62,10 +61,6 @@ class Auth {
         }
       } catch (e) {
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("حدث خطا ما في الاتصال من فضلك حاول مجددا")));
 
         // handle the error here
       }

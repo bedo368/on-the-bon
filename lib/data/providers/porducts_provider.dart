@@ -67,9 +67,6 @@ class Products with ChangeNotifier {
     _currentSubType = types[type]!.values.first;
 
     notifyListeners();
-
-   
-    
   }
 
   String get getCurrentType {
@@ -151,6 +148,7 @@ class Products with ChangeNotifier {
         "imageUrl": url,
         "type": newProduct.type,
         "subType": newProduct.subType,
+        "reviews": 5
       });
 
       _productList[productId.id] = Product(

@@ -92,6 +92,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           appBar: AppBar(
             title: const Text(
               "قائمه طلباتي",
+              style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Theme.of(context).primaryColor,
           ),

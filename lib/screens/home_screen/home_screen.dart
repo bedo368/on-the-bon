@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:on_the_bon/data/helper/subscribe_to_topic.dart';
 import 'package:on_the_bon/data/providers/user_provider.dart';
 import 'package:on_the_bon/global_widgets/clip_shadow.dart';
 import 'package:on_the_bon/global_widgets/main_drawer.dart';
@@ -12,14 +14,16 @@ import 'package:on_the_bon/screens/home_screen/widgets/custom_clip_path.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_subtype.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/products_filter/product_filtter_by_type.dart';
 import 'package:on_the_bon/screens/home_screen/widgets/product_graid.dart';
+import 'package:on_the_bon/screens/sign_screen/sign_screen.dart';
 import 'package:on_the_bon/service/manage_notification.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
   static String routeName = "/";
   static final ValueNotifier<String> productType =
-      ValueNotifier<String>("مشروبات ساخنة");
+      ValueNotifier<String>(productsStringToType.keys.first);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -32,11 +36,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    if (FirebaseAuth.instance.currentUser == null) {
+      Navigator.of(context).pushReplacementNamed(LogInScreen.routeName);
+    }
     NotificationApi.requestPermission();
 
     setState(() {
       isLoading = true;
     });
+
+    if (MyApp.firstOpen) {
+      SubscribeToNotificationTopic.subscreibToAdmin();
+      SubscribeToNotificationTopic.subscreibToUsers();
+    }
+
+    if (FirebaseAuth.instance.currentUser != null) {
+      Provider.of<UserData>(context, listen: false).fetchUserDataAsync();
+    }
 
     InternetConnectionChecker.createInstance()
         .hasConnection
@@ -159,57 +175,61 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   builder: (context, v, c) {
                     return Positioned(
                       top: 0,
-                      child: ClipShadowPath(
-                        shadow: BoxShadow(
-                            blurRadius: 5,
-                            blurStyle: BlurStyle.solid,
-                            offset: const Offset(0, 5),
-                            spreadRadius: 5,
-                            color: Theme.of(context).primaryColor),
-                        clipper: WaveClip(
-                            lowPointPosition: 18, hightPointPosition: 36),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 155 - v / 1,
-                          color: Theme.of(context).primaryColor,
-                          child: Card(
-                            child: Stack(
-                              alignment: Alignment.topCenter,
-                              children: [
-                                Positioned(
-                                    left: 0,
-                                    child: Image.asset(
-                                      "assets/animation/coffee-gif.gif",
-                                      fit: BoxFit.cover,
-                                      width: 90 - scrollvalue / 5,
-                                    )),
-                                Positioned(
-                                  top: -10,
-                                  child: AnimatedOpacity(
-                                    duration: const Duration(milliseconds: 100),
-                                    opacity: scrollvalue > 10 ? 0 : 1,
-                                    child: StrockedText(
-                                      "%",
-                                      fontFamily: "permanentMarker",
-                                      fontSize: 60 - v / 3,
-                                      shadow: const [],
-                                      strokeWidth: 4,
-                                      color: Theme.of(context).primaryColor,
+                      child: Container(
+                        child: ClipShadowPath(
+                          shadow: BoxShadow(
+                              blurRadius: 5,
+                              blurStyle: BlurStyle.outer,
+                              offset: const Offset(0, 5),
+                              spreadRadius: 5,
+                              color: Theme.of(context).primaryColor),
+                          clipper: WaveClip(
+                              lowPointPosition: 15, hightPointPosition: 30),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 155 - v / 1,
+                            color: Theme.of(context).primaryColor,
+                            child: Card(
+                              color: Theme.of(context).primaryColor,
+                              child: Stack(
+                                alignment: Alignment.topCenter,
+                                children: [
+                                  Positioned(
+                                      left: 0,
+                                      child: Image.asset(
+                                        "assets/animation/coffee-gif.gif",
+                                        fit: BoxFit.cover,
+                                        width: 90 - scrollvalue / 5,
+                                      )),
+                                  Positioned(
+                                    top: -10,
+                                    child: AnimatedOpacity(
+                                      duration:
+                                          const Duration(milliseconds: 100),
+                                      opacity: scrollvalue > 10 ? 0 : 1,
+                                      child: StrockedText(
+                                        "%",
+                                        fontFamily: "permanentMarker",
+                                        fontSize: 60 - v / 3,
+                                        shadow: const [],
+                                        strokeWidth: 4,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Positioned(
-                                  top: 45 - v / 4.3 - scrollvalue / 4.5,
-                                  child: StrockedText(
-                                    "On The Bon",
-                                    fontFamily: "RockSalt",
-                                    fontSize: 30 - v / 5 + scrollvalue / 10,
-                                    shadow: const [],
-                                    strokeWidth: 2,
-                                    color: Theme.of(context).primaryColor,
+                                  Positioned(
+                                    top: 45 - v / 4.3 - scrollvalue / 4.5,
+                                    child: StrockedText(
+                                      "On The Bon",
+                                      fontFamily: "RockSalt",
+                                      fontSize: 30 - v / 5 + scrollvalue / 10,
+                                      shadow: const [],
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -240,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         productGridScrollValueNotifier,
                                     builder: (context, v, c) {
                                       return Positioned(
-                                          top: 128 - v,
+                                          top: 134 - v,
                                           child: const ProdcutsFiltterByType());
                                     }),
                                 ValueListenableBuilder<double>(
@@ -304,8 +324,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   child: IconButton(
                     icon: Icon(
                       Icons.menu,
-                      size: 40,
-                      color: Theme.of(context).primaryColor,
+                      size: 44,
+                      color: Colors.white,
                     ),
                     onPressed: () {
                       _scaffoldKey.currentState!.openDrawer();

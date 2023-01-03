@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
-import 'package:on_the_bon/global_widgets/clip_shadow.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
 import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/screens/favorite_screen/fav_graid.dart';
-import 'package:on_the_bon/screens/home_screen/widgets/custom_clip_path.dart';
 import 'package:provider/provider.dart';
 
 class FaivoriteScreen extends StatefulWidget {
@@ -64,7 +62,7 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
                           child: Stack(
                             children: [
                               Positioned(
-                                  top: 25,
+                                  top: 35,
                                   bottom: 0,
                                   left: 0,
                                   right: 0,
@@ -93,24 +91,16 @@ class _FaivoriteScreenState extends State<FaivoriteScreen> {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: ClipShadowPath(
-                    shadow: BoxShadow(
-                        blurRadius: 5,
-                        offset: const Offset(0, 2),
-                        spreadRadius: 2,
-                        color: Theme.of(context).primaryColor),
-                    clipper:
-                        WaveClip(lowPointPosition: 10, hightPointPosition: 20),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      height: 50,
-                      color: Theme.of(context).primaryColor,
-                      width: MediaQuery.of(context).size.width,
-                      child: const Text(
-                        "❤️ مفضلتي",
-                        style: TextStyle(fontSize: 25, color: Colors.white),
-                      ),
-                    )),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  height: 50,
+                  color: Theme.of(context).primaryColor,
+                  width: MediaQuery.of(context).size.width,
+                  child: const Text(
+                    "❤️ مفضلتي",
+                    style: TextStyle(fontSize: 25, color: Colors.white),
+                  ),
+                ),
               ),
             ],
           )),

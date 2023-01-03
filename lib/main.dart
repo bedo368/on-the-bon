@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:on_the_bon/data/helper/subscribe_to_topic.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/data/providers/porducts_provider.dart';
@@ -18,6 +17,7 @@ import 'package:on_the_bon/screens/cart_screen/cart_screen.dart';
 import 'package:on_the_bon/screens/favorite_screen/favorite_screen.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/onboarding_screen/onboarding_screen.dart';
+import 'package:on_the_bon/screens/order_screen/order_screen.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
 import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 import 'package:on_the_bon/screens/product_manage_screen/product_manage_screen.dart';
@@ -26,6 +26,7 @@ import 'package:on_the_bon/screens/send_notification_screen/send_notification_sc
 import 'package:on_the_bon/screens/sign_screen/sign_screen.dart';
 import 'package:on_the_bon/service/manage_notification.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,15 +45,20 @@ void main() async {
       .listen(NotificationApi.onNotificationOpenAPP);
 
   await FirebaseAppCheck.instance.activate();
+  final prefs = await SharedPreferences.getInstance();
+  final showOnboarding = prefs.getBool("hideonboardscreen") ?? false;
 
-  runApp(const MyApp());
+  runApp(MyApp(
+    showOnboarding: showOnboarding,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.showOnboarding}) : super(key: key);
+  final bool showOnboarding;
   static bool firstOpen = true;
 
   @override
@@ -90,8 +96,11 @@ class MyApp extends StatelessWidget {
           Locale('ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales
         ],
         locale: const Locale('ar', 'AE'),
-        title: 'On the bon',
+        title: 'ON THE BON',
         theme: ThemeData(
+                primaryTextTheme:
+                    TextTheme(button: TextStyle(color: Colors.white)),
+                // useMaterial3: true,
                 appBarTheme: AppBarTheme(
                     systemOverlayStyle: SystemUiOverlayStyle.light,
                     backgroundColor: Theme.of(context).primaryColor),
@@ -101,37 +110,37 @@ class MyApp extends StatelessWidget {
                     const Color.fromARGB(255, 255, 255, 255),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
-                        textStyle: GoogleFonts.itim(fontSize: 18))),
+                        textStyle: GoogleFonts.itim(
+                            fontSize: 18, color: Colors.white))),
                 primaryColor: const Color.fromRGBO(61, 26, 26, 1),
                 colorScheme: ColorScheme.fromSwatch()
                     .copyWith(secondary: const Color.fromRGBO(177, 35, 35, 1)))
-            .copyWith(backgroundColor: const Color.fromRGBO(5, 14, 14, 1)),
+            .copyWith(),
         home: StreamBuilder(
           stream: auth.FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            if (firstOpen) {
-              SubscribeToNotificationTopic.subscreibToAdmin();
-              SubscribeToNotificationTopic.subscreibToUsers();
-            }
             if (snapshot.hasData) {
-              return const HomeScreen();
+              return showOnboarding ? const HomeScreen() : OnBoardingScreen();
             } else {
               if (auth.FirebaseAuth.instance.currentUser == null) {
-                return const LogInScreen();
+                return showOnboarding
+                    ? const LogInScreen()
+                    : OnBoardingScreen();
               }
               if (Provider.of<auth.User>(context).uid.isNotEmpty) {
                 if (auth.FirebaseAuth.instance.currentUser!.uid.isNotEmpty) {
                   Provider.of<UserData>(context, listen: false)
                       .fetchUserDataAsync();
                 }
-                return const HomeScreen();
+                return showOnboarding ? const HomeScreen() : OnBoardingScreen();
               }
-              return const LogInScreen();
+              return showOnboarding ? OnBoardingScreen() : const LogInScreen();
             }
           },
         ),
         routes: {
           ProductScreen.routeName: (context) => const ProductScreen(),
+          LogInScreen.routeName: (context) => const LogInScreen(),
           CartScreen.routeName: (context) => const CartScreen(),
           OrdersScreen.routeName: (context) => const OrdersScreen(),
           OrderManageScreen.routeName: (context) => const OrderManageScreen(),
@@ -142,7 +151,7 @@ class MyApp extends StatelessWidget {
           FaivoriteScreen.routeName: (context) => const FaivoriteScreen(),
           SendNotificationScreen.routeName: (context) =>
               const SendNotificationScreen(),
-          "/or": (context) => const OnBoardingScreen(),
+          OrderScreen.routeName: (context) => OrderScreen(orderId: "ff")
         },
       ),
     );

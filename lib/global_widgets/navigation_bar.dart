@@ -124,7 +124,7 @@ class ButtomNavigationBar extends StatelessWidget {
             if (route == OrdersScreen.routeName) {
               if (routeName != CartScreen.routeName) {
                 Navigator.of(context)
-                    .pushReplacement(SlidePageToRight(const CartScreen()));
+                    .pushReplacement(SlidePageToRight( CartScreen()));
               }
             } else {
               if (routeName != CartScreen.routeName) {

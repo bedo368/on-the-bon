@@ -41,19 +41,22 @@ class MySearchDelegate extends SearchDelegate {
       return element.title.contains(input);
     }).toList();
 
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: Text(filterdProduct[index].title),
-          onTap: () {
-            query = filterdProduct[index].title;
+    return SafeArea(
+      child: Scaffold(
+          body: ListView.builder(
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Text(filterdProduct[index].title),
+            onTap: () {
+              query = filterdProduct[index].title;
 
-            onElementTap(
-                context, filterdProduct[index].id, filterdProduct[index].type);
-          },
-        );
-      },
-      itemCount: filterdProduct.length,
+              onElementTap(context, filterdProduct[index].id,
+                  filterdProduct[index].type);
+            },
+          );
+        },
+        itemCount: filterdProduct.length,
+      )),
     );
   }
 }

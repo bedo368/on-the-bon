@@ -8,9 +8,7 @@ class LogInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (Provider.of<User>(context).uid != "") {
-    //   Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-    // }
+    
     final mediaQuery = MediaQuery.of(context);
 
     return Container(

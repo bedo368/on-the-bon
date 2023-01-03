@@ -9,6 +9,16 @@ import 'package:on_the_bon/type_enum/enums.dart';
 class Orders with ChangeNotifier {
   final Map<String, Order> _orders = {};
 
+  Order currOrder = Order(
+      ordersItems: [],
+      userId: "",
+      phoneNumber: "",
+      location: '',
+      id: "",
+      orderType: OrderTypeEnum.orderInProgres,
+      totalPrice: 2,
+      createdAt: DateTime.now());
+
   final Map<OrderTypeEnum, String> ordersTypeEnumToStringE = {
     OrderTypeEnum.successfulOrder: "sucessfulOrder",
     OrderTypeEnum.orderInProgres: "orderInProgres",
@@ -109,7 +119,7 @@ class Orders with ChangeNotifier {
   }
 
   //  opreation on one order
-  Future<void> addOrder({
+  Future<String> addOrder({
     required List<CartItem> orderItems,
     required String phoneNumber,
     required String location,
@@ -128,7 +138,7 @@ class Orders with ChangeNotifier {
       };
     }).toList();
     try {
-      await db.collection("orderInProgres").add({
+      final order =  await db.collection("orderInProgres").add({
         "orderItems": items,
         "userId": userId,
         "PhoneNumber": phoneNumber,
@@ -136,10 +146,8 @@ class Orders with ChangeNotifier {
         "location": location,
         "createdAt": DateTime.now(),
       });
-      await db
-          .collection("users")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({"location": location});
+      return order.id; 
+      
     } catch (e) {
       rethrow;
     }
@@ -176,5 +184,43 @@ class Orders with ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> getOrderById(String id) async {
+    currOrder = Order(
+        ordersItems: [],
+        userId: "",
+        phoneNumber: "",
+        location: '',
+        id: "",
+        orderType: OrderTypeEnum.orderInProgres,
+        totalPrice: 2,
+        createdAt: DateTime.now());
+    notifyListeners();
+    final order = await FirebaseFirestore.instance
+        .collection("orderInProgres")
+        .doc(id)
+        .get();
+    final List<OrderItem> items = [];
+
+    for (var e in (order.data()!["orderItems"] as List<dynamic>)) {
+      items.add(OrderItem(
+          productId: e["productId"],
+          quantity: e["quantity"],
+          title: e["title"],
+          price: e["price"],
+          imageUrl: e["imageUrl"],
+          size: e["size"]));
+    }
+    currOrder = Order(
+        userId: order.data()!['userId'],
+        createdAt: (order.data()!['createdAt'] as Timestamp).toDate(),
+        id: order.id,
+        location: order.data()!['location'],
+        totalPrice: order.data()!['totalPrice'],
+        phoneNumber: order.data()!['PhoneNumber'],
+        orderType: OrderTypeEnum.orderInProgres,
+        ordersItems: items);
+    notifyListeners();
   }
 }

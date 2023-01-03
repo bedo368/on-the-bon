@@ -6,7 +6,9 @@ import 'package:on_the_bon/data/helper/auth.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/data/providers/user_provider.dart';
-import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
+import 'package:on_the_bon/screens/cart_screen/widgets/get_from_shop.dart';
+
+import 'package:on_the_bon/screens/sucess_order_screen/sucess_order_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
@@ -21,6 +23,9 @@ class CartScreenBottom extends StatefulWidget {
 }
 
 class _CartScreenBottomState extends State<CartScreenBottom> {
+  bool isDelevary = true;
+  final ValueNotifier<bool> isLoading = ValueNotifier(false);
+
   @override
   void initState() {
     CartScreenBottom.usingCurrentPhone.value = true;
@@ -31,7 +36,6 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
     super.initState();
   }
 
-  final ValueNotifier<bool> isLoading = ValueNotifier(false);
   @override
   Widget build(BuildContext context) {
     String phoneNumber = "";
@@ -40,20 +44,23 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
       try {
         isLoading.value = true;
 
-        await Provider.of<Orders>(context, listen: false).addOrder(
-            orderItems: Provider.of<Cart>(context, listen: false).cartItems,
-            phoneNumber: phone,
-            location: locationText,
-            totalPrice: Provider.of<Cart>(context, listen: false).totalPrice,
-            userId: Provider.of<UserData>(context, listen: false).id!);
+        await Provider.of<Orders>(context, listen: false)
+            .addOrder(
+                orderItems: Provider.of<Cart>(context, listen: false).cartItems,
+                phoneNumber: phone,
+                location: !isDelevary ? "${locationText}" : locationText,
+                totalPrice:
+                    Provider.of<Cart>(context, listen: false).totalPrice,
+                userId: Provider.of<UserData>(context, listen: false).id!)
+            .then((id) {
+          Provider.of<Cart>(context, listen: false).clearCart();
 
-        // ignore: use_build_context_synchronously
-        Provider.of<Cart>(context, listen: false).clearCart();
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => SucessOrderScreen(orderId: id)),
+          );
 
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
-
-        isLoading.value = false;
+          isLoading.value = false;
+        });
       } catch (e) {
         isLoading.value = false;
 
@@ -237,49 +244,72 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                                 )
                               : Container();
                         }),
-                  Row(
-                    textDirection: TextDirection.rtl,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * .75,
-                        child: TextFormField(
-                          initialValue:
-                              Provider.of<UserData>(context, listen: false)
-                                      .location ??
-                                  "",
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          textAlign: TextAlign.right,
-                          decoration: cartInput("العنوان"),
-                          validator: ((value) {
-                            if (value!.isNotEmpty) {
-                              if (value.length <= 8) {
-                                return " من فضلك  ادخل اسم الحي بشكل صحيح";
-                              }
-                            }
-                            if (value.isEmpty) {
-                              return "من فضلك  ادخل اسم الحي";
-                            }
-                            locationText = value;
-                            return null;
-                          }),
-                          onSaved: (newval) {
-                            locationText = newval!;
-                          },
-                          onFieldSubmitted: (_) async {
-                            await submitOrder();
-                          },
-                        ),
-                      ),
-                      const Center(
-                        child: SizedBox(
-                            width: 30,
-                            height: 50,
-                            child: RiveAnimation.asset(
-                              "assets/animation/location-icon.riv",
-                              fit: BoxFit.cover,
-                            )),
-                      )
-                    ],
+                  isDelevary
+                      ? Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .75,
+                              child: TextFormField(
+                                initialValue: Provider.of<UserData>(context,
+                                            listen: false)
+                                        .location ??
+                                    "",
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                decoration: cartInput("العنوان"),
+                                validator: ((value) {
+                                  if (value!.isNotEmpty) {
+                                    if (value.length <= 8) {
+                                      return " من فضلك  ادخل اسم الحي بشكل صحيح";
+                                    }
+                                  }
+                                  if (value.isEmpty) {
+                                    return "من فضلك  ادخل اسم الحي";
+                                  }
+                                  locationText = value;
+                                  return null;
+                                }),
+                                onSaved: (newval) {
+                                  locationText = newval!;
+                                },
+                                onFieldSubmitted: (_) async {
+                                  await submitOrder();
+                                },
+                              ),
+                            ),
+                            const Center(
+                              child: SizedBox(
+                                  width: 30,
+                                  height: 50,
+                                  child: RiveAnimation.asset(
+                                    "assets/animation/location-icon.riv",
+                                    fit: BoxFit.cover,
+                                  )),
+                            )
+                          ],
+                        )
+                      : Container(),
+                  SetToGetFromShop(
+                    onSubmit: (time) {
+                      locationText = time;
+                    },
+                    shopName: "الموقف الغربي",
+                    switchFunction: (val) {
+                      setState(() {
+                        isDelevary = !val;
+                      });
+                    },
+                  ),
+                  SetToGetFromShop(
+                    onSubmit: (time) {
+                      locationText = time;
+                    },
+                    shopName: " شارع بور سعيد",
+                    switchFunction: (val) {
+                      setState(() {
+                        isDelevary = !val;
+                      });
+                    },
                   ),
                 ],
               ),
@@ -341,7 +371,10 @@ class _CartScreenBottomState extends State<CartScreenBottom> {
                           size: 30,
                         ),
                       )
-                    : const Text("تأكيد الطلب"),
+                    : const Text(
+                        "تأكيد الطلب",
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
             );
           },

@@ -16,33 +16,30 @@ final Map<OrderTypeEnum, String> orderTypeEnumToString = {
   OrderTypeEnum.rejectedOrder: "الطلبات المروفضه",
 };
 
-enum ProductsTypeEnum {
-  food,
-  hotDrinks,
-  coldDrinks,
-  sweat,
-}
+enum ProductsTypeEnum { food, Drinks, sweat, IceCream }
 
 final Map<String, ProductsTypeEnum> productsStringToType = {
-  "مأكولات": ProductsTypeEnum.food,
-  "مشروبات باردة": ProductsTypeEnum.coldDrinks,
-  "مشروبات ساخنة": ProductsTypeEnum.hotDrinks,
-  "الحلو": ProductsTypeEnum.sweat
+  "☕ مشروبات": ProductsTypeEnum.Drinks,
+  "🍔 مأكولات": ProductsTypeEnum.food,
+  "🧁 ديزيرت": ProductsTypeEnum.sweat,
+  "🍨 ايس كريم": ProductsTypeEnum.IceCream,
 };
 
 final Map<ProductsTypeEnum, String> productsTypeToString = {
-  ProductsTypeEnum.food: "مأكولات",
-  ProductsTypeEnum.hotDrinks: "مشروبات ساخنة",
-  ProductsTypeEnum.coldDrinks: "مشروبات باردة",
-  ProductsTypeEnum.sweat: "الحلو"
+  ProductsTypeEnum.Drinks: "☕ مشروبات",
+  ProductsTypeEnum.food: "🍔 مأكولات",
+  ProductsTypeEnum.sweat: "🧁 ديزيرت",
+  ProductsTypeEnum.IceCream: "🍨 ايس كريم",
 };
 
-enum ProductSizeEnum { small, large, meduim }
+enum ProductSizeEnum { small, large, meduim , normal , spitial  }
 
 final productSizeEnumToString = {
   "وسط": ProductSizeEnum.small,
   "كبير": ProductSizeEnum.large,
   "صغير": ProductSizeEnum.meduim,
+  "Normal":ProductSizeEnum.normal ,
+  "Spitial":ProductSizeEnum.spitial
 };
 
 final productSizeStringtoEnum = {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/global_widgets/icon_gif.dart';
-import 'package:on_the_bon/global_widgets/main_drawer.dart';
 import 'package:on_the_bon/global_widgets/navigation_bar.dart';
 import 'package:on_the_bon/data/providers/cart_provider.dart';
 import 'package:on_the_bon/screens/cart_screen/widgets/bottom_cart_screen.dart';
@@ -19,7 +18,7 @@ class CartScreen extends StatelessWidget {
       color: Theme.of(context).primaryColor,
       child: SafeArea(
         child: Scaffold(
-          drawer: const MainDrawer(),
+          // drawer: const MainDrawer(),
           extendBody: true,
           bottomNavigationBar: ButtomNavigationBar(
             routeName: CartScreen.routeName,
@@ -30,6 +29,7 @@ class CartScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: const Text(
                   "عربة التسوق",
+                  style: TextStyle(color: Colors.white),
                 )),
           ),
           body: cartData.cartItems.isNotEmpty

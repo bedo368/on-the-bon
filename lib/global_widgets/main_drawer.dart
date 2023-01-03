@@ -160,24 +160,45 @@ class _MainDrawerState extends State<MainDrawer> {
                       title: "فيس بوك",
                       icon: Icons.facebook,
                       onTap: () async {
-                        var whatsappUrl = "https://www.facebook.com/KAHWAGIA";
-                        await launchUrl(Uri.parse(whatsappUrl));
+                        try {
+                          var whatsappUrl = "https://www.facebook.com/KAHWAGIA";
+                          if (await launchUrl(Uri.parse(whatsappUrl),
+                              mode: LaunchMode.externalNonBrowserApplication)) {
+                          } else {
+                            await launchUrl(
+                                Uri.parse("https://www.facebook.com/KAHWAGIA"));
+                          }
+                        } catch (e) {
+                          await launchUrl(
+                              Uri.parse("https://www.facebook.com/KAHWAGIA"));
+                        }
                       },
                     ),
                     DrawerElement(
                       title: "انستجرام",
                       icon: Ionicons.logo_instagram,
                       onTap: () async {
-                        var whatsappUrl =
-                            "https://instagram.com/on_the_bon?igshid=YmMyMTA2M2Y=";
-                        await launchUrl(Uri.parse(whatsappUrl));
+                        try {
+                          var whatsappUrl =
+                              "instagram://user?username=on_the_bon";
+                          await launchUrl(Uri.parse(whatsappUrl));
+
+                          if (await launchUrl(Uri.parse(whatsappUrl))) {
+                          } else {
+                            await launchUrl(Uri.parse(
+                                "https://instagram.com/on_the_bon?igshid=YmMyMTA2M2Y="));
+                          }
+                        } catch (e) {
+                          await launchUrl(Uri.parse(
+                              "https://instagram.com/on_the_bon?igshid=YmMyMTA2M2Y="));
+                        }
                       },
                     ),
                     DrawerElement(
                       title: "تواصل معنا",
                       icon: Icons.call,
                       onTap: () async {
-                        var whatsappUrl = "tel://214324234";
+                        var whatsappUrl = "tel://0472517754";
                         await launchUrl(Uri.parse(whatsappUrl));
                       },
                     ),
@@ -213,42 +234,77 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushNamed(SendNotificationScreen.routeName);
                         },
                       ),
-                    DrawerElement(
-                      title: "للتواصل مع المطور",
-                      icon: Icons.whatsapp,
-                      onTap: () async {
-                        var whatsappUrl = "whatsapp://send?phone=+201020766083";
-                        await launchUrl(Uri.parse(whatsappUrl));
-                      },
-                    ),
-                    DrawerElement(
-                      title: "للتواصل مع المصمم",
-                      icon: Icons.whatsapp,
-                      onTap: () async {
-                        var whatsappUrl = "whatsapp://send?phone=+201012824110";
-                        await launchUrl(Uri.parse(whatsappUrl));
-                      },
-                    ),
-                    DrawerElement(
-                      title: "للتواصل مع المصمم",
-                      icon: Icons.whatsapp,
-                      onTap: () async {
-                        var whatsappUrl = "whatsapp://send?phone=+201012824110";
-                        await launchUrl(Uri.parse(whatsappUrl));
-                      },
-                    ),
                     Container(
                       margin: EdgeInsets.only(bottom: 10),
                       child: DrawerElement(
-                        title: "onbr",
+                        title: "تسجيل الخروج",
                         icon: Icons.logout,
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed("/or");
-                        
+                        onTap: () async {
+                          Provider.of<Products>(context, listen: false)
+                              .clearProducts();
+                          await Auth.signOut().then((value) {
+                            Provider.of<UserData>(context, listen: false)
+                                .clearData();
+                          });
+                          try {} catch (e) {
+                            rethrow;
+                          }
                         },
                       ),
                     ),
+
+                    // Column(
+                    //   children: [
+                    //     Container(
+                    //       height: 35,
+                    //       child: Row(
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           children: [
+                    //             Text(
+                    //               "للتواصل مع المطور اضغط ",
+                    //               style: TextStyle(color: Colors.white),
+                    //             ),
+                    //             GestureDetector(
+                    //                 onTap: () async {
+                    //                   var whatsappUrl =
+                    //                       "whatsapp://send?phone=+201020766083";
+                    //                   await launchUrl(Uri.parse(whatsappUrl));
+                    //                 },
+                    //                 child: Text(
+                    //                   "هنا",
+                    //                   style: TextStyle(
+                    //                       color: Colors.blue,
+                    //                       fontWeight: FontWeight.bold),
+                    //                 ))
+                    //           ]),
+                    //     ),
+                    //     Container(
+                    //       height: 35,
+                    //       margin: EdgeInsets.all(0),
+                    //       padding: EdgeInsets.all(0),
+                    //       child: Row(
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           children: [
+                    //             Text(
+                    //               "للتواصل مع الجرافيك اضغط  ",
+                    //               style: TextStyle(color: Colors.white),
+                    //             ),
+                    //             GestureDetector(
+                    //                 onTap: () async {
+                    //                   var whatsappUrl =
+                    //                       "whatsapp://send?phone=+";
+                    //                   await launchUrl(Uri.parse(whatsappUrl));
+                    //                 },
+                    //                 child: Text(
+                    //                   "هنا",
+                    //                   style: TextStyle(
+                    //                       color: Colors.blue,
+                    //                       fontWeight: FontWeight.bold),
+                    //                 ))
+                    //           ]),
+                    //     )
+                    //   ],
+                    // ),
                   ],
                 ),
               ))

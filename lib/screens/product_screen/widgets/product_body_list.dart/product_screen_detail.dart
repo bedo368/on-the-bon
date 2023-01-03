@@ -124,7 +124,8 @@ class ProductScreenDetail extends StatelessWidget {
                   ),
                   child: const Text(
                     "اطلب الأن",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
               ),

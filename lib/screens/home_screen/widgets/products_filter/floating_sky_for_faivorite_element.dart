@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:rive/rive.dart';
 

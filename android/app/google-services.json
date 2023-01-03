@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:381399143885:android:df8393ff5197f53bdd6084",
+        "mobilesdk_app_id": "1:381399143885:android:b41d7494f20b9f7ddd6084",
         "android_client_info": {
-          "package_name": "com.example.on_the_bon"
+          "package_name": "com.abdullah.onthebon"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "381399143885-0qor2o9ocu0tnugsm5govkmed0jkl62b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abdullah.onthebon",
+            "certificate_hash": "ac76049ce565c251456a7b75010e758e34e48c8f"
+          }
+        },
         {
           "client_id": "381399143885-8jgqcdmuqj1t65de5ribd76v24s6aok3.apps.googleusercontent.com",
           "client_type": 3

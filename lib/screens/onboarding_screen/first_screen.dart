@@ -13,6 +13,7 @@ class FirstOnBoardingScreen extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
+          
           Positioned(
               top: MediaQuery.of(context).size.height / 2 - 240,
               child: Material(
@@ -29,35 +30,26 @@ class FirstOnBoardingScreen extends StatelessWidget {
           Positioned(
               top: MediaQuery.of(context).size.height / 2 - 290,
               // right: MediaQuery.of(context).size.width / 2 - 90,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Container(
-                  width: 60,
-                  height: 50,
-                  child: Floatingsky(),
-                ),
+              child: Container(
+                width: 60,
+                height: 50,
+                child: Floatingsky(),
               )),
           Positioned(
-              top: MediaQuery.of(context).size.height / 2 - 170,
-              child: FittedBox(
-                child: Container(
-                    width: MediaQuery.of(context).size.width - 30,
-                    child: Image.asset("assets/images/coffe-shop.png")),
-              )),
+              top: MediaQuery.of(context).size.height / 2 - 130,
+              child: Container(
+                  width: MediaQuery.of(context).size.width - 30,
+                  child: Image.asset("assets/images/coffe-shop.png"))),
           Positioned(
-              top: MediaQuery.of(context).size.height / 2 - 40,
+              top: MediaQuery.of(context).size.height / 2 - 10,
               right: MediaQuery.of(context).size.width / 2 - 50,
-              child: FittedBox(
-                child: Container(
-                    width: 40, child: Image.asset("assets/images/men.png")),
-              )),
+              child: Container(
+                  width: 40, child: Image.asset("assets/images/men.png"))),
           Positioned(
-              top: MediaQuery.of(context).size.height / 2 - 40,
+              top: MediaQuery.of(context).size.height / 2 - 10,
               left: MediaQuery.of(context).size.width / 2 - 50,
-              child: FittedBox(
-                child: Container(
-                    width: 40, child: Image.asset("assets/images/women.png")),
-              )),
+              child: Container(
+                  width: 40, child: Image.asset("assets/images/women.png"))),
           // Positioned(
           //   top: MediaQuery.of(context).size.height / 2+150,
           //   child: Text(

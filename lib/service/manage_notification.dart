@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:on_the_bon/main.dart';
 import 'package:on_the_bon/screens/orders_manage_screen/order_manage_screen.dart';
+import 'package:on_the_bon/screens/orders_screen/orders_screen.dart';
 
 class NotificationApi {
   static Future<void> requestPermission() async {
@@ -18,9 +19,6 @@ class NotificationApi {
         criticalAlert: true,
         provisional: true,
         sound: true);
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-            alert: true, sound: true, badge: true);
   }
 
   static Future<void> setUpMainNotificationChannel() async {
@@ -110,8 +108,8 @@ class NotificationApi {
 
       return;
     }
-    if (message.data["type"] == "new Order") {
-      MyApp.navigatorKey.currentState!.pushNamed(OrderManageScreen.routeName);
+    if (message.data["type"] == "users Notification") {
+      MyApp.navigatorKey.currentState!.pushNamed(OrdersScreen.routeName);
     }
   }
 }

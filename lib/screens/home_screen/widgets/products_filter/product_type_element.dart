@@ -12,7 +12,6 @@ class TypeElement extends StatefulWidget {
     required this.typeName,
   }) : super(key: key);
 
-
   final String typeName;
 
   @override
@@ -29,33 +28,32 @@ class _TypeElementState extends State<TypeElement> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 10),
       padding: const EdgeInsets.only(bottom: 3),
       child: Stack(
         textDirection: TextDirection.rtl,
         alignment: AlignmentDirectional.center,
         children: [
-          GestureDetector(
-            onTap: () {
-             
-              final productData = Provider.of<Products>(context, listen: false);
-              if (HomeScreen.productType.value != widget.typeName) {
-                HomeScreen.productType.value = widget.typeName;
-                productData.setType(widget.typeName);
-                if (isSelectedInput != null) {
-                  setState(() {
-                    isSelectedInput!.value =
-                        HomeScreen.productType.value == widget.typeName
-                            ? true
-                            : false;
-                  });
+          Positioned(
+            child: GestureDetector(
+              onTap: () {
+                final productData = Provider.of<Products>(context, listen: false);
+                if (HomeScreen.productType.value != widget.typeName) {
+                  HomeScreen.productType.value = widget.typeName;
+                  productData.setType(widget.typeName);
+                  if (isSelectedInput != null) {
+                    setState(() {
+                      isSelectedInput!.value =
+                          HomeScreen.productType.value == widget.typeName
+                              ? true
+                              : false;
+                    });
+                  }
                 }
-              }
-            },
-            child: Align(
-              alignment: Alignment.bottomCenter,
+              },
               child: Container(
                 height: 40,
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(40),
                   child: AnimatedContainer(
