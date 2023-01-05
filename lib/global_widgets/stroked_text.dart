@@ -14,16 +14,16 @@ class StrockedText extends StatelessWidget {
   List<Shadow> shadow;
   Color color;
 
-  StrockedText(
+   StrockedText(
     this.text, {
     Key? key,
     required this.fontFamily,
     this.overrideSizeStroke = false,
     required this.fontSize,
     this.strokeWidth = 0, // stroke width default
-    this.strokeColor = const Color.fromRGBO(177, 35, 35, 1),
+    required this.strokeColor,
     required this.shadow,
-    this.color = Colors.black,
+    required this.color ,
   }) : super(key: key) {
     shadow;
 

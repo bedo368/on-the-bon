@@ -9,12 +9,12 @@ class SignInLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-  
       children: [
         Center(
           child: StrockedText(
             "%",
             fontFamily: "permanentMarker",
+            strokeColor: Colors.white,
             fontSize: 60,
             shadow: const [],
             strokeWidth: 4,
@@ -24,10 +24,10 @@ class SignInLogo extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 60),
           child: Center(
-            
             child: StrockedText(
               "On The Bon",
               fontFamily: "RockSalt",
+              strokeColor: Colors.white,
               fontSize: 30,
               shadow: const [],
               strokeWidth: 4,

@@ -138,7 +138,7 @@ class Orders with ChangeNotifier {
       };
     }).toList();
     try {
-      final order =  await db.collection("orderInProgres").add({
+      final order = await db.collection("orderInProgres").add({
         "orderItems": items,
         "userId": userId,
         "PhoneNumber": phoneNumber,
@@ -146,8 +146,7 @@ class Orders with ChangeNotifier {
         "location": location,
         "createdAt": DateTime.now(),
       });
-      return order.id; 
-      
+      return order.id;
     } catch (e) {
       rethrow;
     }
@@ -186,7 +185,7 @@ class Orders with ChangeNotifier {
     }
   }
 
-  Future<void> getOrderById(String id) async {
+  Future<void> getOrderById(String id, String type) async {
     currOrder = Order(
         ordersItems: [],
         userId: "",
@@ -198,7 +197,7 @@ class Orders with ChangeNotifier {
         createdAt: DateTime.now());
     notifyListeners();
     final order = await FirebaseFirestore.instance
-        .collection("orderInProgres")
+        .collection(type)
         .doc(id)
         .get();
     final List<OrderItem> items = [];

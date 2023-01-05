@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:on_the_bon/screens/home_screen/home_screen.dart';
 import 'package:on_the_bon/screens/order_screen/order_screen.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
 
 class SucessOrderScreen extends StatelessWidget {
   const SucessOrderScreen({super.key, required this.orderId});
@@ -61,8 +62,10 @@ class SucessOrderScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                OrderScreen(orderId: orderId)),
+                            builder: (context) => OrderScreen(
+                                  orderId: orderId,
+                                  orderType:OrderTypeEnum.orderInProgres,
+                                )),
                       );
                     },
                     child: Text("متابعة طلبك"),

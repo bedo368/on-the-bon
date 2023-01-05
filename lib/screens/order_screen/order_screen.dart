@@ -3,13 +3,16 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_the_bon/data/models/order.dart';
 import 'package:on_the_bon/data/providers/orders_provider.dart';
 import 'package:on_the_bon/screens/orders_screen/widgets/orders_item.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:url_launcher/url_launcher.dart';
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({super.key, required this.orderId});
+  const OrderScreen(
+      {super.key, required this.orderId, required this.orderType});
   final String orderId;
+  final OrderTypeEnum orderType;
   static String routeName = "order-screen";
   @override
   State<OrderScreen> createState() => _OrderScreenState();
@@ -18,7 +21,20 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
-    Provider.of<Orders>(context, listen: false).getOrderById(widget.orderId);
+    String orderType;
+
+    if (widget.orderType == OrderTypeEnum.orderInProgres) {
+      orderType = "orderInProgres";
+    } else if (widget.orderType == OrderTypeEnum.successfulOrder) {
+      orderType = "sucessfulOrder";
+    } else if (widget.orderType == OrderTypeEnum.rejectedOrder) {
+      orderType = "rejectedOrder";
+    } else {
+      orderType = "orderInProgres";
+    }
+
+    Provider.of<Orders>(context, listen: false)
+        .getOrderById(widget.orderId, orderType);
     super.initState();
   }
 

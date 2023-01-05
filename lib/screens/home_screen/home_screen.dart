@@ -210,6 +210,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       child: StrockedText(
                                         "%",
                                         fontFamily: "permanentMarker",
+                                        strokeColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         fontSize: 60 - v / 3,
                                         shadow: const [],
                                         strokeWidth: 4,
@@ -222,6 +225,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     child: StrockedText(
                                       "On The Bon",
                                       fontFamily: "RockSalt",
+                                      strokeColor: Theme.of(context).colorScheme.secondary,
                                       fontSize: 30 - v / 5 + scrollvalue / 10,
                                       shadow: const [],
                                       strokeWidth: 2,

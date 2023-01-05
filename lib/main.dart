@@ -25,6 +25,7 @@ import 'package:on_the_bon/screens/product_screen/product_screen.dart';
 import 'package:on_the_bon/screens/send_notification_screen/send_notification_screen.dart';
 import 'package:on_the_bon/screens/sign_screen/sign_screen.dart';
 import 'package:on_the_bon/service/manage_notification.dart';
+import 'package:on_the_bon/type_enum/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -151,7 +152,10 @@ class MyApp extends StatelessWidget {
           FaivoriteScreen.routeName: (context) => const FaivoriteScreen(),
           SendNotificationScreen.routeName: (context) =>
               const SendNotificationScreen(),
-          OrderScreen.routeName: (context) => OrderScreen(orderId: "ff")
+          OrderScreen.routeName: (context) => OrderScreen(
+                orderId: "",
+                orderType: OrderTypeEnum.orderInProgres,
+              )
         },
       ),
     );

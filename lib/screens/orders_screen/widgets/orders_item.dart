@@ -122,7 +122,10 @@ class OrderItem extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => OrderScreen(orderId: order.id)),
+                        builder: (context) => OrderScreen(
+                              orderId: order.id,
+                              orderType: order.orderType,
+                            )),
                   );
                 },
                 child: Text("الذهاب لصفحة الطلب"),
